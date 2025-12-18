@@ -29,7 +29,8 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   // Get role from session or fallback to pathname-based detection
   const sessionRole = (session?.user as any)?.role as UserRole | undefined
   const pathRole = getRoleFromPath(pathname)
-  const [userRole, setUserRole] = useState<UserRole>(sessionRole || pathRole)
+  // Initialize with path-based role to match current view
+  const [userRole, setUserRole] = useState<UserRole>(pathRole)
   const [theme, setTheme] = useState<"light" | "dark">("light")
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -41,12 +42,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   }
 
   useEffect(() => {
-    // Use session role if available, otherwise use path-based role
-    const detectedRole = sessionRole || getRoleFromPath(pathname)
+    // Update role based on current pathname to keep switcher in sync
+    const detectedRole = getRoleFromPath(pathname)
     if (detectedRole !== userRole) {
       setUserRole(detectedRole)
     }
-  }, [pathname, userRole, sessionRole])
+  }, [pathname, userRole])
 
   useEffect(() => {
     setIsMobileMenuOpen(false)
@@ -77,13 +78,14 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         <Select
           value={userRole}
           onValueChange={(value: UserRole) => {
-            setUserRole(value)
             const config = getRoleConfig(value)
-            window.location.href = config.defaultRoute
+            // Update state and navigate
+            setUserRole(value)
+            router.push(config.defaultRoute)
           }}
         >
           <SelectTrigger className="bg-sidebar-accent h-10">
-            <SelectValue />
+            <SelectValue placeholder="Select view..." />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="investor">🎯 Investor View</SelectItem>
@@ -93,11 +95,13 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       </div>
 
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-        {roleConfig.navigation.map((item) => {
+        {roleConfig.navigation.map((item, index) => {
           const isActive = pathname === item.href
+          // Use a unique key combining role, name, and index to avoid duplicates
+          const uniqueKey = `${userRole}-${item.name}-${index}`
           return (
             <Link
-              key={item.href}
+              key={uniqueKey}
               href={item.href}
               className={cn(
                 "group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
@@ -113,11 +117,13 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         })}
 
         <div className="pt-3 mt-3 border-t border-sidebar-border">
-          {sharedNavigation.map((item) => {
+          {sharedNavigation.map((item, index) => {
             const isActive = pathname === item.href
+            // Use a unique key for shared navigation items
+            const uniqueKey = `shared-${item.name}-${index}`
             return (
               <Link
-                key={item.href}
+                key={uniqueKey}
                 href={item.href}
                 className={cn(
                   "group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
@@ -209,6 +215,23 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <Select
+                value={userRole}
+                onValueChange={(value: UserRole) => {
+                  const config = getRoleConfig(value)
+                  // Update state and navigate
+                  setUserRole(value)
+                  router.push(config.defaultRoute)
+                }}
+              >
+                <SelectTrigger className="h-9 w-[140px] text-xs">
+                  <SelectValue placeholder="View..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="investor">🎯 Investor</SelectItem>
+                  <SelectItem value="founder">🚀 Founder</SelectItem>
+                </SelectContent>
+              </Select>
               {session?.user && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

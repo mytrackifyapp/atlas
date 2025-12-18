@@ -25,17 +25,8 @@ export default async function FounderPage() {
       redirect("/onboarding")
     }
 
-    // Redirect investors to their dashboard
-    if (session.user.role === "investor") {
-      console.log("FounderPage: User is investor, redirecting to portfolio")
-      redirect("/portfolio")
-    }
-
-    // Only render if user is a founder with completed onboarding
-    if (session.user.role !== "founder") {
-      console.log("FounderPage: User role is not founder:", session.user.role, "redirecting to onboarding")
-      redirect("/onboarding")
-    }
+    // Allow users to view any dashboard regardless of their role
+    // Users can switch between investor and founder views
 
     console.log("FounderPage: Rendering founder dashboard")
     return (

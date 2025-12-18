@@ -25,6 +25,11 @@ BETTER_AUTH_URL="http://localhost:3000"
 
 # Next.js
 NEXT_PUBLIC_BETTER_AUTH_URL="http://localhost:3000"
+
+# UploadThing (for file uploads)
+# Get your keys from https://uploadthing.com
+UPLOADTHING_SECRET="your-uploadthing-secret-key"
+UPLOADTHING_APP_ID="your-uploadthing-app-id"
 ```
 
 **Important:** Generate a secure secret key for `BETTER_AUTH_SECRET`. You can use:

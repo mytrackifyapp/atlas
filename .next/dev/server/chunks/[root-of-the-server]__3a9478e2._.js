@@ -56,6 +56,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$be
 ;
 // Routes that require authentication
 const protectedRoutes = [
+    "/dashboard",
     "/portfolio",
     "/deal-flow",
     "/reports",

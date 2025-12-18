@@ -1,10 +1,23 @@
 import Link from "next/link"
-import { ArrowRight, BarChart3, Target, Users, TrendingUp, Globe2, Sparkles } from "lucide-react"
+import Image from "next/image"
+import { ArrowRight, BarChart3, Target, Users, TrendingUp, Globe2, Sparkles, Building2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { getSessionWithRole } from "@/lib/auth-helpers"
+import { roleConfigs } from "@/lib/role-config"
+import { LandingAIAssistant } from "@/components/landing-ai-assistant"
 
-export default function Page() {
+export default async function Page() {
+  const session = await getSessionWithRole()
+  const isAuthenticated = !!session
+  const hasCompletedOnboarding = session?.user.onboardingCompleted ?? false
+  const userRole = session?.user.role as "investor" | "founder" | null
+  
+  // Determine dashboard URL based on role
+  const dashboardUrl = userRole && hasCompletedOnboarding 
+    ? roleConfigs[userRole].defaultRoute 
+    : "/onboarding"
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -13,7 +26,7 @@ export default function Page() {
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                <BarChart3 className="h-5 w-5 text-primary-foreground" />
+                <Building2 className="h-5 w-5 text-primary-foreground" />
               </div>
               <span className="text-xl font-semibold tracking-tight">Trackify Atlas</span>
             </div>
@@ -40,12 +53,22 @@ export default function Page() {
             </div>
 
             <div className="flex items-center gap-3">
-              <Button variant="ghost" size="sm" asChild>
-                <Link href="/sign-in">Sign In</Link>
-              </Button>
-              <Button size="sm" asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
-                <Link href="/sign-up">Get Started</Link>
-              </Button>
+              {isAuthenticated ? (
+                <Button size="sm" asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
+                  <Link href={dashboardUrl}>
+                    {hasCompletedOnboarding ? "View Dashboard" : "Complete Onboarding"}
+                  </Link>
+                </Button>
+              ) : (
+                <>
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link href="/sign-in">Sign In</Link>
+                  </Button>
+                  <Button size="sm" asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
+                    <Link href="/sign-up">Get Started</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -73,34 +96,49 @@ export default function Page() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button
-                size="lg"
-                asChild
-                className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 h-12 text-base"
-              >
-                <Link href="/sign-up">
-                  Start Free Trial
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                asChild
-                className="h-12 px-8 text-base border-border hover:bg-accent bg-transparent"
-              >
-                <Link href="#platform">View Platform</Link>
-              </Button>
+              {isAuthenticated ? (
+                <Button
+                  size="lg"
+                  asChild
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 h-12 text-base"
+                >
+                  <Link href={dashboardUrl}>
+                    {hasCompletedOnboarding ? "View Dashboard" : "Complete Onboarding"}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    size="lg"
+                    asChild
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 h-12 text-base"
+                  >
+                    <Link href="/sign-up">
+                      Start Free Trial
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    asChild
+                    className="h-12 px-8 text-base border-border hover:bg-accent bg-transparent"
+                  >
+                    <Link href="#platform">View Platform</Link>
+                  </Button>
+                </>
+              )}
             </div>
 
             <div className="mt-16 flex items-center justify-center gap-12 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                <span>1,200+ Startups Tracked</span>
+                <span>100+ Startups Tracked</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                <span>$2.4B+ Funding Monitored</span>
+                <span>$2.4M+ Funding Monitored</span>
               </div>
             </div>
           </div>
@@ -117,19 +155,19 @@ export default function Page() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center border-r border-border/40 last:border-r-0">
-              <div className="text-4xl font-bold text-foreground mb-2">$2.4B+</div>
+              <div className="text-4xl font-bold text-foreground mb-2">$1.4M+</div>
               <div className="text-sm text-muted-foreground">Total Funding</div>
             </div>
             <div className="text-center border-r border-border/40 last:border-r-0">
-              <div className="text-4xl font-bold text-foreground mb-2">1,200+</div>
+              <div className="text-4xl font-bold text-foreground mb-2">10+</div>
               <div className="text-sm text-muted-foreground">Active Startups</div>
             </div>
             <div className="text-center border-r border-border/40 last:border-r-0">
-              <div className="text-4xl font-bold text-foreground mb-2">450+</div>
+              <div className="text-4xl font-bold text-foreground mb-2">20+</div>
               <div className="text-sm text-muted-foreground">Investors</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-foreground mb-2">15+</div>
+              <div className="text-4xl font-bold text-foreground mb-2">6+</div>
               <div className="text-sm text-muted-foreground">Countries</div>
             </div>
           </div>
@@ -535,20 +573,31 @@ export default function Page() {
             ecosystem.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            {isAuthenticated ? (
               <Button size="lg" asChild className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 h-12">
-              <Link href="/sign-up">
-                Get Started Free
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              asChild
-              className="h-12 px-8 border-border hover:bg-accent bg-transparent"
-            >
-              <Link href="mailto:hello@trackifyatlas.com">Contact Sales</Link>
-            </Button>
+                <Link href={dashboardUrl}>
+                  {hasCompletedOnboarding ? "View Dashboard" : "Complete Onboarding"}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            ) : (
+              <>
+                <Button size="lg" asChild className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 h-12">
+                  <Link href="/sign-up">
+                    Get Started Free
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  asChild
+                  className="h-12 px-8 border-border hover:bg-accent bg-transparent"
+                >
+                  <Link href="mailto:hello@trackifyatlas.com">Contact Sales</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </section>
@@ -560,7 +609,7 @@ export default function Page() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                  <BarChart3 className="h-5 w-5 text-primary-foreground" />
+                  <Building2 className="h-5 w-5 text-primary-foreground" />
                 </div>
                 <span className="text-lg font-semibold">Trackify Atlas</span>
               </div>
@@ -643,6 +692,9 @@ export default function Page() {
           </div>
         </div>
       </footer>
+
+      {/* Finna AI Floating Modal */}
+      <LandingAIAssistant />
     </div>
   )
 }

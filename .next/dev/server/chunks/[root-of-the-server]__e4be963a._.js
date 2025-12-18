@@ -81,12 +81,41 @@ function getDatabaseName(connectionString) {
     }
 }
 const databaseName = getDatabaseName(connectionString);
-const client = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString);
-// Connect to MongoDB (will be called once)
-if (!client.topology?.isConnected()) {
-    client.connect().catch(console.error);
-}
-// Explicitly specify the database name
+// Create MongoDB client with proper connection options for Atlas
+// Note: mongodb+srv:// automatically uses TLS, so we don't need to set it explicitly
+const client = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString, {
+    maxPoolSize: 10,
+    minPoolSize: 2,
+    maxIdleTimeMS: 30000,
+    serverSelectionTimeoutMS: 10000,
+    socketTimeoutMS: 45000,
+    connectTimeoutMS: 10000,
+    retryWrites: true,
+    retryReads: true
+});
+// Global client instance to reuse across requests (Next.js pattern)
+const globalForMongo = globalThis;
+let clientPromise;
+if ("TURBOPACK compile-time truthy", 1) {
+    // In development, use a global variable so the client is not recreated on hot reloads
+    if (!globalForMongo._mongoClientPromise) {
+        globalForMongo._mongoClientPromise = client.connect().catch((error)=>{
+            console.error("Failed to connect to MongoDB:", error);
+            // Don't throw here, let Better Auth handle it
+            return client;
+        });
+    }
+    clientPromise = globalForMongo._mongoClientPromise;
+} else //TURBOPACK unreachable
+;
+// Initialize connection immediately (non-blocking)
+clientPromise.then((connectedClient)=>{
+    globalForMongo._mongoClient = connectedClient;
+    console.log("MongoDB connected successfully");
+}).catch((error)=>{
+    console.error("MongoDB connection error:", error);
+});
+// Get database instance - Better Auth will handle connection when needed
 const db = client.db(databaseName);
 const auth = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$better$2d$auth$40$1$2e$4$2e$7_$40$prisma$2b$client$40$7$2e$1$2e$0_prisma$40$7$2e$1$2e$0_$40$types$2b$react$40$19$2e$2$2e$7_react$2d$dom$40$19$2e$2$2e$_bd7c77fb510da8d9502659b8eb9a6693$2f$node_modules$2f$better$2d$auth$2f$dist$2f$auth$2f$auth$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__["betterAuth"])({
     database: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$better$2d$auth$40$1$2e$4$2e$7_$40$prisma$2b$client$40$7$2e$1$2e$0_prisma$40$7$2e$1$2e$0_$40$types$2b$react$40$19$2e$2$2e$7_react$2d$dom$40$19$2e$2$2e$_bd7c77fb510da8d9502659b8eb9a6693$2f$node_modules$2f$better$2d$auth$2f$dist$2f$adapters$2f$mongodb$2d$adapter$2f$mongodb$2d$adapter$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__["mongodbAdapter"])(db, {
@@ -144,25 +173,78 @@ function getDatabaseName(connectionString) {
     }
 }
 const databaseName = getDatabaseName(connectionString);
-let client = null;
-let db = null;
+// Create MongoDB client with proper connection options for Atlas
+const client = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString, {
+    maxPoolSize: 10,
+    minPoolSize: 2,
+    maxIdleTimeMS: 30000,
+    serverSelectionTimeoutMS: 10000,
+    socketTimeoutMS: 45000,
+    connectTimeoutMS: 10000,
+    retryWrites: true,
+    retryReads: true
+});
+// Global client instance to reuse across requests (Next.js pattern)
+const globalForMongo = globalThis;
+let clientPromise;
+if ("TURBOPACK compile-time truthy", 1) {
+    // In development, use a global variable so the client is not recreated on hot reloads
+    if (!globalForMongo._mongoClientPromise) {
+        globalForMongo._mongoClientPromise = client.connect().catch((error)=>{
+            console.error("Failed to connect to MongoDB:", error);
+            return client;
+        });
+    }
+    clientPromise = globalForMongo._mongoClientPromise;
+} else //TURBOPACK unreachable
+;
+// Initialize connection immediately (non-blocking)
+clientPromise.then((connectedClient)=>{
+    globalForMongo._mongoClient = connectedClient;
+    console.log("MongoDB connected successfully (db.ts)");
+}).catch((error)=>{
+    console.error("MongoDB connection error (db.ts):", error);
+});
 async function getDatabase() {
-    if (db) {
-        return db;
+    try {
+        // Ensure client is connected
+        const connectedClient = await clientPromise;
+        // Check if client is still connected, reconnect if needed
+        if (!connectedClient.topology?.isConnected()) {
+            console.warn("MongoDB client disconnected, reconnecting...");
+            await connectedClient.connect();
+        }
+        return connectedClient.db(databaseName);
+    } catch (error) {
+        console.error("Error getting database connection:", error);
+        // Try to reconnect
+        try {
+            await client.close();
+            const newClient = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString, {
+                maxPoolSize: 10,
+                minPoolSize: 2,
+                maxIdleTimeMS: 30000,
+                serverSelectionTimeoutMS: 10000,
+                socketTimeoutMS: 45000,
+                connectTimeoutMS: 10000,
+                retryWrites: true,
+                retryReads: true
+            });
+            clientPromise = newClient.connect();
+            const connectedClient = await clientPromise;
+            return connectedClient.db(databaseName);
+        } catch (reconnectError) {
+            console.error("Failed to reconnect to MongoDB:", reconnectError);
+            throw reconnectError;
+        }
     }
-    if (!client) {
-        client = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString);
-        await client.connect();
-    }
-    // Explicitly specify the database name
-    db = client.db(databaseName);
-    return db;
 }
 async function closeDatabase() {
-    if (client) {
-        await client.close();
-        client = null;
-        db = null;
+    try {
+        const connectedClient = await clientPromise;
+        await connectedClient.close();
+    } catch (error) {
+        console.error("Error closing database connection:", error);
     }
 }
 }),
@@ -204,74 +286,124 @@ async function POST(request) {
         }
         // Get database connection
         const db = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["getDatabase"])();
-        // Try to find the user first to verify they exist
-        const userBefore = await db.collection("user").findOne({
-            id: session.user.id
-        });
-        if (!userBefore) {
-            console.error("User not found in database. User ID:", session.user.id);
-            console.error("Session user:", session.user);
-            // Try alternative query by email as fallback
-            const userByEmail = await db.collection("user").findOne({
+        const dbName = db.databaseName;
+        console.log("Update role - Database:", dbName, "User ID:", session.user.id, "Email:", session.user.email);
+        // Better Auth with MongoDB uses _id as primary key
+        // Try _id first (this is what Better Auth uses)
+        let userBefore = null;
+        try {
+            const { ObjectId } = await __turbopack_context__.A("[externals]/mongodb [external] (mongodb, cjs, async loader)");
+            if (ObjectId.isValid(session.user.id)) {
+                userBefore = await db.collection("user").findOne({
+                    _id: new ObjectId(session.user.id)
+                });
+                if (userBefore) {
+                    console.log("Found user by _id");
+                }
+            }
+        } catch (e) {
+            console.error("Error trying ObjectId query:", e);
+        }
+        // If not found by _id, try by email
+        if (!userBefore && session.user.email) {
+            console.log("User not found by _id, trying email");
+            userBefore = await db.collection("user").findOne({
                 email: session.user.email
             });
-            if (userByEmail) {
-                console.log("Found user by email, updating with email query");
-                const result = await db.collection("user").updateOne({
-                    email: session.user.email
-                }, {
-                    $set: {
-                        role,
-                        onboardingCompleted: true,
-                        updatedAt: new Date()
-                    }
-                });
-                return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                    success: true,
-                    role,
-                    matchedCount: result.matchedCount,
-                    modifiedCount: result.modifiedCount
-                });
+            if (userBefore) {
+                console.log("Found user by email");
             }
+        }
+        // Last resort: try id field
+        if (!userBefore) {
+            userBefore = await db.collection("user").findOne({
+                id: session.user.id
+            });
+        }
+        if (!userBefore) {
+            // List sample users for debugging
+            const sampleUsers = await db.collection("user").find({}).limit(3).toArray();
+            console.error("User not found. Database:", dbName);
+            console.error("Session user ID:", session.user.id);
+            console.error("Session user email:", session.user.email);
+            console.error("Sample users in database:", sampleUsers.map((u)=>({
+                    id: u.id,
+                    _id: u._id?.toString(),
+                    email: u.email
+                })));
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: "User not found in database"
+                error: "User not found in database",
+                database: dbName
             }, {
                 status: 404
             });
         }
+        console.log("Found user:", {
+            id: userBefore.id,
+            _id: userBefore._id?.toString(),
+            email: userBefore.email
+        });
+        // Use _id for the update (MongoDB primary key)
+        const { ObjectId } = await __turbopack_context__.A("[externals]/mongodb [external] (mongodb, cjs, async loader)");
+        const queryFilter = {
+            _id: userBefore._id
+        };
+        console.log("Updating user with filter:", queryFilter);
         // Update user role and mark onboarding as completed
-        const result = await db.collection("user").updateOne({
-            id: session.user.id
-        }, {
+        const result = await db.collection("user").updateOne(queryFilter, {
             $set: {
                 role,
                 onboardingCompleted: true,
                 updatedAt: new Date()
             }
         });
+        console.log("Update result:", {
+            matchedCount: result.matchedCount,
+            modifiedCount: result.modifiedCount,
+            upsertedCount: result.upsertedCount,
+            upsertedId: result.upsertedId
+        });
         // Verify the update was successful
         if (result.matchedCount === 0) {
-            console.error("User not found in database:", session.user.id);
+            console.error("User not found in database for update:", {
+                userId: session.user.id,
+                queryFilter
+            });
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 error: "User not found"
             }, {
                 status: 404
             });
         }
-        // Verify the update was actually saved by reading it back
-        const updatedUser = await db.collection("user").findOne({
-            id: session.user.id
-        });
-        if (!updatedUser || updatedUser.role !== role || !updatedUser.onboardingCompleted) {
+        // Verify the update was actually saved by reading it back using the same filter
+        const updatedUser = await db.collection("user").findOne(queryFilter);
+        if (!updatedUser) {
+            console.error("User not found after update:", {
+                userId: session.user.id,
+                queryFilter
+            });
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: "User not found after update"
+            }, {
+                status: 500
+            });
+        }
+        if (updatedUser.role !== role || !updatedUser.onboardingCompleted) {
             console.error("Update verification failed:", {
                 userId: session.user.id,
                 expectedRole: role,
-                actualRole: updatedUser?.role,
+                actualRole: updatedUser.role,
                 expectedOnboarding: true,
-                actualOnboarding: updatedUser?.onboardingCompleted
+                actualOnboarding: updatedUser.onboardingCompleted,
+                updatedUser: {
+                    _id: updatedUser._id?.toString(),
+                    email: updatedUser.email,
+                    role: updatedUser.role,
+                    onboardingCompleted: updatedUser.onboardingCompleted
+                }
             });
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: "Update verification failed"
+                error: "Update verification failed - fields not updated correctly"
             }, {
                 status: 500
             });

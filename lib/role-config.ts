@@ -25,13 +25,13 @@ export const roleConfigs: Record<UserRole, RoleConfig> = {
     role: "investor",
     displayName: "Investor View",
     emoji: "🎯",
-    defaultRoute: "/portfolio",
+    defaultRoute: "/dashboard",
     primaryColor: "oklch(0.92 0.19 128)", // new lime green #c1ff72
     accentColor: "oklch(0.6 0.15 220)", // blue
     navigation: [
       {
         name: "Dashboard",
-        href: "/portfolio",
+        href: "/dashboard",
         icon: Home,
         description: "Portfolio overview and metrics",
       },

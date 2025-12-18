@@ -121,12 +121,41 @@ function getDatabaseName(connectionString) {
     }
 }
 const databaseName = getDatabaseName(connectionString);
-const client = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString);
-// Connect to MongoDB (will be called once)
-if (!client.topology?.isConnected()) {
-    client.connect().catch(console.error);
-}
-// Explicitly specify the database name
+// Create MongoDB client with proper connection options for Atlas
+// Note: mongodb+srv:// automatically uses TLS, so we don't need to set it explicitly
+const client = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString, {
+    maxPoolSize: 10,
+    minPoolSize: 2,
+    maxIdleTimeMS: 30000,
+    serverSelectionTimeoutMS: 10000,
+    socketTimeoutMS: 45000,
+    connectTimeoutMS: 10000,
+    retryWrites: true,
+    retryReads: true
+});
+// Global client instance to reuse across requests (Next.js pattern)
+const globalForMongo = globalThis;
+let clientPromise;
+if ("TURBOPACK compile-time truthy", 1) {
+    // In development, use a global variable so the client is not recreated on hot reloads
+    if (!globalForMongo._mongoClientPromise) {
+        globalForMongo._mongoClientPromise = client.connect().catch((error)=>{
+            console.error("Failed to connect to MongoDB:", error);
+            // Don't throw here, let Better Auth handle it
+            return client;
+        });
+    }
+    clientPromise = globalForMongo._mongoClientPromise;
+} else //TURBOPACK unreachable
+;
+// Initialize connection immediately (non-blocking)
+clientPromise.then((connectedClient)=>{
+    globalForMongo._mongoClient = connectedClient;
+    console.log("MongoDB connected successfully");
+}).catch((error)=>{
+    console.error("MongoDB connection error:", error);
+});
+// Get database instance - Better Auth will handle connection when needed
 const db = client.db(databaseName);
 const auth = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$better$2d$auth$40$1$2e$4$2e$7_$40$prisma$2b$client$40$7$2e$1$2e$0_prisma$40$7$2e$1$2e$0_$40$types$2b$react$40$19$2e$2$2e$7_react$2d$dom$40$19$2e$2$2e$_bd7c77fb510da8d9502659b8eb9a6693$2f$node_modules$2f$better$2d$auth$2f$dist$2f$auth$2f$auth$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["betterAuth"])({
     database: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$better$2d$auth$40$1$2e$4$2e$7_$40$prisma$2b$client$40$7$2e$1$2e$0_prisma$40$7$2e$1$2e$0_$40$types$2b$react$40$19$2e$2$2e$7_react$2d$dom$40$19$2e$2$2e$_bd7c77fb510da8d9502659b8eb9a6693$2f$node_modules$2f$better$2d$auth$2f$dist$2f$adapters$2f$mongodb$2d$adapter$2f$mongodb$2d$adapter$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["mongodbAdapter"])(db, {
@@ -134,7 +163,28 @@ const auth = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f
     }),
     emailAndPassword: {
         enabled: true,
-        requireEmailVerification: false
+        requireEmailVerification: false,
+        sendResetPassword: async ({ user, url, token }, request)=>{
+            // TODO: Integrate with your email service (Resend, SendGrid, etc.)
+            // For now, we'll log the reset link. In production, send an email.
+            console.log("Password reset requested for:", user.email);
+            console.log("Reset URL:", url);
+            console.log("Reset token:", token);
+        // Example with a real email service:
+        // await sendEmail({
+        //   to: user.email,
+        //   subject: "Reset your password",
+        //   html: `
+        //     <h2>Reset Your Password</h2>
+        //     <p>Click the link below to reset your password:</p>
+        //     <a href="${url}">Reset Password</a>
+        //     <p>This link will expire in 1 hour.</p>
+        //   `,
+        // })
+        },
+        onPasswordReset: async ({ user }, request)=>{
+            console.log(`Password reset successful for user: ${user.email}`);
+        }
     },
     user: {
         additionalFields: {
@@ -184,25 +234,78 @@ function getDatabaseName(connectionString) {
     }
 }
 const databaseName = getDatabaseName(connectionString);
-let client = null;
-let db = null;
+// Create MongoDB client with proper connection options for Atlas
+const client = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString, {
+    maxPoolSize: 10,
+    minPoolSize: 2,
+    maxIdleTimeMS: 30000,
+    serverSelectionTimeoutMS: 10000,
+    socketTimeoutMS: 45000,
+    connectTimeoutMS: 10000,
+    retryWrites: true,
+    retryReads: true
+});
+// Global client instance to reuse across requests (Next.js pattern)
+const globalForMongo = globalThis;
+let clientPromise;
+if ("TURBOPACK compile-time truthy", 1) {
+    // In development, use a global variable so the client is not recreated on hot reloads
+    if (!globalForMongo._mongoClientPromise) {
+        globalForMongo._mongoClientPromise = client.connect().catch((error)=>{
+            console.error("Failed to connect to MongoDB:", error);
+            return client;
+        });
+    }
+    clientPromise = globalForMongo._mongoClientPromise;
+} else //TURBOPACK unreachable
+;
+// Initialize connection immediately (non-blocking)
+clientPromise.then((connectedClient)=>{
+    globalForMongo._mongoClient = connectedClient;
+    console.log("MongoDB connected successfully (db.ts)");
+}).catch((error)=>{
+    console.error("MongoDB connection error (db.ts):", error);
+});
 async function getDatabase() {
-    if (db) {
-        return db;
+    try {
+        // Ensure client is connected
+        const connectedClient = await clientPromise;
+        // Check if client is still connected, reconnect if needed
+        if (!connectedClient.topology?.isConnected()) {
+            console.warn("MongoDB client disconnected, reconnecting...");
+            await connectedClient.connect();
+        }
+        return connectedClient.db(databaseName);
+    } catch (error) {
+        console.error("Error getting database connection:", error);
+        // Try to reconnect
+        try {
+            await client.close();
+            const newClient = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString, {
+                maxPoolSize: 10,
+                minPoolSize: 2,
+                maxIdleTimeMS: 30000,
+                serverSelectionTimeoutMS: 10000,
+                socketTimeoutMS: 45000,
+                connectTimeoutMS: 10000,
+                retryWrites: true,
+                retryReads: true
+            });
+            clientPromise = newClient.connect();
+            const connectedClient = await clientPromise;
+            return connectedClient.db(databaseName);
+        } catch (reconnectError) {
+            console.error("Failed to reconnect to MongoDB:", reconnectError);
+            throw reconnectError;
+        }
     }
-    if (!client) {
-        client = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString);
-        await client.connect();
-    }
-    // Explicitly specify the database name
-    db = client.db(databaseName);
-    return db;
 }
 async function closeDatabase() {
-    if (client) {
-        await client.close();
-        client = null;
-        db = null;
+    try {
+        const connectedClient = await clientPromise;
+        await connectedClient.close();
+    } catch (error) {
+        console.error("Error closing database connection:", error);
     }
 }
 }),
@@ -385,26 +488,18 @@ async function PortfolioPage() {
             console.log("PortfolioPage: Onboarding not completed, redirecting to onboarding");
             (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$client$2f$components$2f$navigation$2e$react$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["redirect"])("/onboarding");
         }
-        // Redirect founders to their dashboard
-        if (session.user.role === "founder") {
-            console.log("PortfolioPage: User is founder, redirecting to founder dashboard");
-            (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$client$2f$components$2f$navigation$2e$react$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["redirect"])("/founder");
-        }
-        // Only render if user is an investor with completed onboarding
-        if (session.user.role !== "investor") {
-            console.log("PortfolioPage: User role is not investor:", session.user.role, "redirecting to onboarding");
-            (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$client$2f$components$2f$navigation$2e$react$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["redirect"])("/onboarding");
-        }
+        // Allow users to view any dashboard regardless of their role
+        // Users can switch between investor and founder views
         console.log("PortfolioPage: Rendering portfolio view");
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$dashboard$2d$shell$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["DashboardShell"], {
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$portfolio$2d$view$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["PortfolioView"], {}, void 0, false, {
                 fileName: "[project]/app/portfolio/page.tsx",
-                lineNumber: 43,
+                lineNumber: 34,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/portfolio/page.tsx",
-            lineNumber: 42,
+            lineNumber: 33,
             columnNumber: 7
         }, this);
     } catch (error) {

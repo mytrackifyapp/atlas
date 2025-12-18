@@ -92,28 +92,55 @@ export async function POST(request: NextRequest) {
       }
     )
 
+    console.log("Update result:", {
+      matchedCount: result.matchedCount,
+      modifiedCount: result.modifiedCount,
+      upsertedCount: result.upsertedCount,
+      upsertedId: result.upsertedId
+    })
+
     // Verify the update was successful
     if (result.matchedCount === 0) {
-      console.error("User not found in database:", session.user.id)
+      console.error("User not found in database for update:", {
+        userId: session.user.id,
+        queryFilter
+      })
       return NextResponse.json(
         { error: "User not found" },
         { status: 404 }
       )
     }
 
-    // Verify the update was actually saved by reading it back
-    const updatedUser = await db.collection("user").findOne({ id: session.user.id })
+    // Verify the update was actually saved by reading it back using the same filter
+    const updatedUser = await db.collection("user").findOne(queryFilter)
     
-    if (!updatedUser || updatedUser.role !== role || !updatedUser.onboardingCompleted) {
+    if (!updatedUser) {
+      console.error("User not found after update:", {
+        userId: session.user.id,
+        queryFilter
+      })
+      return NextResponse.json(
+        { error: "User not found after update" },
+        { status: 500 }
+      )
+    }
+    
+    if (updatedUser.role !== role || !updatedUser.onboardingCompleted) {
       console.error("Update verification failed:", {
         userId: session.user.id,
         expectedRole: role,
-        actualRole: updatedUser?.role,
+        actualRole: updatedUser.role,
         expectedOnboarding: true,
-        actualOnboarding: updatedUser?.onboardingCompleted
+        actualOnboarding: updatedUser.onboardingCompleted,
+        updatedUser: {
+          _id: updatedUser._id?.toString(),
+          email: updatedUser.email,
+          role: updatedUser.role,
+          onboardingCompleted: updatedUser.onboardingCompleted
+        }
       })
       return NextResponse.json(
-        { error: "Update verification failed" },
+        { error: "Update verification failed - fields not updated correctly" },
         { status: 500 }
       )
     }

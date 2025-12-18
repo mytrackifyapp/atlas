@@ -1,5 +1,5 @@
 var R=require("../../../../chunks/[turbopack]_runtime.js")("server/app/api/user/check-onboarding/route.js")
-R.c("server/chunks/node_modules__pnpm_e1ac4094._.js")
+R.c("server/chunks/[root-of-the-server]__a6d8bfdb._.js")
 R.c("server/chunks/1dff6_next_0a176dd3._.js")
 R.c("server/chunks/359e5_@better-auth_core_dist_5430d873._.js")
 R.c("server/chunks/708dc_better-auth_dist_125afbed._.js")

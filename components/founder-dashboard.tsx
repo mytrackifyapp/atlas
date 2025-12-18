@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { DollarSign, Flame, TrendingUp, Users } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -7,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { PageHeader } from "@/components/page-header"
 import { KPICard } from "@/components/kpi-card"
+import { StartFundraiseDialog } from "@/components/start-fundraise-dialog"
 
 const kpiData = [
   { title: "Monthly Revenue", value: "$125K", change: "+18%", trend: "up" as const, icon: DollarSign },
@@ -34,21 +36,38 @@ const cashFlowData = [
 ]
 
 export function FounderDashboard() {
+  const [startFundraiseOpen, setStartFundraiseOpen] = useState(false)
+
   return (
-    <div className="p-8 space-y-8">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-6 lg:space-y-8">
+      <StartFundraiseDialog
+        open={startFundraiseOpen}
+        onOpenChange={setStartFundraiseOpen}
+        onSuccess={() => {
+          // Refresh dashboard or redirect to fundraising page
+          console.log("Fundraise started successfully")
+          // Optionally redirect to fundraising page
+          // window.location.href = "/founder/fundraising"
+        }}
+      />
+
       <PageHeader
         title="Founder Dashboard"
         description="Track your company performance and manage investor relationships"
         breadcrumbs={[{ label: "Dashboard" }, { label: "Founder Overview" }]}
         actions={
-          <>
-            <Button variant="outline">Send Update</Button>
-            <Button>Start Fundraise</Button>
-          </>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+            <Button variant="outline" size="sm" className="w-full sm:w-auto">
+              Send Update
+            </Button>
+            <Button size="sm" onClick={() => setStartFundraiseOpen(true)} className="w-full sm:w-auto">
+              Start Fundraise
+            </Button>
+          </div>
         }
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {kpiData.map((kpi) => (
           <KPICard
             key={kpi.title}
@@ -100,14 +119,15 @@ export function FounderDashboard() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle>Revenue & Expenses</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Revenue & Expenses</CardTitle>
             <CardDescription>Monthly comparison in thousands (USD)</CardDescription>
           </CardHeader>
           <CardContent className="pt-2">
-            <ResponsiveContainer width="100%" height={250}>
+            <div className="w-full overflow-x-auto">
+              <ResponsiveContainer width="100%" height={250} minHeight={200}>
               <BarChart data={revenueData}>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                 <XAxis dataKey="month" className="text-xs" />
@@ -123,16 +143,18 @@ export function FounderDashboard() {
                 <Bar dataKey="expenses" fill="#ef4444" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle>Cash Flow</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Cash Flow</CardTitle>
             <CardDescription>Available cash in thousands (USD)</CardDescription>
           </CardHeader>
           <CardContent className="pt-2">
-            <ResponsiveContainer width="100%" height={250}>
+            <div className="w-full overflow-x-auto">
+              <ResponsiveContainer width="100%" height={250} minHeight={200}>
               <LineChart data={cashFlowData}>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                 <XAxis dataKey="month" className="text-xs" />
@@ -147,13 +169,14 @@ export function FounderDashboard() {
                 <Line type="monotone" dataKey="cash" stroke="#3b82f6" strokeWidth={2} dot={{ fill: "#3b82f6" }} />
               </LineChart>
             </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
       </div>
 
       <Card>
         <CardHeader className="space-y-1">
-          <CardTitle>Recent Investor Interest</CardTitle>
+          <CardTitle className="text-lg sm:text-xl">Recent Investor Interest</CardTitle>
           <CardDescription>Investors who have expressed interest in your raise</CardDescription>
         </CardHeader>
         <CardContent>
@@ -165,13 +188,13 @@ export function FounderDashboard() {
             ].map((investor) => (
               <div
                 key={investor.name}
-                className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors"
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors"
               >
                 <div className="space-y-1">
                   <div className="font-medium">{investor.name}</div>
                   <div className="text-sm text-muted-foreground">{investor.date}</div>
                 </div>
-                <Badge variant="secondary">{investor.status}</Badge>
+                <Badge variant="secondary" className="w-fit">{investor.status}</Badge>
               </div>
             ))}
           </div>

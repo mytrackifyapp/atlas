@@ -7,12 +7,12 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 
 const suggestedActions = [
-  "Summarize this startup",
-  "Identify key risks",
-  "Generate investor update",
-  "Match me with investors",
-  "Analyze market opportunity",
-  "Compare to competitors",
+  "What is Trackify Atlas?",
+  "How does the platform work?",
+  "Tell me about Africa's startup ecosystem",
+  "What features are available?",
+  "How do I get started?",
+  "What are the pricing plans?",
 ]
 
 export function AIAssistant() {
@@ -33,7 +33,7 @@ export function AIAssistant() {
         {
           role: "assistant",
           content:
-            "I'm Finna, your AI assistant. I can help you analyze startups, generate reports, and provide insights on Africa's startup ecosystem.",
+            "I'm Finna, your AI assistant for Trackify Atlas! I can help you learn about our platform, understand Africa's startup ecosystem, answer questions about features, and guide you through getting started. How can I assist you today?",
         },
       ])
     }, 1000)
@@ -45,8 +45,9 @@ export function AIAssistant() {
       {!isOpen && (
         <Button
           size="lg"
-          className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg bg-gradient-to-br from-emerald-500 to-blue-600 hover:from-emerald-600 hover:to-blue-700"
+          className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg bg-gradient-to-br from-emerald-500 to-blue-600 hover:from-emerald-600 hover:to-blue-700 z-50 transition-all hover:scale-110"
           onClick={() => setIsOpen(true)}
+          aria-label="Open Finna AI Assistant"
         >
           <Bot className="h-6 w-6" />
         </Button>
@@ -54,7 +55,7 @@ export function AIAssistant() {
 
       {/* Assistant Panel */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 w-96 shadow-2xl rounded-lg border border-border bg-card z-50">
+        <div className="fixed bottom-6 right-6 w-[calc(100vw-3rem)] sm:w-96 max-w-md shadow-2xl rounded-lg border border-border bg-card z-50 animate-in slide-in-from-bottom-4">
           <CardHeader className="border-b border-border bg-gradient-to-br from-emerald-500/10 to-blue-600/10">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -73,7 +74,7 @@ export function AIAssistant() {
           </CardHeader>
           <CardContent className="p-0">
             {/* Messages */}
-            <div className="h-96 overflow-y-auto p-4 space-y-4">
+            <div className="h-[400px] sm:h-96 overflow-y-auto p-4 space-y-4">
               {messages.length === 0 ? (
                 <div className="text-center py-8">
                   <Sparkles className="h-12 w-12 text-muted-foreground mx-auto mb-3" />

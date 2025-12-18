@@ -14,13 +14,20 @@ datasource db {
 
 // Example: Portfolio Company Model
 model PortfolioCompany {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  industry  String?
-  stage     String?
-  amount    Float?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  industry      String?
+  stage         String?
+  amount        Float?
+  location      String?
+  country       String?
+  website       String?
+  description   String?
+  foundedYear   String?
+  employeeCount String?
+  logo          String?  // Store logo URL or path
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@map("portfolio_companies")
 }

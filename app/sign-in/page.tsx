@@ -3,7 +3,7 @@
 import { useState, Suspense } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
-import { BarChart3 } from "lucide-react"
+import { BarChart3, Eye, EyeOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -16,6 +16,7 @@ function SignInForm() {
   const redirectTo = searchParams.get("redirect") || "/onboarding"
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -57,6 +58,11 @@ function SignInForm() {
           <CardDescription className="text-center">
             Enter your email and password to access your account
           </CardDescription>
+          {searchParams.get("reset") === "success" && (
+            <div className="mt-4 p-3 text-sm text-green-600 bg-green-50 dark:bg-green-950/20 rounded-md border border-green-200 dark:border-green-800">
+              Password reset successful! You can now sign in with your new password.
+            </div>
+          )}
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
@@ -78,15 +84,38 @@ function SignInForm() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={loading}
-              />
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password">Password</Label>
+                <Link
+                  href="/forgot-password"
+                  className="text-sm text-primary hover:underline"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  disabled={loading}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">

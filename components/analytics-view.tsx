@@ -55,14 +55,14 @@ const cashFlowData = [
 
 export function AnalyticsView() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-4 sm:space-y-6 lg:space-y-8 p-4 sm:p-6 lg:p-8">
       <PageHeader
         title="Analytics"
         description="In-depth analysis of your investment performance"
         actions={
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
             <Select defaultValue="6m">
-              <SelectTrigger className="w-[140px]">
+              <SelectTrigger className="w-full sm:w-[140px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -73,16 +73,17 @@ export function AnalyticsView() {
                 <SelectItem value="all">All Time</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="sm">
-              <Download className="h-4 w-4 mr-2" />
-              Export Report
+            <Button variant="outline" size="sm" className="w-full sm:w-auto">
+              <Download className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Export Report</span>
+              <span className="sm:hidden">Export</span>
             </Button>
           </div>
         }
       />
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <Card>
           <CardContent className="pt-6">
             <div className="space-y-2">
@@ -128,13 +129,14 @@ export function AnalyticsView() {
       </div>
 
       {/* Performance Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Portfolio Performance</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Portfolio Performance</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <div className="w-full overflow-x-auto">
+              <ResponsiveContainer width="100%" height={300} minHeight={250}>
               <AreaChart data={portfolioPerformance}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
@@ -167,15 +169,17 @@ export function AnalyticsView() {
                 />
               </AreaChart>
             </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Deal Flow Funnel</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Deal Flow Funnel</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <div className="w-full overflow-x-auto">
+              <ResponsiveContainer width="100%" height={300} minHeight={250}>
               <BarChart data={dealFlowMetrics}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
@@ -193,6 +197,7 @@ export function AnalyticsView() {
                 <Bar dataKey="invested" fill="#c1ff72" name="Invested" />
               </BarChart>
             </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -200,10 +205,11 @@ export function AnalyticsView() {
       {/* Sector Performance */}
       <Card>
         <CardHeader>
-          <CardTitle>Sector Performance Analysis</CardTitle>
+          <CardTitle className="text-lg sm:text-xl">Sector Performance Analysis</CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
+          <div className="w-full overflow-x-auto">
+            <ResponsiveContainer width="100%" height={300} minHeight={250}>
             <BarChart data={sectorPerformance} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis type="number" stroke="hsl(var(--muted-foreground))" />
@@ -218,16 +224,18 @@ export function AnalyticsView() {
               <Bar dataKey="returns" fill="#c1ff72" name="Returns %" />
             </BarChart>
           </ResponsiveContainer>
+          </div>
         </CardContent>
       </Card>
 
       {/* Cash Flow */}
       <Card>
         <CardHeader>
-          <CardTitle>Cash Flow Analysis</CardTitle>
+          <CardTitle className="text-lg sm:text-xl">Cash Flow Analysis</CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
+          <div className="w-full overflow-x-auto">
+            <ResponsiveContainer width="100%" height={300} minHeight={250}>
             <BarChart data={cashFlowData}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
@@ -244,6 +252,7 @@ export function AnalyticsView() {
               <Bar dataKey="outflow" fill="#f472b6" name="Outflow" />
             </BarChart>
           </ResponsiveContainer>
+          </div>
         </CardContent>
       </Card>
     </div>

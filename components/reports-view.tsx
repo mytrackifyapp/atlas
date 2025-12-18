@@ -57,20 +57,21 @@ const statusColors = {
 
 export function ReportsView() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-4 sm:space-y-6 lg:space-y-8 p-4 sm:p-6 lg:p-8">
       <PageHeader
         title="Reports"
         description="Access and manage investment reports and analysis"
         actions={
-          <Button size="sm">
-            <Plus className="h-4 w-4 mr-2" />
-            Create Report
+          <Button size="sm" className="w-full sm:w-auto">
+            <Plus className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Create Report</span>
+            <span className="sm:hidden">Create</span>
           </Button>
         }
       />
 
       {/* Report Categories */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-6">
         <Card>
           <CardContent className="pt-6">
             <div className="space-y-2">
@@ -121,44 +122,48 @@ export function ReportsView() {
       {/* Reports List */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Reports</CardTitle>
+          <CardTitle className="text-lg sm:text-xl">Recent Reports</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {reports.map((report) => (
               <div
                 key={report.id}
-                className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors"
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors"
               >
-                <div className="flex items-start gap-4 flex-1">
-                  <div className="p-3 bg-primary/10 rounded-lg">
-                    <FileText className="h-6 w-6 text-primary" />
+                <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
+                  <div className="p-2 sm:p-3 bg-primary/10 rounded-lg flex-shrink-0">
+                    <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                   </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-3">
-                      <h3 className="font-semibold">{report.title}</h3>
-                      <Badge variant={statusColors[report.status] as any}>{report.status}</Badge>
-                      <Badge variant="outline">{report.type}</Badge>
+                  <div className="space-y-2 flex-1 min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                      <h3 className="font-semibold truncate">{report.title}</h3>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <Badge variant={statusColors[report.status] as any} className="text-xs">{report.status}</Badge>
+                        <Badge variant="outline" className="text-xs">{report.type}</Badge>
+                      </div>
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{report.description}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{report.description}</p>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Calendar className="h-3.5 w-3.5" />
-                      {new Date(report.date).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
+                      <Calendar className="h-3.5 w-3.5 flex-shrink-0" />
+                      <span className="text-xs sm:text-sm">
+                        {new Date(report.date).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </span>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm">
-                    <Eye className="h-4 w-4 mr-2" />
-                    View
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <Button variant="outline" size="sm" className="flex-1 sm:flex-initial">
+                    <Eye className="h-4 w-4 sm:mr-2" />
+                    <span className="hidden sm:inline">View</span>
                   </Button>
-                  <Button variant="outline" size="sm">
-                    <Download className="h-4 w-4 mr-2" />
-                    Download
+                  <Button variant="outline" size="sm" className="flex-1 sm:flex-initial">
+                    <Download className="h-4 w-4 sm:mr-2" />
+                    <span className="hidden sm:inline">Download</span>
                   </Button>
                 </div>
               </div>
