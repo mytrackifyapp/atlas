@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+}
+
+// Note: Better Auth uses the MongoDB adapter directly and manages its own collections
+// (user, session, account, verification). This schema is for your application-specific models.
+
+// Example: Portfolio Company Model
+model PortfolioCompany {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  industry  String?
+  stage     String?
+  amount    Float?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("portfolio_companies")
+}
+
+// Example: Deal Model
+model Deal {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  companyName String
+  stage       String
+  amount      Float?
+  status      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("deals")
+}
