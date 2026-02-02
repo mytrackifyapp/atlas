@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react"
-import { BarChart3, Briefcase, Home, Lightbulb, MessageSquare, Rocket, Users } from "lucide-react"
+import { BarChart3, Briefcase, Home, Lightbulb, MessageSquare, Rocket, Users, Shield } from "lucide-react"
 
 export type UserRole = "investor" | "founder"
 
@@ -97,6 +97,15 @@ export const sharedNavigation: NavItem[] = [
     href: "/accelerator",
     icon: Users,
     description: "Join the startup accelerator",
+  },
+]
+
+export const adminNavigation: NavItem[] = [
+  {
+    name: "Admin Dashboard",
+    href: "/admin",
+    icon: Shield,
+    description: "User management and analytics",
   },
 ]
 

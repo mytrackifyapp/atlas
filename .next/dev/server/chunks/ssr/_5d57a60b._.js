@@ -245,8 +245,16 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$better$2d$auth$40$1$2e$4$2e$7_$40$prisma$2b$client$40$7$2e$1$2e$0_prisma$40$7$2e$1$2e$0_$40$types$2b$react$40$19$2e$2$2e$7_react$2d$dom$40$19$2e$2$2e$_bd7c77fb510da8d9502659b8eb9a6693$2f$node_modules$2f$better$2d$auth$2f$dist$2f$client$2f$react$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/better-auth@1.4.7_@prisma+client@7.1.0_prisma@7.1.0_@types+react@19.2.7_react-dom@19.2._bd7c77fb510da8d9502659b8eb9a6693/node_modules/better-auth/dist/client/react/index.mjs [app-ssr] (ecmascript) <locals>");
 "use client";
 ;
+// Get base URL from environment or use current origin
+function getBaseURL() {
+    // In browser, use NEXT_PUBLIC_BETTER_AUTH_URL or current origin
+    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+    ;
+    // Server-side fallback
+    return ("TURBOPACK compile-time value", "http://localhost:3000") || "http://localhost:3000";
+}
 const authClient = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$better$2d$auth$40$1$2e$4$2e$7_$40$prisma$2b$client$40$7$2e$1$2e$0_prisma$40$7$2e$1$2e$0_$40$types$2b$react$40$19$2e$2$2e$7_react$2d$dom$40$19$2e$2$2e$_bd7c77fb510da8d9502659b8eb9a6693$2f$node_modules$2f$better$2d$auth$2f$dist$2f$client$2f$react$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createAuthClient"])({
-    baseURL: ("TURBOPACK compile-time value", "http://localhost:3000") || "http://localhost:3000"
+    baseURL: getBaseURL()
 });
 const { signIn, signUp, signOut, useSession } = authClient;
 }),

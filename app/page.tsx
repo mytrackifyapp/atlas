@@ -15,7 +15,8 @@ export default async function Page() {
   const userRole = session?.user.role as "investor" | "founder" | null
   
   // Determine dashboard URL based on role
-  const dashboardUrl = userRole && hasCompletedOnboarding 
+  // Only use roleConfigs if role is investor or founder
+  const dashboardUrl = userRole && hasCompletedOnboarding && (userRole === "investor" || userRole === "founder")
     ? roleConfigs[userRole].defaultRoute 
     : "/onboarding"
   return (
@@ -150,8 +151,8 @@ export default async function Page() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 border-y border-border/40 bg-muted/30">
+      {/* Stats Section - Commented out */}
+      {/* <section className="py-16 border-y border-border/40 bg-muted/30">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center border-r border-border/40 last:border-r-0">
@@ -172,6 +173,38 @@ export default async function Page() {
             </div>
           </div>
         </div>
+      </section> */}
+
+      {/* Marquee Section */}
+      <section className="py-12 border-y border-border/40 bg-muted/30 overflow-hidden">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 mb-6">
+          <p className="text-center text-sm font-medium text-muted-foreground">
+            Startups using Trackify Atlas
+          </p>
+        </div>
+        <div className="relative">
+          <div className="flex items-center gap-16 animate-marquee whitespace-nowrap">
+            {[1, 2, 3, 4, 5, 6].map((num) => (
+              <div key={num} className="flex-shrink-0 px-4">
+                <img
+                  src={`/marquee/m${num}.PNG`}
+                  alt={`Startup ${num}`}
+                  className="h-24 w-auto object-contain opacity-50 hover:opacity-100 transition-opacity duration-300"
+                />
+              </div>
+            ))}
+            {/* Duplicate for seamless loop */}
+            {[1, 2, 3, 4, 5, 6].map((num) => (
+              <div key={`duplicate-${num}`} className="flex-shrink-0 px-4">
+                <img
+                  src={`/marquee/m${num}.PNG`}
+                  alt={`Startup ${num}`}
+                  className="h-24 w-auto object-contain opacity-50 hover:opacity-100 transition-opacity duration-300"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Features Grid */}
@@ -186,8 +219,13 @@ export default async function Page() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="p-8 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 bg-card">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-6">
-                <BarChart3 className="h-6 w-6 text-primary" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg mb-6 overflow-hidden">
+                <img 
+                  src="/icons/icon3.PNG" 
+                  alt="Portfolio Management" 
+                  className="h-full w-full object-contain p-1.5" 
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                />
               </div>
               <h3 className="text-xl font-semibold mb-3">Portfolio Management</h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -197,8 +235,13 @@ export default async function Page() {
             </Card>
 
             <Card className="p-8 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 bg-card">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-6">
-                <Target className="h-6 w-6 text-primary" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg mb-6 overflow-hidden">
+                <img 
+                  src="/icons/icon4.PNG" 
+                  alt="Deal Flow Pipeline" 
+                  className="h-full w-full object-contain p-1.5" 
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                />
               </div>
               <h3 className="text-xl font-semibold mb-3">Deal Flow Pipeline</h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -207,8 +250,13 @@ export default async function Page() {
             </Card>
 
             <Card className="p-8 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 bg-card">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-6">
-                <TrendingUp className="h-6 w-6 text-primary" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg mb-6 overflow-hidden">
+                <img 
+                  src="/icons/icon7.PNG" 
+                  alt="Fundraising Tools" 
+                  className="h-full w-full object-contain p-1.5" 
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                />
               </div>
               <h3 className="text-xl font-semibold mb-3">Fundraising Tools</h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -217,8 +265,13 @@ export default async function Page() {
             </Card>
 
             <Card className="p-8 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 bg-card">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-6">
-                <Users className="h-6 w-6 text-primary" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg mb-6 overflow-hidden">
+                <img 
+                  src="/icons/icon4.PNG" 
+                  alt="Network Intelligence" 
+                  className="h-full w-full object-contain p-1.5" 
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                />
               </div>
               <h3 className="text-xl font-semibold mb-3">Network Intelligence</h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -227,8 +280,13 @@ export default async function Page() {
             </Card>
 
             <Card className="p-8 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 bg-card">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-6">
-                <Globe2 className="h-6 w-6 text-primary" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg mb-6 overflow-hidden">
+                <img 
+                  src="/icons/icon2.PNG" 
+                  alt="Market Insights" 
+                  className="h-full w-full object-contain p-1.5" 
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                />
               </div>
               <h3 className="text-xl font-semibold mb-3">Market Insights</h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -237,8 +295,13 @@ export default async function Page() {
             </Card>
 
             <Card className="p-8 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 bg-card">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-6">
-                <Sparkles className="h-6 w-6 text-primary" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg mb-6 overflow-hidden">
+                <img 
+                  src="/icons/icon6.PNG" 
+                  alt="AI-Powered Analysis" 
+                  className="h-full w-full object-contain p-1.5" 
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                />
               </div>
               <h3 className="text-xl font-semibold mb-3">AI-Powered Analysis</h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -289,18 +352,82 @@ export default async function Page() {
             </div>
             <div className="relative">
               <div className="aspect-[4/3] rounded-2xl border border-border/50 bg-card shadow-2xl shadow-primary/5 overflow-hidden">
-                <div className="p-6 border-b border-border/50 flex items-center gap-2">
+                {/* Browser Header */}
+                <div className="p-4 border-b border-border/50 flex items-center gap-2 bg-muted/30">
                   <div className="h-3 w-3 rounded-full bg-destructive/80" />
                   <div className="h-3 w-3 rounded-full bg-primary/80" />
                   <div className="h-3 w-3 rounded-full bg-chart-2/80" />
+                  <div className="flex-1 h-6 bg-muted rounded-md mx-4 flex items-center px-3 text-xs text-muted-foreground">
+                    trackifyatlas.com/portfolio/analytics
+                  </div>
                 </div>
-                <div className="p-6 space-y-4">
-                  <div className="h-4 bg-muted rounded w-1/3" />
-                  <div className="h-32 bg-gradient-to-br from-primary/20 to-chart-2/20 rounded-lg" />
+                
+                {/* Dashboard Content */}
+                <div className="p-6 space-y-4 bg-gradient-to-br from-background to-muted/20">
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-lg font-semibold text-foreground mb-1">Portfolio Overview</h3>
+                      <p className="text-xs text-muted-foreground">Q1 2025 Performance</p>
+                    </div>
+                    <button className="h-8 px-4 bg-primary/20 text-primary text-xs font-medium rounded-lg hover:bg-primary/30 transition-colors">
+                      Export Report
+                    </button>
+                  </div>
+
+                  {/* Chart Area */}
+                  <div className="h-32 bg-gradient-to-br from-primary/20 to-chart-2/20 rounded-lg p-4 flex items-end justify-between gap-2">
+                    <div className="flex-1 h-20 bg-primary/40 rounded-t" style={{ height: '60%' }} />
+                    <div className="flex-1 h-24 bg-chart-2/40 rounded-t" style={{ height: '75%' }} />
+                    <div className="flex-1 h-28 bg-primary/40 rounded-t" style={{ height: '85%' }} />
+                    <div className="flex-1 h-32 bg-chart-2/40 rounded-t" style={{ height: '100%' }} />
+                    <div className="flex-1 h-20 bg-primary/40 rounded-t" style={{ height: '60%' }} />
+                    <div className="flex-1 h-24 bg-chart-2/40 rounded-t" style={{ height: '75%' }} />
+                  </div>
+
+                  {/* Portfolio Stats */}
                   <div className="grid grid-cols-3 gap-3">
-                    <div className="h-16 bg-muted/50 rounded" />
-                    <div className="h-16 bg-muted/50 rounded" />
-                    <div className="h-16 bg-muted/50 rounded" />
+                    <div className="bg-card border border-border/50 rounded-lg p-3">
+                      <p className="text-xs text-muted-foreground mb-1">Total Value</p>
+                      <p className="text-base font-semibold text-foreground">$24.5M</p>
+                      <p className="text-xs text-chart-2 mt-1">+12.3%</p>
+                    </div>
+                    <div className="bg-card border border-border/50 rounded-lg p-3">
+                      <p className="text-xs text-muted-foreground mb-1">Companies</p>
+                      <p className="text-base font-semibold text-foreground">18</p>
+                      <p className="text-xs text-muted-foreground mt-1">Active</p>
+                    </div>
+                    <div className="bg-card border border-border/50 rounded-lg p-3">
+                      <p className="text-xs text-muted-foreground mb-1">IRR</p>
+                      <p className="text-base font-semibold text-foreground">28.4%</p>
+                      <p className="text-xs text-chart-2 mt-1">Above target</p>
+                    </div>
+                  </div>
+
+                  {/* Deal Flow Pipeline */}
+                  <div className="bg-card border border-border/50 rounded-lg p-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs font-semibold text-foreground">Deal Flow Pipeline</p>
+                      <p className="text-xs text-muted-foreground">12 deals</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <div className="flex-1 h-2 bg-primary/30 rounded-full overflow-hidden">
+                        <div className="h-full bg-primary rounded-full" style={{ width: '35%' }} />
+                      </div>
+                      <div className="flex-1 h-2 bg-chart-2/30 rounded-full overflow-hidden">
+                        <div className="h-full bg-chart-2 rounded-full" style={{ width: '25%' }} />
+                      </div>
+                      <div className="flex-1 h-2 bg-chart-3/30 rounded-full overflow-hidden">
+                        <div className="h-full bg-chart-3 rounded-full" style={{ width: '40%' }} />
+                      </div>
+                    </div>
+                    <div className="flex gap-2 mt-2 text-xs">
+                      <span className="text-muted-foreground">Due Diligence</span>
+                      <span className="text-muted-foreground">•</span>
+                      <span className="text-muted-foreground">Review</span>
+                      <span className="text-muted-foreground">•</span>
+                      <span className="text-muted-foreground">Screening</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -315,22 +442,100 @@ export default async function Page() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="order-2 lg:order-1 relative">
               <div className="aspect-[4/3] rounded-2xl border border-border/50 bg-card shadow-2xl shadow-primary/5 overflow-hidden">
-                <div className="p-6 border-b border-border/50 flex items-center gap-2">
+                {/* Browser Header */}
+                <div className="p-4 border-b border-border/50 flex items-center gap-2 bg-muted/30">
                   <div className="h-3 w-3 rounded-full bg-destructive/80" />
                   <div className="h-3 w-3 rounded-full bg-primary/80" />
                   <div className="h-3 w-3 rounded-full bg-chart-2/80" />
-                </div>
-                <div className="p-6 space-y-4">
-                  <div className="h-4 bg-muted rounded w-2/5" />
-                  <div className="space-y-2">
-                    <div className="h-2 bg-muted/50 rounded w-full" />
-                    <div className="h-2 bg-muted/50 rounded w-4/5" />
-                    <div className="h-2 bg-muted/50 rounded w-3/5" />
+                  <div className="flex-1 h-6 bg-muted rounded-md mx-4 flex items-center px-3 text-xs text-muted-foreground">
+                    trackifyatlas.com/founder/dashboard
                   </div>
-                  <div className="h-24 bg-gradient-to-br from-chart-2/20 to-primary/20 rounded-lg mt-4" />
-                  <div className="flex gap-2">
-                    <div className="h-8 flex-1 bg-muted/50 rounded" />
-                    <div className="h-8 flex-1 bg-muted/50 rounded" />
+                </div>
+                
+                {/* Dashboard Content */}
+                <div className="p-6 space-y-4 bg-gradient-to-br from-background to-muted/20">
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-lg font-semibold text-foreground mb-1">Fundraising Dashboard</h3>
+                      <p className="text-xs text-muted-foreground">Series A Round</p>
+                    </div>
+                    <button className="h-8 px-4 bg-primary/20 text-primary text-xs font-medium rounded-lg hover:bg-primary/30 transition-colors">
+                      Add Investor
+                    </button>
+                  </div>
+
+                  {/* Metrics Cards */}
+                  <div className="grid grid-cols-3 gap-3 mb-4">
+                    <div className="bg-card border border-border/50 rounded-lg p-3">
+                      <p className="text-xs text-muted-foreground mb-2">Target</p>
+                      <p className="text-lg font-semibold text-foreground mb-1">$2.5M</p>
+                      <p className="text-xs text-muted-foreground">Series A</p>
+                    </div>
+                    <div className="bg-card border border-border/50 rounded-lg p-3">
+                      <p className="text-xs text-muted-foreground mb-2">Raised</p>
+                      <p className="text-lg font-semibold text-chart-2 mb-1">$1.8M</p>
+                      <p className="text-xs text-muted-foreground">72% complete</p>
+                    </div>
+                    <div className="bg-card border border-border/50 rounded-lg p-3">
+                      <p className="text-xs text-muted-foreground mb-2">Investors</p>
+                      <p className="text-lg font-semibold text-chart-3 mb-1">12</p>
+                      <p className="text-xs text-muted-foreground">Active leads</p>
+                    </div>
+                  </div>
+
+                  {/* Investor Pipeline */}
+                  <div className="bg-card border border-border/50 rounded-lg p-4">
+                    <h4 className="text-sm font-semibold text-foreground mb-3">Investor Pipeline</h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-3">
+                        <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-medium text-primary">
+                          AC
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-foreground">Acme Ventures</p>
+                          <p className="text-xs text-muted-foreground">Lead investor • $500K committed</p>
+                        </div>
+                        <span className="h-6 px-2 bg-primary/10 text-primary text-xs font-medium rounded flex items-center">
+                          Committed
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="h-8 w-8 rounded-full bg-chart-2/20 flex items-center justify-center text-xs font-medium text-chart-2">
+                          TC
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-foreground">Tech Capital Partners</p>
+                          <p className="text-xs text-muted-foreground">Due diligence • $300K</p>
+                        </div>
+                        <span className="h-6 px-2 bg-chart-2/10 text-chart-2 text-xs font-medium rounded flex items-center">
+                          In Review
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="h-8 w-8 rounded-full bg-chart-3/20 flex items-center justify-center text-xs font-medium text-chart-3">
+                          GF
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-foreground">Growth Fund</p>
+                          <p className="text-xs text-muted-foreground">Initial meeting scheduled</p>
+                        </div>
+                        <span className="h-6 px-2 bg-chart-3/10 text-chart-3 text-xs font-medium rounded flex items-center">
+                          Contacted
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div className="mt-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs font-medium text-foreground">Fundraising Progress</p>
+                      <p className="text-xs text-muted-foreground">72%</p>
+                    </div>
+                    <div className="h-2 bg-muted rounded-full overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-primary/60 to-chart-2/60 rounded-full w-3/4" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -494,9 +699,12 @@ export default async function Page() {
                   size="sm"
                   variant="ghost"
                   className="group-hover:bg-primary/10 group-hover:text-primary transition-colors"
+                  asChild
                 >
-                  Explore
-                  <ArrowRight className="ml-2 h-3.5 w-3.5" />
+                  <Link href="/stages/pre-seed-seed">
+                    Explore
+                    <ArrowRight className="ml-2 h-3.5 w-3.5" />
+                  </Link>
                 </Button>
               </div>
             </Card>
@@ -514,9 +722,12 @@ export default async function Page() {
                   size="sm"
                   variant="ghost"
                   className="group-hover:bg-primary/10 group-hover:text-primary transition-colors"
+                  asChild
                 >
-                  Explore
-                  <ArrowRight className="ml-2 h-3.5 w-3.5" />
+                  <Link href="/stages/series-a">
+                    Explore
+                    <ArrowRight className="ml-2 h-3.5 w-3.5" />
+                  </Link>
                 </Button>
               </div>
             </Card>
@@ -532,9 +743,12 @@ export default async function Page() {
                   size="sm"
                   variant="ghost"
                   className="group-hover:bg-primary/10 group-hover:text-primary transition-colors"
+                  asChild
                 >
-                  Explore
-                  <ArrowRight className="ml-2 h-3.5 w-3.5" />
+                  <Link href="/stages/growth">
+                    Explore
+                    <ArrowRight className="ml-2 h-3.5 w-3.5" />
+                  </Link>
                 </Button>
               </div>
             </Card>
@@ -554,9 +768,12 @@ export default async function Page() {
                   size="sm"
                   variant="ghost"
                   className="group-hover:bg-primary/10 group-hover:text-primary transition-colors"
+                  asChild
                 >
-                  Explore
-                  <ArrowRight className="ml-2 h-3.5 w-3.5" />
+                  <Link href="/stages/late-stage-exit">
+                    Explore
+                    <ArrowRight className="ml-2 h-3.5 w-3.5" />
+                  </Link>
                 </Button>
               </div>
             </Card>
@@ -679,13 +896,13 @@ export default async function Page() {
           <div className="pt-8 border-t border-border/40 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <p>© 2025 Trackify Atlas. All rights reserved.</p>
             <div className="flex gap-6">
-              <Link href="#" className="hover:text-foreground transition-colors">
+              <Link href="/privacy" className="hover:text-foreground transition-colors">
                 Privacy
               </Link>
-              <Link href="#" className="hover:text-foreground transition-colors">
+              <Link href="/terms" className="hover:text-foreground transition-colors">
                 Terms
               </Link>
-              <Link href="#" className="hover:text-foreground transition-colors">
+              <Link href="/security" className="hover:text-foreground transition-colors">
                 Security
               </Link>
             </div>

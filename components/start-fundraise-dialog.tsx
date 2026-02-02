@@ -143,11 +143,24 @@ export function StartFundraiseDialog({ open, onOpenChange, onSuccess }: StartFun
     setLoading(true)
 
     try {
-      // TODO: Implement API call to create fundraise
-      console.log("Starting fundraise:", formData)
+      // Call API to create fundraise
+      const response = await fetch("/api/founder/fundraise", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to start fundraise")
+      }
+
+      if (!result.success) {
+        throw new Error("Fundraise creation was not successful")
+      }
 
       // Reset form
       setFormData({
@@ -454,21 +467,25 @@ export function StartFundraiseDialog({ open, onOpenChange, onSuccess }: StartFun
                       </div>
                     ) : (
                       <UploadButton<OurFileRouter>
-                        endpoint="companyLogo"
+                        endpoint="pitchDeck"
                         onClientUploadComplete={(res) => {
                           if (res && res[0]) {
                             handleInputChange("pitchDeck", res[0].url)
                           }
                         }}
-                        className="ut-button:w-full"
+                        onUploadError={(error) => {
+                          console.error("Upload error:", error)
+                          alert("Failed to upload pitch deck. Please ensure it's a PDF file under 10MB.")
+                        }}
+                        className="ut-button:w-full ut-button:bg-primary ut-button:text-primary-foreground ut-button:hover:bg-primary/90 ut-button:rounded-lg ut-button:border ut-button:border-primary ut-button:font-medium ut-button:px-4 ut-button:py-2 ut-button:shadow-sm ut-ready:bg-primary ut-uploading:bg-primary/50"
                         content={{
                           button: ({ ready }) => (
                             <div className="flex items-center justify-center gap-2 w-full">
                               <FileText className="h-4 w-4" />
-                              <span>{ready ? "Upload Pitch Deck" : "Preparing..."}</span>
+                              <span>{ready ? "Upload Pitch Deck (PDF)" : "Preparing..."}</span>
                             </div>
                           ),
-                          allowedContent: "PDF (10MB max)",
+                          allowedContent: "PDF files up to 10MB",
                         }}
                       />
                     )}
@@ -493,21 +510,25 @@ export function StartFundraiseDialog({ open, onOpenChange, onSuccess }: StartFun
                       </div>
                     ) : (
                       <UploadButton<OurFileRouter>
-                        endpoint="companyLogo"
+                        endpoint="financialModel"
                         onClientUploadComplete={(res) => {
                           if (res && res[0]) {
                             handleInputChange("financialModel", res[0].url)
                           }
                         }}
-                        className="ut-button:w-full"
+                        onUploadError={(error) => {
+                          console.error("Upload error:", error)
+                          alert("Failed to upload financial model. Please ensure it's a PDF file under 10MB.")
+                        }}
+                        className="ut-button:w-full ut-button:bg-primary ut-button:text-primary-foreground ut-button:hover:bg-primary/90 ut-button:rounded-lg ut-button:border ut-button:border-primary ut-button:font-medium ut-button:px-4 ut-button:py-2 ut-button:shadow-sm ut-ready:bg-primary ut-uploading:bg-primary/50"
                         content={{
                           button: ({ ready }) => (
                             <div className="flex items-center justify-center gap-2 w-full">
                               <FileText className="h-4 w-4" />
-                              <span>{ready ? "Upload Financial Model" : "Preparing..."}</span>
+                              <span>{ready ? "Upload Financial Model (PDF)" : "Preparing..."}</span>
                             </div>
                           ),
-                          allowedContent: "Excel/PDF (10MB max)",
+                          allowedContent: "PDF files up to 10MB",
                         }}
                       />
                     )}

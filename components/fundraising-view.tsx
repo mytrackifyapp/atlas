@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { PageHeader } from "@/components/page-header"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -28,63 +28,15 @@ import {
   Edit,
   Plus,
   X,
+  RefreshCw,
+  Loader2,
+  AlertCircle,
 } from "lucide-react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { AddInvestorDialog } from "@/components/add-investor-dialog"
 import { UploadButton } from "@uploadthing/react"
 import type { OurFileRouter } from "@/app/api/uploadthing/core"
-
-const fundraisingData = [
-  { month: "Jan", raised: 500000 },
-  { month: "Feb", raised: 1200000 },
-  { month: "Mar", raised: 2100000 },
-  { month: "Apr", raised: 2800000 },
-  { month: "May", raised: 3500000 },
-  { month: "Jun", raised: 4200000 },
-]
-
-const investors = [
-  {
-    id: 1,
-    name: "Sarah Chen",
-    firm: "Atlas Ventures",
-    avatar: "/diverse-group-smiling.png",
-    status: "Committed",
-    amount: 1500000,
-    lastContact: "2024-06-12",
-    stage: "Term Sheet",
-  },
-  {
-    id: 2,
-    name: "Michael Torres",
-    firm: "Sequoia Capital",
-    avatar: "/portrait-contemplative-man.png",
-    status: "Interested",
-    amount: 2000000,
-    lastContact: "2024-06-10",
-    stage: "Due Diligence",
-  },
-  {
-    id: 3,
-    name: "Emily Rodriguez",
-    firm: "Accel Partners",
-    avatar: "/portrait-emily.png",
-    status: "In Discussion",
-    amount: 1000000,
-    lastContact: "2024-06-08",
-    stage: "Initial Meeting",
-  },
-  {
-    id: 4,
-    name: "David Kim",
-    firm: "Andreessen Horowitz",
-    avatar: "/thoughtful-person.png",
-    status: "Committed",
-    amount: 1200000,
-    lastContact: "2024-06-14",
-    stage: "Term Sheet",
-  },
-]
+import { cn } from "@/lib/utils"
 
 const statusColors = {
   Committed: "default",
@@ -93,51 +45,134 @@ const statusColors = {
   Passed: "destructive",
 }
 
-const milestones = [
-  { id: 1, title: "Pitch Deck Complete", status: "completed", date: "2024-05-01" },
-  { id: 2, title: "First Investor Meeting", status: "completed", date: "2024-05-15" },
-  { id: 3, title: "Term Sheet Received", status: "in-progress", date: "2024-06-20" },
-  { id: 4, title: "Due Diligence Complete", status: "pending", date: "2024-07-15" },
-  { id: 5, title: "Round Closed", status: "pending", date: "2024-08-15" },
-]
+interface Fundraise {
+  id: string
+  roundType: string
+  targetAmount: number
+  committedAmount: number
+  percentage: number
+  preMoneyValuation: number | null
+  minInvestment: number | null
+  maxInvestment: number | null
+  startDate: string | Date
+  targetCloseDate: string | Date
+  useOfFunds: string[]
+  useOfFundsBreakdown: string
+  companyDescription: string
+  traction: string
+  marketOpportunity: string
+  competitiveAdvantage: string
+  pitchDeck: string | null
+  financialModel: string | null
+  status: string
+  daysRemaining: number
+  fundraisingData: Array<{ month: string; raised: number }>
+}
 
-const documents = [
-  { id: 1, name: "Pitch Deck - Series A", type: "PDF", size: "12.4 MB", uploaded: "2024-05-01", version: "v2.1" },
-  { id: 2, name: "Financial Model", type: "Excel", size: "2.8 MB", uploaded: "2024-05-10", version: "v1.3" },
-  { id: 3, name: "Cap Table", type: "PDF", size: "486 KB", uploaded: "2024-05-15", version: "v1.0" },
-  { id: 4, name: "Product Roadmap", type: "PDF", size: "1.2 MB", uploaded: "2024-06-01", version: "v2.0" },
-]
+interface Investor {
+  id: string
+  name: string
+  email?: string
+  phone?: string
+  firm?: string
+  title?: string
+  amount: number
+  status: string
+  stage: string
+  notes?: string
+  lastContact: string | Date
+  avatar?: string
+}
 
-const updates = [
-  {
-    id: 1,
-    title: "Monthly Update - June 2024",
-    sentTo: 12,
-    opened: 10,
-    date: "2024-06-15",
-    status: "sent",
-  },
-  {
-    id: 2,
-    title: "Product Launch Announcement",
-    sentTo: 12,
-    opened: 8,
-    date: "2024-06-10",
-    status: "sent",
-  },
-  {
-    id: 3,
-    title: "Q2 Financial Update",
-    sentTo: 12,
-    opened: 11,
-    date: "2024-05-30",
-    status: "sent",
-  },
-]
+interface InvestorStats {
+  total: number
+  committed: number
+  inDiscussion: number
+  interested: number
+}
 
 export function FundraisingView() {
   const [addInvestorOpen, setAddInvestorOpen] = useState(false)
   const [activeTab, setActiveTab] = useState("overview")
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [fundraise, setFundraise] = useState<Fundraise | null>(null)
+  const [investors, setInvestors] = useState<Investor[]>([])
+  const [investorStats, setInvestorStats] = useState<InvestorStats>({
+    total: 0,
+    committed: 0,
+    inDiscussion: 0,
+    interested: 0,
+  })
+
+  const fetchFundraise = useCallback(async () => {
+    try {
+      setError(null)
+      const response = await fetch("/api/founder/fundraise")
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to fetch fundraise")
+      }
+
+      if (result.success) {
+        setFundraise(result.fundraise)
+      }
+    } catch (err) {
+      console.error("Error fetching fundraise:", err)
+      setError(err instanceof Error ? err.message : "An unexpected error occurred")
+    }
+  }, [])
+
+  const fetchInvestors = useCallback(async () => {
+    try {
+      setError(null)
+      const response = await fetch("/api/founder/investors")
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to fetch investors")
+      }
+
+      if (result.success) {
+        setInvestors(result.investors || [])
+        setInvestorStats(result.stats || { total: 0, committed: 0, inDiscussion: 0, interested: 0 })
+      }
+    } catch (err) {
+      console.error("Error fetching investors:", err)
+      setError(err instanceof Error ? err.message : "An unexpected error occurred")
+    }
+  }, [])
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true)
+      await Promise.all([fetchFundraise(), fetchInvestors()])
+      setLoading(false)
+    }
+    loadData()
+  }, [fetchFundraise, fetchInvestors])
+
+  const handleInvestorAdded = () => {
+    fetchInvestors()
+    fetchFundraise() // Refresh to update committed amount
+  }
+
+  const formatDate = (date: string | Date) => {
+    if (!date) return "—"
+    const d = date instanceof Date ? date : new Date(date)
+    return d.toLocaleDateString()
+  }
+
+  const formatCurrency = (amount: number) => {
+    if (amount >= 1000000) {
+      return `$${(amount / 1000000).toFixed(1)}M`
+    }
+    if (amount >= 1000) {
+      return `$${(amount / 1000).toFixed(0)}K`
+    }
+    return `$${amount.toFixed(0)}`
+  }
 
   return (
     <div className="space-y-6 p-4 sm:p-6 lg:p-8">
@@ -162,11 +197,32 @@ export function FundraisingView() {
       <AddInvestorDialog
         open={addInvestorOpen}
         onOpenChange={setAddInvestorOpen}
-        onSuccess={() => {
-          // Refresh investor list
-          console.log("Investor added successfully")
-        }}
+        onSuccess={handleInvestorAdded}
       />
+
+      {loading ? (
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <Loader2 className="h-12 w-12 animate-spin text-primary mb-3" />
+          <p className="text-muted-foreground">Loading fundraising data...</p>
+        </div>
+      ) : error && !fundraise ? (
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <AlertCircle className="h-12 w-12 text-destructive mb-3" />
+          <p className="text-destructive mb-4">{error}</p>
+          <Button onClick={() => { fetchFundraise(); fetchInvestors(); }}>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Retry
+          </Button>
+        </div>
+      ) : !fundraise ? (
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <Target className="h-12 w-12 text-muted-foreground mb-3" />
+          <p className="text-muted-foreground mb-4">No active fundraise found.</p>
+          <Button asChild>
+            <a href="/founder">Start a Fundraise</a>
+          </Button>
+        </div>
+      ) : (
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
         <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5 h-auto">
@@ -179,101 +235,119 @@ export function FundraisingView() {
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-4 sm:space-y-6 mt-4 sm:mt-6">
-      {/* Key Metrics */}
+          {/* Key Metrics */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
-                <p className="text-sm font-medium text-muted-foreground">Target Raise</p>
-              </div>
-              <p className="text-3xl font-bold">$5.0M</p>
-              <p className="text-sm text-muted-foreground">Series A Round</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                <p className="text-sm font-medium text-muted-foreground">Raised to Date</p>
-              </div>
-              <p className="text-3xl font-bold">$4.2M</p>
-              <div className="flex items-center text-sm text-primary">
-                <span>84% of target</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-muted-foreground" />
-                <p className="text-sm font-medium text-muted-foreground">Active Investors</p>
-              </div>
-              <p className="text-3xl font-bold">12</p>
-              <p className="text-sm text-muted-foreground">4 committed</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <p className="text-sm font-medium text-muted-foreground">Target Close</p>
-              </div>
-              <p className="text-3xl font-bold">Aug 15</p>
-              <p className="text-sm text-muted-foreground">45 days remaining</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Fundraising Progress */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Fundraising Progress</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4 sm:space-y-6">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between text-sm">
-              <span className="font-medium">$4.2M of $5.0M goal</span>
-              <span className="text-muted-foreground">84%</span>
-            </div>
-            <Progress value={84} className="h-3" />
+            <Card>
+              <CardContent className="pt-6">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <DollarSign className="h-4 w-4 text-muted-foreground" />
+                    <p className="text-sm font-medium text-muted-foreground">Target Raise</p>
+                  </div>
+                  <p className="text-3xl font-bold">{formatCurrency(fundraise.targetAmount)}</p>
+                  <p className="text-sm text-muted-foreground">{fundraise.roundType} Round</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                    <p className="text-sm font-medium text-muted-foreground">Raised to Date</p>
+                  </div>
+                  <p className="text-3xl font-bold">{formatCurrency(fundraise.committedAmount)}</p>
+                  <div className="flex items-center text-sm text-primary">
+                    <span>{fundraise.percentage}% of target</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Users className="h-4 w-4 text-muted-foreground" />
+                    <p className="text-sm font-medium text-muted-foreground">Active Investors</p>
+                  </div>
+                  <p className="text-3xl font-bold">{investorStats.total}</p>
+                  <p className="text-sm text-muted-foreground">{investorStats.committed} committed</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                    <p className="text-sm font-medium text-muted-foreground">Target Close</p>
+                  </div>
+                  <p className="text-3xl font-bold">{formatDate(fundraise.targetCloseDate).split(",")[0]}</p>
+                  <p className="text-sm text-muted-foreground">{fundraise.daysRemaining} days remaining</p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
-          <div className="w-full overflow-x-auto">
-            <ResponsiveContainer width="100%" height={250} minHeight={200}>
-            <LineChart data={fundraisingData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
-              <YAxis stroke="hsl(var(--muted-foreground))" />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "hsl(var(--card))",
-                  border: "1px solid hsl(var(--border))",
-                  borderRadius: "8px",
-                }}
-              />
-              <Line type="monotone" dataKey="raised" stroke="#c1ff72" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
-          </div>
-        </CardContent>
-      </Card>
 
-      {/* Investor Pipeline */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Investor Pipeline</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3 sm:space-y-4">
-            {investors.map((investor) => (
+          {/* Fundraising Progress */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Fundraising Progress</CardTitle>
+                <Button variant="ghost" size="icon" onClick={() => { fetchFundraise(); fetchInvestors(); }} disabled={loading}>
+                  <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4 sm:space-y-6">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="font-medium">
+                    {formatCurrency(fundraise.committedAmount)} of {formatCurrency(fundraise.targetAmount)} goal
+                  </span>
+                  <span className="text-muted-foreground">{fundraise.percentage}%</span>
+                </div>
+                <Progress value={fundraise.percentage} className="h-3" />
+              </div>
+              <div className="w-full overflow-x-auto">
+                <ResponsiveContainer width="100%" height={250} minHeight={200}>
+                  <LineChart data={fundraise.fundraisingData || []}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                    <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
+                    <YAxis stroke="hsl(var(--muted-foreground))" tickFormatter={(value) => formatCurrency(value)} />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "hsl(var(--card))",
+                        border: "1px solid hsl(var(--border))",
+                        borderRadius: "8px",
+                      }}
+                      formatter={(value: number) => [formatCurrency(value), "Raised"]}
+                    />
+                    <Line type="monotone" dataKey="raised" stroke="#c1ff72" strokeWidth={2} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Investor Pipeline */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Investor Pipeline</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {investors.length === 0 ? (
+                <div className="text-center py-12">
+                  <Users className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                  <p className="text-muted-foreground mb-4">No investors yet.</p>
+                  <Button onClick={() => setAddInvestorOpen(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Your First Investor
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-3 sm:space-y-4">
+                  {investors.map((investor) => (
               <div
                 key={investor.id}
                 className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors"
@@ -301,7 +375,7 @@ export function FundraisingView() {
                       <span className="flex items-center gap-1.5">
                         <Calendar className="h-3.5 w-3.5 flex-shrink-0" />
                         <span className="hidden sm:inline">Last contact: </span>
-                        {new Date(investor.lastContact).toLocaleDateString()}
+                        {formatDate(investor.lastContact)}
                       </span>
                     </div>
                   </div>
@@ -311,7 +385,7 @@ export function FundraisingView() {
                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
                     <div className="text-left sm:text-right space-y-1">
                       <p className="text-xs sm:text-sm text-muted-foreground">Commitment</p>
-                      <p className="font-semibold text-sm sm:text-base">${(investor.amount / 1000000).toFixed(1)}M</p>
+                      <p className="font-semibold text-sm sm:text-base">{formatCurrency(investor.amount)}</p>
                     </div>
                     <div className="text-left sm:text-right space-y-1">
                       <p className="text-xs sm:text-sm text-muted-foreground">Stage</p>
@@ -332,9 +406,10 @@ export function FundraisingView() {
                 </div>
               </div>
             ))}
-          </div>
-        </CardContent>
-      </Card>
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
           {/* Fundraising Setup */}
           <Card>
@@ -355,21 +430,29 @@ export function FundraisingView() {
                 <div className="space-y-4">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground mb-1">Round Type</p>
-                    <p className="text-lg font-semibold">Series A</p>
+                    <p className="text-lg font-semibold">{fundraise.roundType}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-muted-foreground mb-1">Valuation</p>
-                    <p className="text-lg font-semibold">$25M Pre-Money</p>
+                    <p className="text-lg font-semibold">
+                      {fundraise.preMoneyValuation ? `${formatCurrency(fundraise.preMoneyValuation)} Pre-Money` : "—"}
+                    </p>
                   </div>
                 </div>
                 <div className="space-y-4">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground mb-1">Use of Funds</p>
-                    <p className="text-sm">Product development (40%), Team expansion (35%), Marketing (25%)</p>
+                    <p className="text-sm">
+                      {fundraise.useOfFunds.length > 0
+                        ? fundraise.useOfFunds.join(", ")
+                        : fundraise.useOfFundsBreakdown || "—"}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-muted-foreground mb-1">Timeline</p>
-                    <p className="text-sm">Started: May 1, 2024 | Target Close: Aug 15, 2024</p>
+                    <p className="text-sm">
+                      Started: {formatDate(fundraise.startDate)} | Target Close: {formatDate(fundraise.targetCloseDate)}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -402,7 +485,7 @@ export function FundraisingView() {
               <CardContent className="pt-6">
                 <div className="space-y-2">
                   <p className="text-sm font-medium text-muted-foreground">Total Investors</p>
-                  <p className="text-3xl font-bold">12</p>
+                  <p className="text-3xl font-bold">{investorStats.total}</p>
                 </div>
               </CardContent>
             </Card>
@@ -410,7 +493,7 @@ export function FundraisingView() {
               <CardContent className="pt-6">
                 <div className="space-y-2">
                   <p className="text-sm font-medium text-muted-foreground">Committed</p>
-                  <p className="text-3xl font-bold text-emerald-600">4</p>
+                  <p className="text-3xl font-bold text-emerald-600">{investorStats.committed}</p>
                 </div>
               </CardContent>
             </Card>
@@ -418,7 +501,7 @@ export function FundraisingView() {
               <CardContent className="pt-6">
                 <div className="space-y-2">
                   <p className="text-sm font-medium text-muted-foreground">In Discussion</p>
-                  <p className="text-3xl font-bold text-blue-600">5</p>
+                  <p className="text-3xl font-bold text-blue-600">{investorStats.inDiscussion}</p>
                 </div>
               </CardContent>
             </Card>
@@ -426,7 +509,7 @@ export function FundraisingView() {
               <CardContent className="pt-6">
                 <div className="space-y-2">
                   <p className="text-sm font-medium text-muted-foreground">Interested</p>
-                  <p className="text-3xl font-bold text-yellow-600">3</p>
+                  <p className="text-3xl font-bold text-yellow-600">{investorStats.interested}</p>
                 </div>
               </CardContent>
             </Card>
@@ -438,8 +521,18 @@ export function FundraisingView() {
               <CardTitle>All Investors</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3 sm:space-y-4">
-                {investors.map((investor) => (
+              {investors.length === 0 ? (
+                <div className="text-center py-12">
+                  <Users className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                  <p className="text-muted-foreground mb-4">No investors yet.</p>
+                  <Button onClick={() => setAddInvestorOpen(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Your First Investor
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-3 sm:space-y-4">
+                  {investors.map((investor) => (
                   <div
                     key={investor.id}
                     className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors"
@@ -467,7 +560,7 @@ export function FundraisingView() {
                           <span className="flex items-center gap-1.5">
                             <Calendar className="h-3.5 w-3.5 flex-shrink-0" />
                             <span className="hidden sm:inline">Last contact: </span>
-                            {new Date(investor.lastContact).toLocaleDateString()}
+                            {formatDate(investor.lastContact)}
                           </span>
                         </div>
                       </div>
@@ -477,7 +570,7 @@ export function FundraisingView() {
                       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
                         <div className="text-left sm:text-right space-y-1">
                           <p className="text-xs sm:text-sm text-muted-foreground">Commitment</p>
-                          <p className="font-semibold text-sm sm:text-base">${(investor.amount / 1000000).toFixed(1)}M</p>
+                          <p className="font-semibold text-sm sm:text-base">{formatCurrency(investor.amount)}</p>
                         </div>
                         <div className="text-left sm:text-right space-y-1">
                           <p className="text-xs sm:text-sm text-muted-foreground">Stage</p>
@@ -498,7 +591,8 @@ export function FundraisingView() {
                     </div>
                   </div>
                 ))}
-              </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -523,14 +617,14 @@ export function FundraisingView() {
                 <CardDescription>Your main fundraising presentation</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {documents.find((d) => d.name.includes("Pitch Deck")) ? (
+                {fundraise.pitchDeck ? (
                   <div className="space-y-3">
                     <div className="flex items-center justify-between gap-3 p-3 border border-border rounded-lg">
                       <div className="flex items-center gap-3 min-w-0 flex-1">
                         <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
                         <div className="min-w-0 flex-1">
-                          <p className="font-medium truncate">Pitch Deck - Series A</p>
-                          <p className="text-sm text-muted-foreground">v2.1 • 12.4 MB</p>
+                          <p className="font-medium truncate">Pitch Deck - {fundraise.roundType}</p>
+                          <p className="text-sm text-muted-foreground">PDF</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2 flex-shrink-0">
@@ -584,26 +678,26 @@ export function FundraisingView() {
                 <CardDescription>Financial models, projections, and statements</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                {documents
-                  .filter((d) => d.name.includes("Financial") || d.name.includes("Cap Table"))
-                  .map((doc) => (
-                    <div key={doc.id} className="flex items-center justify-between gap-3 p-3 border border-border rounded-lg">
-                      <div className="flex items-center gap-3 min-w-0 flex-1">
-                        <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                        <div className="min-w-0 flex-1">
-                          <p className="font-medium truncate">{doc.name}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {doc.version} • {doc.size}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 flex-shrink-0">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
-                          <Download className="h-4 w-4" />
-                        </Button>
+                {fundraise.financialModel ? (
+                  <div className="flex items-center justify-between gap-3 p-3 border border-border rounded-lg">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium truncate">Financial Model</p>
+                        <p className="text-sm text-muted-foreground">PDF</p>
                       </div>
                     </div>
-                  ))}
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10" asChild>
+                        <a href={fundraise.financialModel} target="_blank" rel="noopener noreferrer">
+                          <Download className="h-4 w-4" />
+                        </a>
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">No financial model uploaded yet.</p>
+                )}
                 <Button variant="outline" className="w-full" size="sm">
                   <Plus className="h-4 w-4 mr-2" />
                   Add Financial Document
@@ -619,31 +713,58 @@ export function FundraisingView() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {documents.map((doc) => (
-                  <div
-                    key={doc.id}
-                    className="flex items-center justify-between gap-3 p-3 border border-border rounded-lg hover:bg-accent/50 transition-colors"
-                  >
+                {fundraise.pitchDeck && (
+                  <div className="flex items-center justify-between gap-3 p-3 border border-border rounded-lg hover:bg-accent/50 transition-colors">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
                       <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
                       <div className="min-w-0 flex-1">
-                        <p className="font-medium truncate">{doc.name}</p>
+                        <p className="font-medium truncate">Pitch Deck - {fundraise.roundType}</p>
                         <p className="text-sm text-muted-foreground">
-                          {doc.type} • {doc.size} • Uploaded {new Date(doc.uploaded).toLocaleDateString()}
+                          PDF • Uploaded {formatDate(fundraise.createdAt)}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
-                      <Badge variant="outline" className="text-xs hidden sm:inline-flex">{doc.version}</Badge>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
-                        <Download className="h-4 w-4" />
+                      <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10" asChild>
+                        <a href={fundraise.pitchDeck} target="_blank" rel="noopener noreferrer">
+                          <Download className="h-4 w-4" />
+                        </a>
                       </Button>
                       <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
                         <Share2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
-                ))}
+                )}
+                {fundraise.financialModel && (
+                  <div className="flex items-center justify-between gap-3 p-3 border border-border rounded-lg hover:bg-accent/50 transition-colors">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium truncate">Financial Model</p>
+                        <p className="text-sm text-muted-foreground">
+                          PDF • Uploaded {formatDate(fundraise.createdAt)}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10" asChild>
+                        <a href={fundraise.financialModel} target="_blank" rel="noopener noreferrer">
+                          <Download className="h-4 w-4" />
+                        </a>
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
+                        <Share2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+                {!fundraise.pitchDeck && !fundraise.financialModel && (
+                  <div className="text-center py-8">
+                    <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                    <p className="text-muted-foreground">No documents uploaded yet.</p>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -658,58 +779,9 @@ export function FundraisingView() {
 
           <Card>
             <CardContent className="pt-6">
-              <div className="space-y-6">
-                {milestones.map((milestone, index) => (
-                  <div key={milestone.id} className="flex items-start gap-4">
-                    <div className="flex flex-col items-center">
-                      {milestone.status === "completed" ? (
-                        <div className="h-10 w-10 rounded-full bg-emerald-600 flex items-center justify-center">
-                          <CheckCircle2 className="h-5 w-5 text-white" />
-                        </div>
-                      ) : milestone.status === "in-progress" ? (
-                        <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center">
-                          <Clock className="h-5 w-5 text-white" />
-                        </div>
-                      ) : (
-                        <div className="h-10 w-10 rounded-full border-2 border-muted flex items-center justify-center">
-                          <Target className="h-5 w-5 text-muted-foreground" />
-                        </div>
-                      )}
-                      {index < milestones.length - 1 && (
-                        <div
-                          className={`w-0.5 h-16 mt-2 ${
-                            milestone.status === "completed" ? "bg-emerald-600" : "bg-muted"
-                          }`}
-                        />
-                      )}
-                    </div>
-                    <div className="flex-1 pb-6">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-semibold">{milestone.title}</p>
-                          <p className="text-sm text-muted-foreground">
-                            Target: {new Date(milestone.date).toLocaleDateString()}
-                          </p>
-                        </div>
-                        <Badge
-                          variant={
-                            milestone.status === "completed"
-                              ? "default"
-                              : milestone.status === "in-progress"
-                                ? "secondary"
-                                : "outline"
-                          }
-                        >
-                          {milestone.status === "completed"
-                            ? "Completed"
-                            : milestone.status === "in-progress"
-                              ? "In Progress"
-                              : "Pending"}
-                        </Badge>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+              <div className="text-center py-12">
+                <Target className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                <p className="text-muted-foreground">Milestones tracking coming soon.</p>
               </div>
             </CardContent>
           </Card>
@@ -728,69 +800,17 @@ export function FundraisingView() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Total Updates</p>
-                  <p className="text-3xl font-bold">12</p>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-6">
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Avg. Open Rate</p>
-                  <p className="text-3xl font-bold">83%</p>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-6">
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Last Sent</p>
-                  <p className="text-3xl font-bold">2 days ago</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
           <Card>
-            <CardHeader>
-              <CardTitle>Recent Updates</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3 sm:space-y-4">
-                {updates.map((update) => (
-                  <div
-                    key={update.id}
-                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors"
-                  >
-                    <div className="space-y-1 flex-1 min-w-0">
-                      <p className="font-semibold">{update.title}</p>
-                      <p className="text-sm text-muted-foreground">
-                        Sent to {update.sentTo} investors • {update.opened} opened ({Math.round((update.opened / update.sentTo) * 100)}%)
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(update.date).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <Badge variant="default" className="text-xs">{update.status}</Badge>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
-                        <Share2 className="h-4 w-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
-                        <BarChart3 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+            <CardContent className="pt-6">
+              <div className="text-center py-12">
+                <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                <p className="text-muted-foreground">Investor updates feature coming soon.</p>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
+      )}
     </div>
   )
 }

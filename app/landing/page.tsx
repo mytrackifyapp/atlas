@@ -148,8 +148,13 @@ export default function LandingPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="p-8 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 bg-card">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-6">
-                <BarChart3 className="h-6 w-6 text-primary" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-primary/10 mb-6 overflow-hidden">
+                <img 
+                  src="/icons/icon1.PNG" 
+                  alt="Portfolio Management" 
+                  className="h-full w-full object-contain p-1.5" 
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                />
               </div>
               <h3 className="text-xl font-semibold mb-3">Portfolio Management</h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -159,8 +164,13 @@ export default function LandingPage() {
             </Card>
 
             <Card className="p-8 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 bg-card">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-6">
-                <Target className="h-6 w-6 text-primary" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-primary/10 mb-6 overflow-hidden">
+                <img 
+                  src="/icons/icon2.PNG" 
+                  alt="Deal Flow Pipeline" 
+                  className="h-full w-full object-contain p-1.5" 
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                />
               </div>
               <h3 className="text-xl font-semibold mb-3">Deal Flow Pipeline</h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -169,8 +179,13 @@ export default function LandingPage() {
             </Card>
 
             <Card className="p-8 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 bg-card">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-6">
-                <TrendingUp className="h-6 w-6 text-primary" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-primary/10 mb-6 overflow-hidden">
+                <img 
+                  src="/icons/icon3.PNG" 
+                  alt="Fundraising Tools" 
+                  className="h-full w-full object-contain p-1.5" 
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                />
               </div>
               <h3 className="text-xl font-semibold mb-3">Fundraising Tools</h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -179,8 +194,13 @@ export default function LandingPage() {
             </Card>
 
             <Card className="p-8 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 bg-card">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-6">
-                <Users className="h-6 w-6 text-primary" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-primary/10 mb-6 overflow-hidden">
+                <img 
+                  src="/icons/icon4.PNG" 
+                  alt="Network Intelligence" 
+                  className="h-full w-full object-contain p-1.5" 
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                />
               </div>
               <h3 className="text-xl font-semibold mb-3">Network Intelligence</h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -189,8 +209,13 @@ export default function LandingPage() {
             </Card>
 
             <Card className="p-8 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 bg-card">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-6">
-                <Globe2 className="h-6 w-6 text-primary" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-primary/10 mb-6 overflow-hidden">
+                <img 
+                  src="/icons/icon5.PNG" 
+                  alt="Market Insights" 
+                  className="h-full w-full object-contain p-1.5" 
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                />
               </div>
               <h3 className="text-xl font-semibold mb-3">Market Insights</h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -199,14 +224,46 @@ export default function LandingPage() {
             </Card>
 
             <Card className="p-8 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 bg-card">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-6">
-                <Sparkles className="h-6 w-6 text-primary" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-primary/10 mb-6 overflow-hidden">
+                <img 
+                  src="/icons/icon6.PNG" 
+                  alt="AI-Powered Analysis" 
+                  className="h-full w-full object-contain p-1.5" 
+                  style={{ maxWidth: '100%', maxHeight: '100%' }}
+                />
               </div>
               <h3 className="text-xl font-semibold mb-3">AI-Powered Analysis</h3>
               <p className="text-muted-foreground leading-relaxed">
                 Leverage machine learning for deal recommendations, risk assessment, and predictive analytics.
               </p>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Marquee Section */}
+      <section className="py-12 border-y border-border/40 bg-muted/30 overflow-hidden">
+        <div className="relative">
+          <div className="flex items-center gap-16 animate-marquee whitespace-nowrap">
+            {[1, 2, 3, 4, 5, 6].map((num) => (
+              <div key={num} className="flex-shrink-0 px-4">
+                <img
+                  src={`/marquee/m${num}.PNG`}
+                  alt={`Partner ${num}`}
+                  className="h-10 w-auto object-contain opacity-50 hover:opacity-100 transition-opacity duration-300"
+                />
+              </div>
+            ))}
+            {/* Duplicate for seamless loop */}
+            {[1, 2, 3, 4, 5, 6].map((num) => (
+              <div key={`duplicate-${num}`} className="flex-shrink-0 px-4">
+                <img
+                  src={`/marquee/m${num}.PNG`}
+                  alt={`Partner ${num}`}
+                  className="h-10 w-auto object-contain opacity-50 hover:opacity-100 transition-opacity duration-300"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -630,13 +687,13 @@ export default function LandingPage() {
           <div className="pt-8 border-t border-border/40 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <p>© 2025 Trackify Atlas. All rights reserved.</p>
             <div className="flex gap-6">
-              <Link href="#" className="hover:text-foreground transition-colors">
+              <Link href="/privacy" className="hover:text-foreground transition-colors">
                 Privacy
               </Link>
-              <Link href="#" className="hover:text-foreground transition-colors">
+              <Link href="/terms" className="hover:text-foreground transition-colors">
                 Terms
               </Link>
-              <Link href="#" className="hover:text-foreground transition-colors">
+              <Link href="/security" className="hover:text-foreground transition-colors">
                 Security
               </Link>
             </div>

@@ -30,6 +30,9 @@ NEXT_PUBLIC_BETTER_AUTH_URL="http://localhost:3000"
 # Get your keys from https://uploadthing.com
 UPLOADTHING_SECRET="your-uploadthing-secret-key"
 UPLOADTHING_APP_ID="your-uploadthing-app-id"
+
+# Admin Access (comma-separated list of admin emails)
+ADMIN_EMAILS="admin@example.com,another-admin@example.com"
 ```
 
 **Important:** Generate a secure secret key for `BETTER_AUTH_SECRET`. You can use:
@@ -70,6 +73,7 @@ Navigate to `/sign-in` to sign in with your credentials.
 
 ### Protected Routes
 The following routes require authentication:
+- `/dashboard`
 - `/portfolio`
 - `/deal-flow`
 - `/reports`
@@ -77,6 +81,7 @@ The following routes require authentication:
 - `/founder/*`
 - `/deal-room/*`
 - `/accelerator`
+- `/admin`
 
 Unauthenticated users will be redirected to `/sign-in`.
 
@@ -101,10 +106,55 @@ Unauthenticated users will be redirected to `/sign-in`.
 - Auth API route: `app/api/auth/[...all]/route.ts`
 - Protected routes: `middleware.ts`
 
+## Admin Dashboard
+
+The admin dashboard is available at `/admin` and provides:
+- User management and analytics
+- View all registered users
+- Search and filter users by role
+- User statistics and signup trends
+- Onboarding completion metrics
+
+To access the admin dashboard:
+1. Set `ADMIN_EMAILS` in your `.env` file with comma-separated admin email addresses
+2. Sign in with one of the admin emails
+3. Navigate to `/admin`
+
+Alternatively, you can set a user's role to `"admin"` in the database, or add an `isAdmin: true` field to their user document.
+
+## Admin Dashboard
+
+The admin dashboard is available at `/admin` and provides:
+- User management and analytics
+- View all registered users
+- Search and filter users by role
+- User statistics and signup trends
+- Onboarding completion metrics
+
+To access the admin dashboard:
+1. Set `ADMIN_EMAILS` in your `.env` file with comma-separated admin email addresses
+2. Sign in with one of the admin emails
+3. Navigate to `/admin`
+
+Alternatively, you can set a user's role to `"admin"` in the database, or add an `isAdmin: true` field to their user document.
+
 ## Production Deployment
 
 1. Set secure environment variables
 2. Use a production MongoDB instance (MongoDB Atlas recommended)
-3. Update `BETTER_AUTH_URL` and `NEXT_PUBLIC_BETTER_AUTH_URL` to your production URL
+3. **Important**: Set `BETTER_AUTH_URL` and `NEXT_PUBLIC_BETTER_AUTH_URL` to your production URL:
+   ```env
+   BETTER_AUTH_URL="https://atlas.mytrackify.com"
+   NEXT_PUBLIC_BETTER_AUTH_URL="https://atlas.mytrackify.com"
+   ```
+   Note: The auth client will automatically use the current origin if `NEXT_PUBLIC_BETTER_AUTH_URL` is not set or contains "localhost", but it's recommended to set it explicitly.
 4. Ensure `BETTER_AUTH_SECRET` is a strong, random secret
+5. Set `ADMIN_EMAILS` with your admin email addresses
+
+### CORS Issues
+
+If you encounter CORS errors in production:
+- Ensure `BETTER_AUTH_URL` and `NEXT_PUBLIC_BETTER_AUTH_URL` are set to your production domain (e.g., `https://atlas.mytrackify.com`)
+- The auth client will automatically use `window.location.origin` if the env var is not set or contains "localhost"
+- Make sure both URLs match your actual production domain
 

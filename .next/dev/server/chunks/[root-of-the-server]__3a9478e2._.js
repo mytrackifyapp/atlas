@@ -63,7 +63,8 @@ const protectedRoutes = [
     "/analytics",
     "/founder",
     "/deal-room",
-    "/accelerator"
+    "/accelerator",
+    "/admin"
 ];
 // Routes that should redirect to dashboard if already authenticated
 const authRoutes = [

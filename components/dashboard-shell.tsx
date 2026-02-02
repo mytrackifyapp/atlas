@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { AIAssistant } from "@/components/ai-assistant"
-import { getRoleConfig, getRoleFromPath, sharedNavigation, type UserRole } from "@/lib/role-config"
+import { getRoleConfig, getRoleFromPath, sharedNavigation, adminNavigation, type UserRole } from "@/lib/role-config"
 import { authClient } from "@/lib/auth-client"
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
@@ -33,6 +33,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [userRole, setUserRole] = useState<UserRole>(pathRole)
   const [theme, setTheme] = useState<"light" | "dark">("light")
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   const roleConfig = getRoleConfig(userRole)
 
@@ -52,6 +53,24 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     setIsMobileMenuOpen(false)
   }, [pathname])
+
+  // Check admin status
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      try {
+        const response = await fetch("/api/admin/check")
+        const data = await response.json()
+        setIsAdmin(data.isAdmin || false)
+      } catch (error) {
+        console.error("Error checking admin status:", error)
+        setIsAdmin(false)
+      }
+    }
+
+    if (session?.user) {
+      checkAdminStatus()
+    }
+  }, [session])
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light"
@@ -138,6 +157,31 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             )
           })}
         </div>
+
+        {/* Admin Navigation */}
+        {isAdmin && (
+          <div className="pt-3 mt-3 border-t border-sidebar-border">
+            {adminNavigation.map((item, index) => {
+              const isActive = pathname === item.href
+              const uniqueKey = `admin-${item.name}-${index}`
+              return (
+                <Link
+                  key={uniqueKey}
+                  href={item.href}
+                  className={cn(
+                    "group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
+                    isActive
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground",
+                  )}
+                >
+                  <item.icon className={cn("h-4 w-4 transition-colors", isActive ? "text-primary" : "")} />
+                  <span>{item.name}</span>
+                </Link>
+              )
+            })}
+          </div>
+        )}
       </nav>
 
       <div className="p-3 border-t border-sidebar-border space-y-1">

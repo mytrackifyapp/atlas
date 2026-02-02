@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///Users/ekaygabriel/Downloads/trackify-ventures-ui/app/api/uploadthing/core.ts"],"sourcesContent":["import { createUploadthing, type FileRouter } from \"uploadthing/next\"\n\nconst f = createUploadthing()\n\nexport const ourFileRouter = {\n  companyLogo: f({ image: { maxFileSize: \"4MB\", maxFileCount: 1 } })\n    .onUploadComplete(async ({ metadata, file }) => {\n      console.log(\"Upload complete\")\n      console.log(\"file url\", file.url)\n      return { url: file.url }\n    }),\n} satisfies FileRouter\n\nexport type OurFileRouter = typeof ourFileRouter\n\n"],"names":[],"mappings":";;;;AAAA;;AAEA,MAAM,IAAI,IAAA,8WAAiB;AAEpB,MAAM,gBAAgB;IAC3B,aAAa,EAAE;QAAE,OAAO;YAAE,aAAa;YAAO,cAAc;QAAE;IAAE,GAC7D,gBAAgB,CAAC,OAAO,EAAE,QAAQ,EAAE,IAAI,EAAE;QACzC,QAAQ,GAAG,CAAC;QACZ,QAAQ,GAAG,CAAC,YAAY,KAAK,GAAG;QAChC,OAAO;YAAE,KAAK,KAAK,GAAG;QAAC;IACzB;AACJ"}},
-    {"offset": {"line": 65, "column": 0}, "map": {"version":3,"sources":["file:///Users/ekaygabriel/Downloads/trackify-ventures-ui/app/api/uploadthing/route.ts"],"sourcesContent":["import { createRouteHandler } from \"uploadthing/next\"\n\nimport { ourFileRouter } from \"./core\"\n\nexport const { GET, POST } = createRouteHandler({\n  router: ourFileRouter,\n})\n\n"],"names":[],"mappings":";;;;;;AAAA;AAEA;;;AAEO,MAAM,EAAE,GAAG,EAAE,IAAI,EAAE,GAAG,IAAA,+WAAkB,EAAC;IAC9C,QAAQ,oJAAa;AACvB"}}]
-}

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 import { getSessionWithRole } from "@/lib/auth-helpers"
+import { roleConfigs } from "@/lib/role-config"
 import { OnboardingClient } from "./onboarding-client"
 
 export default async function OnboardingPage() {
@@ -21,7 +22,14 @@ export default async function OnboardingPage() {
 
     // If onboarding already completed, redirect to appropriate dashboard
     if (session.user.onboardingCompleted) {
-      const redirectPath = session.user.role === "founder" ? "/founder" : "/portfolio"
+      // Use roleConfigs to get the correct default route, or fallback to /dashboard
+      let redirectPath = "/dashboard"
+      const userRole = session.user.role as "investor" | "founder" | null
+      
+      if (userRole === "founder" || userRole === "investor") {
+        redirectPath = roleConfigs[userRole].defaultRoute
+      }
+      
       console.log("OnboardingPage: Onboarding completed, redirecting to:", redirectPath)
       redirect(redirectPath)
     }

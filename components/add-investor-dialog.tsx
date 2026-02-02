@@ -64,11 +64,23 @@ export function AddInvestorDialog({ open, onOpenChange, onSuccess }: AddInvestor
     setLoading(true)
 
     try {
-      // TODO: Implement API call to save investor
-      console.log("Adding investor:", formData)
-      
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const response = await fetch("/api/founder/investors", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to add investor")
+      }
+
+      if (!result.success) {
+        throw new Error("Investor creation was not successful")
+      }
 
       // Reset form
       setFormData({
