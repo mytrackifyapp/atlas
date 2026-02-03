@@ -4,7 +4,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Building2, Moon, Settings, Sun, Menu, X, LogOut, User } from "lucide-react"
+import { Moon, Settings, Sun, Menu, X, LogOut, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -82,15 +82,13 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     <>
       {/* Logo */}
       <div className="p-6 border-b border-sidebar-border">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-            <Building2 className="h-6 w-6 text-primary-foreground" />
-          </div>
+        <Link href="/" className="flex items-center gap-3">
+          <img src="/images/logo.PNG" alt="Trackify Atlas" className="h-10 w-auto object-contain" />
           <div>
-            <h1 className="text-xl font-bold text-sidebar-foreground">Trackify</h1>
-            <p className="text-xs text-muted-foreground">Atlas</p>
+            <h1 className="text-xl font-bold text-sidebar-foreground"></h1>
+            <p className="text-xs text-muted-foreground"></p>
           </div>
-        </div>
+        </Link>
       </div>
 
       <div className="p-4 border-b border-sidebar-border">
@@ -248,15 +246,13 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
               >
                 {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </Button>
-              <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                  <Building2 className="h-5 w-5 text-primary-foreground" />
-                </div>
+              <Link href="/" className="flex items-center gap-2">
+                <img src="/images/logo.PNG" alt="Trackify Atlas" className="h-8 w-auto object-contain" />
                 <div>
-                  <h1 className="text-base font-bold">Trackify</h1>
-                  <p className="text-xs text-muted-foreground -mt-0.5">Atlas</p>
+                  <h1 className="text-base font-bold"></h1>
+                  <p className="text-xs text-muted-foreground -mt-0.5"></p>
                 </div>
-              </div>
+              </Link>
             </div>
             <div className="flex items-center gap-2">
               <Select

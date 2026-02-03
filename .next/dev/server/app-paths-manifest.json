@@ -5,8 +5,16 @@
   "/api/admin/users/route": "app/api/admin/users/route.js",
   "/api/auth/[...all]/route": "app/api/auth/[...all]/route.js",
   "/api/dashboard/stats/route": "app/api/dashboard/stats/route.js",
+  "/api/founder/stats/route": "app/api/founder/stats/route.js",
+  "/api/portfolio/analytics/route": "app/api/portfolio/analytics/route.js",
+  "/api/portfolio/companies/route": "app/api/portfolio/companies/route.js",
+  "/api/workspace/route": "app/api/workspace/route.js",
   "/dashboard/page": "app/dashboard/page.js",
+  "/deal-flow/page": "app/deal-flow/page.js",
+  "/founder/page": "app/founder/page.js",
   "/onboarding/page": "app/onboarding/page.js",
   "/page": "app/page.js",
-  "/sign-in/page": "app/sign-in/page.js"
+  "/portfolio/page": "app/portfolio/page.js",
+  "/reports/page": "app/reports/page.js",
+  "/workspace/page": "app/workspace/page.js"
 }

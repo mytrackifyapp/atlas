@@ -38,7 +38,7 @@ import { UploadButton } from "@uploadthing/react"
 import type { OurFileRouter } from "@/app/api/uploadthing/core"
 import { cn } from "@/lib/utils"
 
-const statusColors = {
+const statusColors: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
   Committed: "default",
   Interested: "secondary",
   "In Discussion": "outline",
@@ -67,6 +67,7 @@ interface Fundraise {
   status: string
   daysRemaining: number
   fundraisingData: Array<{ month: string; raised: number }>
+  createdAt?: string | Date
 }
 
 interface Investor {
@@ -365,7 +366,7 @@ export function FundraisingView() {
                   <div className="space-y-1 min-w-0 flex-1">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
                       <p className="font-semibold truncate">{investor.name}</p>
-                      <Badge variant={statusColors[investor.status] as any} className="w-fit">{investor.status}</Badge>
+                      <Badge variant={statusColors[investor.status] ?? "secondary"} className="w-fit">{investor.status}</Badge>
                     </div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1.5 truncate">
@@ -550,7 +551,7 @@ export function FundraisingView() {
                       <div className="space-y-1 min-w-0 flex-1">
                         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
                           <p className="font-semibold truncate">{investor.name}</p>
-                          <Badge variant={statusColors[investor.status] as any} className="w-fit">{investor.status}</Badge>
+                          <Badge variant={statusColors[investor.status] ?? "secondary"} className="w-fit">{investor.status}</Badge>
                         </div>
                         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground">
                           <span className="flex items-center gap-1.5 truncate">
@@ -636,7 +637,7 @@ export function FundraisingView() {
                         </Button>
                       </div>
                     </div>
-                    <UploadButton<OurFileRouter>
+                    <UploadButton<OurFileRouter, "companyLogo">
                       endpoint="companyLogo"
                       onClientUploadComplete={(res) => {
                         console.log("Upload complete:", res)
@@ -653,7 +654,7 @@ export function FundraisingView() {
                     />
                   </div>
                 ) : (
-                  <UploadButton<OurFileRouter>
+                  <UploadButton<OurFileRouter, "companyLogo">
                     endpoint="companyLogo"
                     onClientUploadComplete={(res) => {
                       console.log("Upload complete:", res)
@@ -720,7 +721,7 @@ export function FundraisingView() {
                       <div className="min-w-0 flex-1">
                         <p className="font-medium truncate">Pitch Deck - {fundraise.roundType}</p>
                         <p className="text-sm text-muted-foreground">
-                          PDF • Uploaded {formatDate(fundraise.createdAt)}
+                          PDF • Uploaded {fundraise.createdAt != null ? formatDate(fundraise.createdAt) : "—"}
                         </p>
                       </div>
                     </div>
@@ -743,7 +744,7 @@ export function FundraisingView() {
                       <div className="min-w-0 flex-1">
                         <p className="font-medium truncate">Financial Model</p>
                         <p className="text-sm text-muted-foreground">
-                          PDF • Uploaded {formatDate(fundraise.createdAt)}
+                          PDF • Uploaded {fundraise.createdAt != null ? formatDate(fundraise.createdAt) : "—"}
                         </p>
                       </div>
                     </div>

@@ -1,48 +1,675 @@
-[00:00:00.644] Server  LOG      ✓ Ready in 513ms
-[00:00:06.495] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:06.632] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:06.632] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:00:06.632] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770025800624}
-[00:00:07.654] Server  LOG     MongoDB connected successfully
-[00:00:07.654] Server  LOG     MongoDB connected successfully (db.ts)
-[00:00:08.335] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/sign-in color: rgb(120, 120, 120) color: inherit {"dp":"/sign-in","o":"http://localhost:3000/sign-in","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770025802326}
-[00:00:11.319] Server  LOG     MongoDB connected successfully
-[00:00:15.668] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
-[00:00:15.844] Server  LOG     Found user by _id!
-[00:00:15.845] Server  LOG     User found via "_id" ":" {}
-[00:00:15.846] Server  LOG     Returning session with role: {}
-[00:00:15.846] Server  LOG     OnboardingPage: Session check: {}
-[00:00:15.846] Server  LOG     OnboardingPage: Onboarding completed, redirecting to: "/dashboard"
-[00:00:15.853] Server  ERROR   Error in onboarding page: Error: NEXT_REDIRECT
-[00:00:15.990] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/onboarding color: rgb(120, 120, 120) color: inherit {"dp":"/onboarding","o":"http://localhost:3000/onboarding","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770025809979}
-[00:00:17.082] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
-[00:00:17.094] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
-[00:00:17.252] Server  LOG     Found user by _id!
-[00:00:17.252] Server  LOG     User found via "_id" ":" {}
-[00:00:17.252] Server  LOG     Returning session with role: {}
-[00:00:17.263] Server  LOG     Found user by _id!
-[00:00:17.263] Server  LOG     User found via "_id" ":" {}
-[00:00:17.263] Server  LOG     Returning session with role: {}
-[00:00:17.433] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770025811414}
-[00:00:17.584] Server  LOG     MongoDB connected successfully (db.ts)
-[00:00:17.942] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
-[00:00:18.108] Server  LOG     Found user by _id!
-[00:00:18.108] Server  LOG     User found via "_id" ":" {}
-[00:00:18.109] Server  LOG     Returning session with role: {}
-[00:00:18.644] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
-[00:00:18.816] Server  LOG     Found user by _id!
-[00:00:18.817] Server  LOG     User found via "_id" ":" {}
-[00:00:18.818] Server  LOG     Returning session with role: {}
-[00:00:24.949] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
-[00:00:25.122] Server  LOG     Found user by _id!
-[00:00:25.122] Server  LOG     User found via "_id" ":" {}
-[00:00:25.123] Server  LOG     Returning session with role: {}
-[00:00:25.796] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/admin color: rgb(120, 120, 120) color: inherit {"dp":"/admin","o":"http://localhost:3000/admin","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770025819777}
-[00:00:44.686] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
-[00:00:44.860] Server  LOG     Found user by _id!
-[00:00:44.861] Server  LOG     User found via "_id" ":" {}
-[00:00:44.861] Server  LOG     Returning session with role: {}
-[00:00:45.244] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:45.373] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:45.373] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:00:45.373] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770025839363}
+[00:00:00.799] Server  LOG      ✓ Ready in 609ms
+[00:00:05.269] Server  LOG     MongoDB connected successfully
+[00:00:05.271] Server  LOG     MongoDB connected successfully (db.ts)
+[00:00:06.600] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:06.709] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:06.748] Server  LOG     Found user by _id!
+[00:00:06.749] Server  LOG     User found via "_id" ":" {}
+[00:00:06.749] Server  LOG     Returning session with role: {}
+[00:00:06.908] Server  LOG     Found user by _id!
+[00:00:06.909] Server  LOG     User found via "_id" ":" {}
+[00:00:06.909] Server  LOG     Returning session with role: {}
+[00:00:07.497] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:07.664] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:07.664] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:00:07.664] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770147079836}
+[00:00:10.534] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:10.668] Server  LOG     Found user by _id!
+[00:00:10.668] Server  LOG     User found via "_id" ":" {}
+[00:00:10.668] Server  LOG     Returning session with role: {}
+[00:00:10.668] Server  LOG     OnboardingPage: Session check: {}
+[00:00:10.668] Server  LOG     OnboardingPage: Onboarding completed, redirecting to: "/dashboard"
+[00:00:10.675] Server  ERROR   Error in onboarding page: Error: NEXT_REDIRECT
+[00:00:10.810] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/onboarding color: rgb(120, 120, 120) color: inherit {"dp":"/onboarding","o":"http://localhost:3000/onboarding","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770147082981}
+[00:00:11.729] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:11.735] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:11.947] Server  LOG     Found user by _id!
+[00:00:11.947] Server  LOG     User found via "_id" ":" {}
+[00:00:11.947] Server  LOG     Returning session with role: {}
+[00:00:11.960] Server  LOG     Found user by _id!
+[00:00:11.960] Server  LOG     User found via "_id" ":" {}
+[00:00:11.960] Server  LOG     Returning session with role: {}
+[00:00:12.130] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770147084291}
+[00:00:12.478] Server  LOG     MongoDB connected successfully
+[00:00:12.478] Server  LOG     MongoDB connected successfully (db.ts)
+[00:00:14.224] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:14.353] Server  LOG     Found user by _id!
+[00:00:14.353] Server  LOG     User found via "_id" ":" {}
+[00:00:14.353] Server  LOG     Returning session with role: {}
+[00:00:14.838] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:14.968] Server  LOG     Found user by _id!
+[00:00:14.969] Server  LOG     User found via "_id" ":" {}
+[00:00:14.969] Server  LOG     Returning session with role: {}
+[00:00:15.534] Server  ERROR    ⨯ ./components/workspace-view.tsx:549:6
+Parsing ecmascript source code failed
+  547 |         </div>
+  548 |       </div>
+> 549 |     </div>
+      |      ^^^^^
+  550 |   )
+  551 | }
+  552 |
+
+Unterminated regexp literal
+
+Import trace:
+  Server Component:
+    ./components/workspace-view.tsx
+    ./app/workspace/page.tsx
+
+
+[00:00:15.666] Browser ERROR   ./components/workspace-view.tsx:549:6
+Parsing ecmascript source code failed
+  547 |         </div>
+  548 |       </div>
+> 549 |     </div>
+      |      ^^^^^
+  550 |   )
+  551 | }
+  552 |
+
+Unterminated regexp literal
+
+Import trace:
+  Server Component:
+    ./components/workspace-view.tsx
+    ./app/workspace/page.tsx
+[00:00:15.944] Browser ERROR   ./components/workspace-view.tsx:549:6
+Parsing ecmascript source code failed
+  547 |         </div>
+  548 |       </div>
+> 549 |     </div>
+      |      ^^^^^
+  550 |   )
+  551 | }
+  552 |
+
+Unterminated regexp literal
+
+Import trace:
+  Server Component:
+    ./components/workspace-view.tsx
+    ./app/workspace/page.tsx
+[00:00:15.944] Browser ERROR   ./components/workspace-view.tsx:549:6
+Parsing ecmascript source code failed
+  547 |         </div>
+  548 |       </div>
+> 549 |     </div>
+      |      ^^^^^
+  550 |   )
+  551 | }
+  552 |
+
+Unterminated regexp literal
+
+Import trace:
+  Server Component:
+    ./components/workspace-view.tsx
+    ./app/workspace/page.tsx
+[00:00:15.970] Server  ERROR    ⨯ ./components/workspace-view.tsx:549:6
+Parsing ecmascript source code failed
+  547 |         </div>
+  548 |       </div>
+> 549 |     </div>
+      |      ^^^^^
+  550 |   )
+  551 | }
+  552 |
+
+Unterminated regexp literal
+
+Import trace:
+  Server Component:
+    ./components/workspace-view.tsx
+    ./app/workspace/page.tsx
+
+
+[00:00:16.079] Browser ERROR   uncaughtError: Error: ./components/workspace-view.tsx:549:6
+Parsing ecmascript source code failed
+  547 |         </div>
+  548 |       </div>
+> 549 |     </div>
+      |      ^^^^^
+  550 |   )
+  551 | }
+  552 |
+
+Unterminated regexp literal
+
+Import trace:
+  Server Component:
+    ./components/workspace-view.tsx
+    ./app/workspace/page.tsx
+
+
+[00:00:16.234] Browser ERROR   ./components/workspace-view.tsx:549:6
+Parsing ecmascript source code failed
+  547 |         </div>
+  548 |       </div>
+> 549 |     </div>
+      |      ^^^^^
+  550 |   )
+  551 | }
+  552 |
+
+Unterminated regexp literal
+
+Import trace:
+  Server Component:
+    ./components/workspace-view.tsx
+    ./app/workspace/page.tsx
+[00:00:16.234] Browser ERROR   ./components/workspace-view.tsx:549:6
+Parsing ecmascript source code failed
+  547 |         </div>
+  548 |       </div>
+> 549 |     </div>
+      |      ^^^^^
+  550 |   )
+  551 | }
+  552 |
+
+Unterminated regexp literal
+
+Import trace:
+  Server Component:
+    ./components/workspace-view.tsx
+    ./app/workspace/page.tsx
+[00:01:16.228] Server  LOG      ✓ Compiled in 214ms
+[00:01:16.605] Server  LOG     MongoDB connected successfully
+[00:01:16.605] Server  LOG     MongoDB connected successfully (db.ts)
+[00:01:18.276] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:01:18.411] Server  LOG     Found user by _id!
+[00:01:18.411] Server  LOG     User found via "_id" ":" {}
+[00:01:18.411] Server  LOG     Returning session with role: {}
+[00:01:18.629] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:18.782] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:01:18.782] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/workspace","route":"/workspace"}
+[00:01:18.782] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/workspace color: rgb(120, 120, 120) color: inherit {"dp":"/workspace","o":"http://localhost:3000/workspace","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770147150954}
+[00:01:19.183] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:01:19.322] Server  LOG     Found user by _id!
+[00:01:19.323] Server  LOG     User found via "_id" ":" {}
+[00:01:19.323] Server  LOG     Returning session with role: {}
+[00:02:16.200] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:02:16.329] Server  LOG     Found user by _id!
+[00:02:16.330] Server  LOG     User found via "_id" ":" {}
+[00:02:16.330] Server  LOG     Returning session with role: {}
+[00:07:41.502] Server  LOG      ✓ Compiled in 84ms
+[00:07:47.133] Server  LOG      ✓ Compiled in 45ms
+[00:09:58.166] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:09:58.359] Server  LOG     Found user by _id!
+[00:09:58.360] Server  LOG     User found via "_id" ":" {}
+[00:09:58.360] Server  LOG     Returning session with role: {}
+[00:09:58.737] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:09:58.908] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:09:58.908] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/dashboard","route":"/dashboard"}
+[00:09:58.908] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770147671075}
+[00:09:59.051] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:09:59.269] Server  LOG     Found user by _id!
+[00:09:59.269] Server  LOG     User found via "_id" ":" {}
+[00:09:59.270] Server  LOG     Returning session with role: {}
+[00:10:07.362] Server  LOG     MongoDB connected successfully
+[00:10:07.362] Server  LOG     MongoDB connected successfully (db.ts)
+[00:10:09.125] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:10:09.256] Server  LOG     Found user by _id!
+[00:10:09.256] Server  LOG     User found via "_id" ":" {}
+[00:10:09.256] Server  LOG     Returning session with role: {}
+[00:10:09.429] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/workspace color: rgb(120, 120, 120) color: inherit {"dp":"/workspace","o":"http://localhost:3000/workspace","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770147681578}
+[00:10:09.641] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:10:09.772] Server  LOG     Found user by _id!
+[00:10:09.772] Server  LOG     User found via "_id" ":" {}
+[00:10:09.772] Server  LOG     Returning session with role: {}
+[00:10:10.161] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:10:10.296] Server  LOG     Found user by _id!
+[00:10:10.296] Server  LOG     User found via "_id" ":" {}
+[00:10:10.296] Server  LOG     Returning session with role: {}
+[00:10:12.940] Server  LOG      ✓ Compiled in 50ms
+[00:10:22.162] Server  LOG      ✓ Compiled in 368ms
+[00:10:30.299] Server  LOG      ✓ Compiled in 99ms
+[00:10:35.448] Server  LOG      ✓ Compiled in 60ms
+[00:10:39.544] Server  LOG      ✓ Compiled in 99ms
+[00:12:21.603] Browser WARN    Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[00:12:21.603] Browser WARN    Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[00:13:51.965] Server  LOG      ✓ Compiled in 56ms
+[00:17:21.778] Server  LOG      ✓ Compiled in 57ms
+[00:17:24.568] Server  LOG      ✓ Compiled in 35ms
+[00:17:26.892] Server  LOG      ✓ Compiled in 81ms
+[00:17:29.093] Server  LOG      ✓ Compiled in 36ms
+[00:17:34.460] Server  LOG      ✓ Compiled in 73ms
+[00:19:15.808] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/deal-flow color: rgb(120, 120, 120) color: inherit {"dp":"/deal-flow","o":"http://localhost:3000/deal-flow","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770148227972}
+[00:19:18.048] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:18.179] Server  LOG     Found user by _id!
+[00:19:18.179] Server  LOG     User found via "_id" ":" {}
+[00:19:18.179] Server  LOG     Returning session with role: {}
+[00:19:18.179] Server  LOG     PortfolioPage: Session check: {}
+[00:19:18.179] Server  LOG     PortfolioPage: Rendering portfolio view
+[00:19:18.379] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:18.380] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/portfolio color: rgb(120, 120, 120) color: inherit {"dp":"/portfolio","o":"http://localhost:3000/portfolio","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770148230536}
+[00:19:18.563] Server  LOG     Found user by _id!
+[00:19:18.563] Server  LOG     User found via "_id" ":" {}
+[00:19:18.563] Server  LOG     Returning session with role: {}
+[00:19:18.690] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:18.693] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770148230860}
+[00:19:18.817] Server  LOG     Found user by _id!
+[00:19:18.818] Server  LOG     User found via "_id" ":" {}
+[00:19:18.818] Server  LOG     Returning session with role: {}
+[00:19:18.857] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:18.985] Server  LOG     Found user by _id!
+[00:19:18.985] Server  LOG     User found via "_id" ":" {}
+[00:19:18.985] Server  LOG     Returning session with role: {}
+[00:19:19.220] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:19.349] Server  LOG     Found user by _id!
+[00:19:19.350] Server  LOG     User found via "_id" ":" {}
+[00:19:19.350] Server  LOG     Returning session with role: {}
+[00:19:19.615] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:19.741] Server  LOG     Found user by _id!
+[00:19:19.741] Server  LOG     User found via "_id" ":" {}
+[00:19:19.741] Server  LOG     Returning session with role: {}
+[00:19:20.137] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:20.263] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:20.267] Server  LOG     Found user by _id!
+[00:19:20.268] Server  LOG     User found via "_id" ":" {}
+[00:19:20.268] Server  LOG     Returning session with role: {}
+[00:19:20.393] Server  LOG     Found user by _id!
+[00:19:20.394] Server  LOG     User found via "_id" ":" {}
+[00:19:20.394] Server  LOG     Returning session with role: {}
+[00:19:20.645] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/reports color: rgb(120, 120, 120) color: inherit {"dp":"/reports","o":"http://localhost:3000/reports","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770148232813}
+[00:19:29.057] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:29.191] Server  LOG     Found user by _id!
+[00:19:29.191] Server  LOG     User found via "_id" ":" {}
+[00:19:29.192] Server  LOG     Returning session with role: {}
+[00:19:29.333] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770148241496}
+[00:19:29.573] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:29.704] Server  LOG     Found user by _id!
+[00:19:29.705] Server  LOG     User found via "_id" ":" {}
+[00:19:29.705] Server  LOG     Returning session with role: {}
+[00:19:30.102] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:30.232] Server  LOG     Found user by _id!
+[00:19:30.232] Server  LOG     User found via "_id" ":" {}
+[00:19:30.232] Server  LOG     Returning session with role: {}
+[00:19:32.522] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:32.720] Server  LOG     Found user by _id!
+[00:19:32.720] Server  LOG     User found via "_id" ":" {}
+[00:19:32.720] Server  LOG     Returning session with role: {}
+[00:19:32.720] Server  LOG     FounderPage: Session check: {}
+[00:19:32.720] Server  LOG     FounderPage: Rendering founder dashboard
+[00:19:32.873] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/founder color: rgb(120, 120, 120) color: inherit {"dp":"/founder","o":"http://localhost:3000/founder","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770148245040}
+[00:19:33.147] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:33.358] Server  LOG     Found user by _id!
+[00:19:33.358] Server  LOG     User found via "_id" ":" {}
+[00:19:33.358] Server  LOG     Returning session with role: {}
+[00:19:34.431] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:34.557] Server  LOG     Found user by _id!
+[00:19:34.558] Server  LOG     User found via "_id" ":" {}
+[00:19:34.558] Server  LOG     Returning session with role: {}
+[00:19:35.146] Server  LOG     MongoDB connected successfully
+[00:19:35.146] Server  LOG     MongoDB connected successfully (db.ts)
+[00:19:36.915] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:37.044] Server  LOG     Found user by _id!
+[00:19:37.044] Server  LOG     User found via "_id" ":" {}
+[00:19:37.044] Server  LOG     Returning session with role: {}
+[00:19:37.208] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/workspace color: rgb(120, 120, 120) color: inherit {"dp":"/workspace","o":"http://localhost:3000/workspace","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770148249368}
+[00:19:37.446] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:37.576] Server  LOG     Found user by _id!
+[00:19:37.577] Server  LOG     User found via "_id" ":" {}
+[00:19:37.577] Server  LOG     Returning session with role: {}
+[00:19:38.004] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:19:38.142] Server  LOG     Found user by _id!
+[00:19:38.142] Server  LOG     User found via "_id" ":" {}
+[00:19:38.143] Server  LOG     Returning session with role: {}
+[00:20:51.118] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:20:51.259] Server  LOG     Found user by _id!
+[00:20:51.259] Server  LOG     User found via "_id" ":" {}
+[00:20:51.260] Server  LOG     Returning session with role: {}
+[00:20:51.385] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770148323552}
+[00:20:51.627] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:20:51.753] Server  LOG     Found user by _id!
+[00:20:51.754] Server  LOG     User found via "_id" ":" {}
+[00:20:51.754] Server  LOG     Returning session with role: {}
+[00:20:52.175] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:20:52.299] Server  LOG     Found user by _id!
+[00:20:52.300] Server  LOG     User found via "_id" ":" {}
+[00:20:52.300] Server  LOG     Returning session with role: {}
+[00:20:56.479] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:20:56.615] Server  LOG     Found user by _id!
+[00:20:56.615] Server  LOG     User found via "_id" ":" {}
+[00:20:56.615] Server  LOG     Returning session with role: {}
+[00:20:56.762] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/workspace color: rgb(120, 120, 120) color: inherit {"dp":"/workspace","o":"http://localhost:3000/workspace","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770148328918}
+[00:20:56.922] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:20:57.130] Server  LOG     Found user by _id!
+[00:20:57.130] Server  LOG     User found via "_id" ":" {}
+[00:20:57.130] Server  LOG     Returning session with role: {}
+[00:20:57.554] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:20:57.681] Server  LOG     Found user by _id!
+[00:20:57.682] Server  LOG     User found via "_id" ":" {}
+[00:20:57.682] Server  LOG     Returning session with role: {}
+[00:22:29.017] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/reports color: rgb(120, 120, 120) color: inherit {"dp":"/reports","o":"http://localhost:3000/reports","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770148421180}
+[00:22:32.433] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:22:32.567] Server  LOG     Found user by _id!
+[00:22:32.568] Server  LOG     User found via "_id" ":" {}
+[00:22:32.568] Server  LOG     Returning session with role: {}
+[00:22:33.259] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/admin color: rgb(120, 120, 120) color: inherit {"dp":"/admin","o":"http://localhost:3000/admin","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770148425421}
+[00:22:41.868] Server  LOG      ✓ Compiled in 65ms
+[00:22:44.463] Server  LOG      ✓ Compiled in 38ms
+[00:22:45.658] Server  LOG      ✓ Compiled in 41ms
+[00:22:49.782] Server  LOG      ✓ Compiled in 31ms
+[00:22:57.316] Server  LOG     MongoDB connected successfully
+[00:22:57.316] Server  LOG     MongoDB connected successfully (db.ts)
+[00:22:59.304] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:22:59.461] Server  LOG     Found user by _id!
+[00:22:59.461] Server  LOG     User found via "_id" ":" {}
+[00:22:59.462] Server  LOG     Returning session with role: {}
+[00:22:59.632] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/workspace color: rgb(120, 120, 120) color: inherit {"dp":"/workspace","o":"http://localhost:3000/workspace","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770148451786}
+[00:22:59.824] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:22:59.995] Server  LOG     Found user by _id!
+[00:22:59.995] Server  LOG     User found via "_id" ":" {}
+[00:22:59.996] Server  LOG     Returning session with role: {}
+[00:23:00.488] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:23:00.615] Server  LOG     Found user by _id!
+[00:23:00.615] Server  LOG     User found via "_id" ":" {}
+[00:23:00.616] Server  LOG     Returning session with role: {}
+[00:26:56.994] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:26:57.130] Server  LOG     Found user by _id!
+[00:26:57.130] Server  LOG     User found via "_id" ":" {}
+[00:26:57.130] Server  LOG     Returning session with role: {}
+[00:26:57.274] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770148689433}
+[00:26:57.511] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:26:57.643] Server  LOG     Found user by _id!
+[00:26:57.643] Server  LOG     User found via "_id" ":" {}
+[00:26:57.644] Server  LOG     Returning session with role: {}
+[00:26:58.171] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:26:58.366] Server  LOG     Found user by _id!
+[00:26:58.366] Server  LOG     User found via "_id" ":" {}
+[00:26:58.367] Server  LOG     Returning session with role: {}
+[00:27:16.987] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:27:17.146] Server  LOG     Found user by _id!
+[00:27:17.146] Server  LOG     User found via "_id" ":" {}
+[00:27:17.146] Server  LOG     Returning session with role: {}
+[00:27:17.299] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/workspace color: rgb(120, 120, 120) color: inherit {"dp":"/workspace","o":"http://localhost:3000/workspace","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770148709454}
+[00:27:17.501] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:27:17.773] Server  LOG     Found user by _id!
+[00:27:17.774] Server  LOG     User found via "_id" ":" {}
+[00:27:17.774] Server  LOG     Returning session with role: {}
+[00:27:18.193] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:27:18.444] Server  LOG     Found user by _id!
+[00:27:18.445] Server  LOG     User found via "_id" ":" {}
+[00:27:18.446] Server  LOG     Returning session with role: {}
+[00:27:30.488] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:27:30.627] Server  LOG     Found user by _id!
+[00:27:30.627] Server  LOG     User found via "_id" ":" {}
+[00:27:30.627] Server  LOG     Returning session with role: {}
+[00:27:30.628] Server  LOG     FounderPage: Session check: {}
+[00:27:30.628] Server  LOG     FounderPage: Rendering founder dashboard
+[00:27:30.776] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/founder color: rgb(120, 120, 120) color: inherit {"dp":"/founder","o":"http://localhost:3000/founder","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770148722936}
+[00:27:31.022] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:27:31.183] Server  LOG     Found user by _id!
+[00:27:31.184] Server  LOG     User found via "_id" ":" {}
+[00:27:31.184] Server  LOG     Returning session with role: {}
+[00:27:32.592] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:27:32.729] Server  LOG     Found user by _id!
+[00:27:32.730] Server  LOG     User found via "_id" ":" {}
+[00:27:32.730] Server  LOG     Returning session with role: {}
+[00:27:51.585] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:27:51.745] Server  LOG     Found user by _id!
+[00:27:51.745] Server  LOG     User found via "_id" ":" {}
+[00:27:51.746] Server  LOG     Returning session with role: {}
+[00:27:51.893] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/workspace color: rgb(120, 120, 120) color: inherit {"dp":"/workspace","o":"http://localhost:3000/workspace","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770148744049}
+[00:27:52.132] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:27:52.266] Server  LOG     Found user by _id!
+[00:27:52.267] Server  LOG     User found via "_id" ":" {}
+[00:27:52.267] Server  LOG     Returning session with role: {}
+[00:27:52.686] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:27:52.890] Server  LOG     Found user by _id!
+[00:27:52.891] Server  LOG     User found via "_id" ":" {}
+[00:27:52.892] Server  LOG     Returning session with role: {}
+[00:28:15.963] Browser WARN    Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[00:28:15.963] Browser WARN    Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[00:31:12.097] Server  LOG      ✓ Compiled in 47ms
+[00:31:13.636] Server  LOG      ✓ Compiled in 61ms
+[00:31:19.796] Server  LOG      ✓ Compiled in 33ms
+[00:31:32.020] Server  LOG      ✓ Compiled in 42ms
+[00:31:35.850] Server  LOG      ✓ Compiled in 69ms
+[00:31:39.093] Server  LOG      ✓ Compiled in 85ms
+[00:34:57.407] Server  LOG      ✓ Compiled in 65ms
+[00:35:23.237] Server  LOG      ✓ Compiled in 97ms
+[00:35:23.342] Browser ERROR   uncaughtError: ReferenceError: X is not defined
+[00:35:43.004] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:35:43.025] Server  LOG      ✓ Compiled in 68ms
+[00:35:43.304] Server  LOG     MongoDB connected successfully
+[00:35:43.304] Server  LOG     MongoDB connected successfully (db.ts)
+[00:35:43.401] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/workspace color: rgb(120, 120, 120) color: inherit {"dp":"/workspace","o":"http://localhost:3000/workspace","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770149215313}
+[00:35:43.704] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:35:43.839] Server  LOG     Found user by _id!
+[00:35:43.839] Server  LOG     User found via "_id" ":" {}
+[00:35:43.839] Server  LOG     Returning session with role: {}
+[00:35:45.162] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:35:45.296] Server  LOG     Found user by _id!
+[00:35:45.296] Server  LOG     User found via "_id" ":" {}
+[00:35:45.296] Server  LOG     Returning session with role: {}
+[00:35:45.599] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:35:45.759] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:35:45.759] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/workspace","route":"/workspace"}
+[00:35:45.759] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/workspace color: rgb(120, 120, 120) color: inherit {"dp":"/workspace","o":"http://localhost:3000/workspace","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770149217937}
+[00:35:45.946] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:35:46.077] Server  LOG     Found user by _id!
+[00:35:46.078] Server  LOG     User found via "_id" ":" {}
+[00:35:46.078] Server  LOG     Returning session with role: {}
+[00:36:10.136] Browser ERROR   uncaughtError: ReferenceError: X is not defined
+[00:36:36.724] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:36:36.747] Server  LOG      ✓ Compiled in 117ms
+[00:36:36.939] Server  LOG     MongoDB connected successfully
+[00:36:36.940] Server  LOG     MongoDB connected successfully (db.ts)
+[00:36:38.955] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:36:39.131] Server  LOG     Found user by _id!
+[00:36:39.131] Server  LOG     User found via "_id" ":" {}
+[00:36:39.131] Server  LOG     Returning session with role: {}
+[00:36:39.320] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:36:39.469] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <div className="flex h-scr...">
+      ...
+        <SelectCollectionProvider scope={undefined}>
+          <SelectCollectionProviderProvider scope={undefined} itemMap={Map} collectionRef={{current:null}}>
+            <SelectProvider scope={undefined} onNativeOptionAdd={function Select.useCallback} ...>
+              <SelectTrigger className="bg-sidebar...">
+                <SelectTrigger data-slot="select-tri..." data-size="default" className={"border-i..."}>
+                  <PopperAnchor asChild={true} __scopePopper={{Popper:[...]}}>
+                    <Primitive.div asChild={true} ref={function}>
+                      <Slot ref={function}>
+                        <SlotClone ref={function}>
+                          <Primitive.button type="button" role="combobox" aria-controls="radix-_R_8..." ...>
+                            <button
+                              type="button"
+                              role="combobox"
++                             aria-controls="radix-_R_8lesndlb_"
+-                             aria-controls="radix-_R_135esndlb_"
+                              aria-expanded={false}
+                              aria-required={undefined}
+                              aria-autocomplete="none"
+                              dir="ltr"
+                              data-state="closed"
+                              disabled={false}
+                              data-disabled={undefined}
+                              data-placeholder={undefined}
+                              data-slot="select-trigger"
+                              data-size="default"
+                              className={"border-input data-[placeholder]:text-muted-foreground [&_svg:not([class*='t..."}
+                              onClick={function handleEvent}
+                              onPointerDown={function handleEvent}
+                              onKeyDown={function handleEvent}
+                              ref={function}
+                            >
+              ...
+        ...
+      <main className="flex-1 ove...">
+        ...
+          <SelectCollectionProvider scope={undefined}>
+            <SelectCollectionProviderProvider scope={undefined} itemMap={Map} collectionRef={{current:null}}>
+              <SelectProvider scope={undefined} onNativeOptionAdd={function Select.useCallback} ...>
+                <SelectTrigger className="h-9 w-[140...">
+                  <SelectTrigger data-slot="select-tri..." data-size="default" className={"border-i..."}>
+                    <PopperAnchor asChild={true} __scopePopper={{Popper:[...]}}>
+                      <Primitive.div asChild={true} ref={function}>
+                        <Slot ref={function}>
+                          <SlotClone ref={function}>
+                            <Primitive.button type="button" role="combobox" aria-controls="radix-_R_3..." ...>
+                              <button
+                                type="button"
+                                role="combobox"
++                               aria-controls="radix-_R_35lesndlb_"
+-                               aria-controls="radix-_R_cn5esndlb_"
+                                aria-expanded={false}
+                                aria-required={undefined}
+                                aria-autocomplete="none"
+                                dir="ltr"
+                                data-state="closed"
+                                disabled={false}
+                                data-disabled={undefined}
+                                data-placeholder={undefined}
+                                data-slot="select-trigger"
+                                data-size="default"
+                                className={"border-input data-[placeholder]:text-muted-foreground [&_svg:not([class*=..."}
+                                onClick={function handleEvent}
+                                onPointerDown={function handleEvent}
+                                onKeyDown={function handleEvent}
+                                ref={function}
+                              >
+                ...
+        ...
+          <header className="shrink-0 f...">
+            ...
+              <SelectProvider scope={undefined} onNativeOptionAdd={function Select.useCallback} ...>
+                <SelectTrigger className="w-[180px] h-9">
+                  <SelectTrigger data-slot="select-tri..." data-size="default" className={"border-i..."}>
+                    <PopperAnchor asChild={true} __scopePopper={{Popper:[...]}}>
+                      <Primitive.div asChild={true} ref={function}>
+                        <Slot ref={function}>
+                          <SlotClone ref={function}>
+                            <Primitive.button type="button" role="combobox" aria-controls="radix-_R_5..." ...>
+                              <button
+                                type="button"
+                                role="combobox"
++                               aria-controls="radix-_R_5plesndlb_"
+-                               aria-controls="radix-_R_n75esndlb_"
+                                aria-expanded={false}
+                                aria-required={undefined}
+                                aria-autocomplete="none"
+                                dir="ltr"
+                                data-state="closed"
+                                disabled={false}
+                                data-disabled={undefined}
+                                data-placeholder={undefined}
+                                data-slot="select-trigger"
+                                data-size="default"
+                                className={"border-input data-[placeholder]:text-muted-foreground [&_svg:not([class*=..."}
+                                onClick={function handleEvent}
+                                onPointerDown={function handleEvent}
+                                onKeyDown={function handleEvent}
+                                ref={function}
+                              >
+                ...
+            ...
+              <SelectProvider scope={undefined} onNativeOptionAdd={function Select.useCallback} ...>
+                <SelectTrigger className="w-[220px] ..." onDoubleClick={function onDoubleClick}>
+                  <SelectTrigger data-slot="select-tri..." data-size="default" className={"border-i..."} ...>
+                    <PopperAnchor asChild={true} __scopePopper={{Popper:[...]}}>
+                      <Primitive.div asChild={true} ref={function}>
+                        <Slot ref={function}>
+                          <SlotClone ref={function}>
+                            <Primitive.button type="button" role="combobox" aria-controls="radix-_R_6..." ...>
+                              <button
+                                type="button"
+                                role="combobox"
++                               aria-controls="radix-_R_69plesndlb_"
+-                               aria-controls="radix-_R_p775esndlb_"
+                                aria-expanded={false}
+                                aria-required={undefined}
+                                aria-autocomplete="none"
+                                dir="ltr"
+                                data-state="closed"
+                                disabled={false}
+                                data-disabled={undefined}
+                                data-placeholder={undefined}
+                                data-slot="select-trigger"
+                                data-size="default"
+                                className={"border-input data-[placeholder]:text-muted-foreground [&_svg:not([class*=..."}
+                                onDoubleClick={function onDoubleClick}
+                                onClick={function handleEvent}
+                                onPointerDown={function handleEvent}
+                                onKeyDown={function handleEvent}
+                                ref={function}
+                              >
+                ...
+            <div>
+            ...
+              <DropdownMenuTrigger data-slot="dropdown-m..." asChild={true}>
+                <MenuAnchor asChild={true} __scopeMenu={{Menu:[...], ...}}>
+                  <PopperAnchor __scopePopper={{Menu:[...], ...}} asChild={true} ref={null}>
+                    <Primitive.div asChild={true} ref={function}>
+                      <Slot ref={function}>
+                        <SlotClone ref={function}>
+                          <Primitive.button type="button" id="radix-_R_3..." aria-haspopup="menu" aria-expanded={false} ...>
+                            <Slot type="button" id="radix-_R_3..." aria-haspopup="menu" aria-expanded={false} ...>
+                              <SlotClone type="button" id="radix-_R_3..." aria-haspopup="menu" aria-expanded={false} ...>
+                                <Button variant="ghost" size="icon" className="h-8 w-8" type="button" id="radix-_R_3..." ...>
+                                  <button
+                                    data-slot="dropdown-menu-trigger"
+                                    className={"inline-flex items-center justify-center gap-2 whitespace-nowrap round..."}
+                                    type="button"
++                                   id="radix-_R_3hplesndlb_"
+-                                   id="radix-_R_e775esndlb_"
+                                    aria-haspopup="menu"
+                                    aria-expanded={false}
+                                    aria-controls={undefined}
+                                    data-state="closed"
+                                    data-disabled={undefined}
+                                    disabled={false}
+                                    onPointerDown={function handleEvent}
+                                    onKeyDown={function handleEvent}
+                                    ref={function}
+                                  >
+      ...
+
+[00:36:39.469] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:36:39.469] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/workspace","route":"/workspace"}
+[00:36:39.469] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/workspace color: rgb(120, 120, 120) color: inherit {"dp":"/workspace","o":"http://localhost:3000/workspace","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770149271648}
+[00:36:39.629] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:36:39.814] Server  LOG     Found user by _id!
+[00:36:39.814] Server  LOG     User found via "_id" ":" {}
+[00:36:39.815] Server  LOG     Returning session with role: {}
+[00:39:20.764] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:39:20.915] Server  LOG     Found user by _id!
+[00:39:20.916] Server  LOG     User found via "_id" ":" {}
+[00:39:20.916] Server  LOG     Returning session with role: {}
+[00:39:21.114] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770149433277}
+[00:39:21.293] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:39:21.451] Server  LOG     Found user by _id!
+[00:39:21.452] Server  LOG     User found via "_id" ":" {}
+[00:39:21.452] Server  LOG     Returning session with role: {}
+[00:39:21.945] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:39:22.074] Server  LOG     Found user by _id!
+[00:39:22.074] Server  LOG     User found via "_id" ":" {}
+[00:39:22.074] Server  LOG     Returning session with role: {}
+[00:39:41.991] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:39:42.252] Server  LOG     Found user by _id!
+[00:39:42.252] Server  LOG     User found via "_id" ":" {}
+[00:39:42.252] Server  LOG     Returning session with role: {}
+[00:39:42.508] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1770149454682}
+[00:48:28.118] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:48:28.261] Server  LOG     Found user by _id!
+[00:48:28.261] Server  LOG     User found via "_id" ":" {}
+[00:48:28.261] Server  LOG     Returning session with role: {}
+[00:49:17.734] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:49:17.928] Server  LOG     Found user by _id!
+[00:49:17.928] Server  LOG     User found via "_id" ":" {}
+[00:49:17.928] Server  LOG     Returning session with role: {}

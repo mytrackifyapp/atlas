@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, BarChart3, Target, Users, TrendingUp, Globe2, Sparkles } from "lucide-react"
+import { ArrowRight, Target, Users, TrendingUp, Globe2, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -12,10 +12,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                <BarChart3 className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-semibold tracking-tight">Trackify Atlas</span>
+              <img src="/images/logo.PNG" alt="Trackify Atlas" className="h-12 w-auto object-contain" />
             </div>
 
             <div className="hidden items-center gap-8 md:flex">
@@ -616,10 +613,7 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                  <BarChart3 className="h-5 w-5 text-primary-foreground" />
-                </div>
-                <span className="text-lg font-semibold">Trackify Atlas</span>
+                <img src="/images/logo.PNG" alt="Trackify Atlas" className="h-12 w-auto object-contain" />
               </div>
               <p className="text-sm text-muted-foreground">Navigate Africa's venture landscape with precision.</p>
             </div>
