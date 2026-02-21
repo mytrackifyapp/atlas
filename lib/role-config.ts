@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react"
-import { BarChart3, Briefcase, Home, Lightbulb, MessageSquare, Rocket, Users, Shield, LayoutPanelTop } from "lucide-react"
+import { BarChart3, Briefcase, Home, Lightbulb, MessageSquare, Rocket, Users, Shield, LayoutPanelTop, Building2 } from "lucide-react"
 
 export type UserRole = "investor" | "founder"
 
@@ -83,7 +83,7 @@ export const roleConfigs: Record<UserRole, RoleConfig> = {
       },
       {
         name: "Workspace",
-        href: "/workspace",
+        href: "/founder/workspace",
         icon: LayoutPanelTop,
         description: "Collaborative docs, memos & data room",
       },
@@ -92,6 +92,12 @@ export const roleConfigs: Record<UserRole, RoleConfig> = {
         href: "/founder/updates",
         icon: MessageSquare,
         description: "Send updates to investors",
+      },
+      {
+        name: "Company Structure",
+        href: "/founder/structure",
+        icon: Building2,
+        description: "Team, equity, stakeholders & co-founders",
       },
       {
         name: "Analytics",

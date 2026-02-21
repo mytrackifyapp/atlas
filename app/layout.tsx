@@ -10,23 +10,15 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Trackify Atlas - Africa Startup Ecosystem Platform",
   description: "Premium venture capital and startup ecosystem platform for Africa",
-  generator: "v0.app",
+  generator: "Trackify Atlas ",
   icons: {
     icon: [
       {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
+        url: "/trackify-logo.png",
+        type: "image/png",
       },
     ],
-    apple: "/apple-icon.png",
+    apple: "/trackify-logo.png",
   },
 }
 

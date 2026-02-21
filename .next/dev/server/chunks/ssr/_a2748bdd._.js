@@ -1374,7 +1374,7 @@ const roleConfigs = {
             },
             {
                 name: "Workspace",
-                href: "/workspace",
+                href: "/founder/workspace",
                 icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$454$2e$0_react$40$19$2e$2$2e$0$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$layout$2d$panel$2d$top$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__LayoutPanelTop$3e$__["LayoutPanelTop"],
                 description: "Collaborative docs, memos & data room"
             },
