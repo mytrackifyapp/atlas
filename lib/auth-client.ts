@@ -2,20 +2,26 @@
 
 import { createAuthClient } from "better-auth/react"
 
-// Get base URL from environment or use current origin
+function normalizeOrigin(url: string): string {
+  return url.replace(/\/$/, "")
+}
+
+/**
+ * Better Auth API lives on the same Next.js host. Using `NEXT_PUBLIC_BETTER_AUTH_URL`
+ * when it points at a different host than the page (e.g. apex vs www) causes
+ * cross-origin requests and CORS/preflight failures in the browser.
+ */
 function getBaseURL(): string {
-  // In browser, use NEXT_PUBLIC_BETTER_AUTH_URL or current origin
   if (typeof window !== "undefined") {
-    // If env var is set and not localhost, use it
-    const envUrl = process.env.NEXT_PUBLIC_BETTER_AUTH_URL
-    if (envUrl && !envUrl.includes("localhost")) {
-      return envUrl
-    }
-    // Otherwise, use current origin (works for production)
     return window.location.origin
   }
-  // Server-side fallback
-  return process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000"
+  return (
+    normalizeOrigin(
+      process.env.BETTER_AUTH_URL ||
+        process.env.NEXT_PUBLIC_BETTER_AUTH_URL ||
+        "http://localhost:3000"
+    )
+  )
 }
 
 export const authClient = createAuthClient({

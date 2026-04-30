@@ -2621,3 +2621,86 @@ https://react.dev/link/hydration-mismatch
 [00:22:54.330] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
 [00:22:54.330] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1777570601487} /_vercel/insights/view
 [00:22:54.330] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1777570601487} /_vercel/insights/view
+[00:45:37.719] Server  LOG     MongoDB connected successfully
+[00:45:37.719] Server  LOG     MongoDB connected successfully (db.ts)
+[00:45:39.335] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:45:39.468] Server  LOG     Found user by _id!
+[00:45:39.469] Server  LOG     User found via "_id" ":" {}
+[00:45:39.469] Server  LOG     Returning session with role: {}
+[00:45:39.927] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:45:40.840] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <div className="size-full" style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+      <MaxWidthWrapper className="flex items...">
+        <section className="h-full mx-...">
+          ...
+            <NavigationMenuCollectionItemSlot scope={undefined} value="radix-_R_2...">
+              <Slot data-radix-collection-item="" ref={function}>
+                <SlotClone data-radix-collection-item="" ref={function}>
+                  <NavigationMenuCollectionItemSlot scope={undefined}>
+                    <Slot data-radix-collection-item="" ref={function}>
+                      <SlotClone data-radix-collection-item="" ref={function}>
+                        <Primitive.button asChild={true} data-radix-collection-item="" ref={function} ...>
+                          <Slot data-radix-collection-item="" onKeyDown={function handleEvent} ref={function}>
+                            <SlotClone data-radix-collection-item="" onKeyDown={function handleEvent} ref={function}>
+                              <Primitive.button id="radix-_R_1..." disabled={undefined} data-disabled={undefined} ...>
+                                <button
++                                 id="radix-_R_16indlb_-trigger-radix-_R_2n6indlb_"
+-                                 id="radix-_R_161indlb_-trigger-radix-_R_2n61indlb_"
+                                  disabled={undefined}
+                                  data-disabled={undefined}
+                                  data-state="closed"
+                                  aria-expanded={false}
++                                 aria-controls="radix-_R_16indlb_-content-radix-_R_2n6indlb_"
+-                                 aria-controls="radix-_R_161indlb_-content-radix-_R_2n61indlb_"
+                                  data-slot="navigation-menu-trigger"
+                                  className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 p..."
+                                  onPointerEnter={function handleEvent}
+                                  onPointerMove={function handleEvent}
+                                  onPointerLeave={function handleEvent}
+                                  onClick={function handleEvent}
+                                  onKeyDown={function}
+                                  data-radix-collection-item=""
+                                  ref={function}
+                                >
+          <div>
+          <MobileNavbar isLoggedIn={false}>
+            <div className="flex lg:hi...">
+              <Sheet open={false} onOpenChange={function bound dispatchSetState}>
+                <Dialog data-slot="sheet" open={false} onOpenChange={function bound dispatchSetState}>
+                  <DialogProvider scope={undefined} triggerRef={{current:null}} contentRef={{current:null}} ...>
+                    <SheetTrigger asChild={true}>
+                      <DialogTrigger data-slot="sheet-trigger" asChild={true}>
+                        <Primitive.button type="button" aria-haspopup="dialog" aria-expanded={false} ...>
+                          <Slot type="button" aria-haspopup="dialog" aria-expanded={false} aria-controls="radix-_R_e..." ...>
+                            <SlotClone type="button" aria-haspopup="dialog" aria-expanded={false} ...>
+                              <Button size="icon" variant="ghost" className="text-neutr..." type="button" ...>
+                                <button
+                                  data-slot="sheet-trigger"
+                                  className={"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded..."}
+                                  type="button"
+                                  aria-haspopup="dialog"
+                                  aria-expanded={false}
++                                 aria-controls="radix-_R_eindlb_"
+-                                 aria-controls="radix-_R_e1indlb_"
+                                  data-state="closed"
+                                  onClick={function handleEvent}
+                                  ref={function}
+                                >
+                    ...
+
+[00:45:40.840] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:45:40.840] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:45:40.840] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1777571967364} /_vercel/insights/view
+[00:46:35.712] Server  LOG      ✓ Compiled in 160ms
