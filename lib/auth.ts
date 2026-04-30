@@ -73,7 +73,54 @@ clientPromise.then((connectedClient) => {
 // Get database instance - Better Auth will handle connection when needed
 const db = client.db(databaseName)
 
+/**
+ * Allow both apex and www when `BETTER_AUTH_URL` only lists one — otherwise
+ * sign-in from the other host gets 403 "Invalid origin".
+ * Merge with optional `BETTER_AUTH_TRUSTED_ORIGINS` (comma-separated).
+ */
+function alternatePublicOrigins(): string[] {
+  const fromEnv =
+    process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",")
+      .map((s) => s.trim().replace(/\/$/, ""))
+      .filter(Boolean) ?? []
+  const primary = (
+    process.env.BETTER_AUTH_URL ||
+    process.env.NEXT_PUBLIC_BETTER_AUTH_URL ||
+    ""
+  )
+    .trim()
+    .replace(/\/$/, "")
+
+  const extra = new Set<string>()
+  for (const e of fromEnv) {
+    try {
+      extra.add(new URL(e).origin)
+    } catch {
+      extra.add(e)
+    }
+  }
+
+  if (!primary || primary.includes("localhost")) {
+    return [...extra]
+  }
+
+  try {
+    const u = new URL(primary)
+    const alt = u.hostname.startsWith("www.")
+      ? `${u.protocol}//${u.hostname.slice(4)}`
+      : `${u.protocol}//www.${u.hostname}`
+    if (alt !== u.origin) {
+      extra.add(alt)
+    }
+  } catch {
+    /* ignore */
+  }
+
+  return [...extra]
+}
+
 export const auth = betterAuth({
+  trustedOrigins: alternatePublicOrigins(),
   database: mongodbAdapter(db, {
     client,
   }),

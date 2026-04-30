@@ -7,25 +7,19 @@ function normalizeOrigin(url: string): string {
 }
 
 /**
- * Better Auth API lives on the same Next.js host. Using `NEXT_PUBLIC_BETTER_AUTH_URL`
- * when it points at a different host than the page (e.g. apex vs www) causes
- * cross-origin requests and CORS/preflight failures in the browser.
+ * Auth routes must use the same host as the page. In the browser we always use
+ * `window.location.origin` so www vs apex never cross.
+ * (Server-side imports of this module use env — rare for this file.)
  */
-function getBaseURL(): string {
-  if (typeof window !== "undefined") {
-    return window.location.origin
-  }
-  return (
-    normalizeOrigin(
-      process.env.BETTER_AUTH_URL ||
-        process.env.NEXT_PUBLIC_BETTER_AUTH_URL ||
-        "http://localhost:3000"
-    )
-  )
-}
-
 export const authClient = createAuthClient({
-  baseURL: getBaseURL(),
+  baseURL:
+    typeof window !== "undefined"
+      ? window.location.origin
+      : normalizeOrigin(
+          process.env.BETTER_AUTH_URL ||
+            process.env.NEXT_PUBLIC_BETTER_AUTH_URL ||
+            "http://localhost:3000"
+        ),
 })
 
 export const { signIn, signUp, signOut, useSession } = authClient
