@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react"
-import { BarChart3, Briefcase, Home, Lightbulb, MessageSquare, Rocket, Users, Shield, LayoutPanelTop, Building2 } from "lucide-react"
+import { BarChart3, Briefcase, Home, Lightbulb, MessageSquare, Rocket, Users, Shield, LayoutPanelTop, Building2, Wallet, Sparkles, Brain } from "lucide-react"
 
 export type UserRole = "investor" | "founder"
 
@@ -34,6 +34,12 @@ export const roleConfigs: Record<UserRole, RoleConfig> = {
         href: "/dashboard",
         icon: Home,
         description: "Portfolio overview and metrics",
+      },
+      {
+        name: "Finance",
+        href: "/dashboard/finance",
+        icon: Wallet,
+        description: "Transactions, budgets & accounts per workspace",
       },
       {
         name: "Portfolio",
@@ -76,6 +82,12 @@ export const roleConfigs: Record<UserRole, RoleConfig> = {
         description: "Company overview",
       },
       {
+        name: "Finance",
+        href: "/founder/finance",
+        icon: Wallet,
+        description: "Transactions, budgets & accounts per workspace",
+      },
+      {
         name: "Fundraising",
         href: "/founder/fundraising",
         icon: Rocket,
@@ -115,6 +127,12 @@ export const sharedNavigation: NavItem[] = [
     href: "/accelerator",
     icon: Users,
     description: "Join the startup accelerator",
+  },
+  {
+    name: "AI Agents",
+    href: "/ai",
+    icon: Brain,
+    description: "Specialist AI agents (CFO, Lawyer, Marketer)",
   },
 ]
 

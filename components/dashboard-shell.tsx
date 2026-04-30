@@ -127,7 +127,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                   : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground",
               )}
             >
-              <item.icon className={cn("h-4 w-4 transition-colors", isActive ? "text-primary" : "")} />
+              <item.icon
+                className={cn(
+                  "h-4 w-4 transition-colors",
+                  isActive ? "text-emerald-700 dark:text-emerald-400" : "",
+                )}
+              />
               <span>{item.name}</span>
             </Link>
           )
@@ -135,13 +140,15 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
         <div className="pt-3 mt-3 border-t border-sidebar-border">
           {sharedNavigation.map((item, index) => {
-            const isActive = pathname === item.href
+            const resolvedHref =
+              item.href === "/ai" ? (userRole === "founder" ? "/founder/ai" : "/dashboard/ai") : item.href
+            const isActive = pathname === resolvedHref
             // Use a unique key for shared navigation items
             const uniqueKey = `shared-${item.name}-${index}`
             return (
               <Link
                 key={uniqueKey}
-                href={item.href}
+                href={resolvedHref}
                 className={cn(
                   "group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
                   isActive
@@ -149,7 +156,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                     : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground",
                 )}
               >
-                <item.icon className={cn("h-4 w-4 transition-colors", isActive ? "text-primary" : "")} />
+                <item.icon
+                  className={cn(
+                    "h-4 w-4 transition-colors",
+                    isActive ? "text-emerald-700 dark:text-emerald-400" : "",
+                  )}
+                />
                 <span>{item.name}</span>
               </Link>
             )
@@ -173,7 +185,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                       : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground",
                   )}
                 >
-                  <item.icon className={cn("h-4 w-4 transition-colors", isActive ? "text-primary" : "")} />
+                  <item.icon
+                    className={cn(
+                      "h-4 w-4 transition-colors",
+                      isActive ? "text-emerald-700 dark:text-emerald-400" : "",
+                    )}
+                  />
                   <span>{item.name}</span>
                 </Link>
               )

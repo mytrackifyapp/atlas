@@ -1,0 +1,210 @@
+import type { LucideIcon } from "lucide-react"
+import {
+  BadgeDollarSign,
+  BookOpenCheck,
+  Building2,
+  CalendarClock,
+  ChartLine,
+  ClipboardCheck,
+  FileSpreadsheet,
+  Globe,
+  Mail,
+  Megaphone,
+  MessageCircle,
+  MessagesSquare,
+  NotebookPen,
+  Presentation,
+  Search,
+  Sparkles,
+  Target,
+  Users,
+  Webhook,
+} from "lucide-react"
+
+export type AppCategory = "Sales" | "Marketing" | "Operations" | "Finance" | "Productivity" | "AI"
+
+export type StoreApp = {
+  id: string
+  name: string
+  category: AppCategory
+  description: string
+  icon: LucideIcon
+  tags: string[]
+  href?: string
+  comingSoon?: boolean
+}
+
+export const APPS_CATALOG: StoreApp[] = [
+  {
+    id: "lead-finder",
+    name: "Lead Finder",
+    category: "Sales",
+    description: "Build prospect lists from ICP filters and export to CSV.",
+    icon: Search,
+    tags: ["prospecting", "csv", "pipeline", "b2b"],
+    comingSoon: true,
+  },
+  {
+    id: "pipeline-crm-lite",
+    name: "Pipeline CRM Lite",
+    category: "Sales",
+    description: "Lightweight deal tracking with stages, notes, and reminders.",
+    icon: Target,
+    tags: ["crm", "pipeline", "stages"],
+    comingSoon: true,
+  },
+  {
+    id: "email-swipe",
+    name: "Email Swipe Generator",
+    category: "Marketing",
+    description: "Generate email sequences for outbound, onboarding, and reactivation.",
+    icon: Mail,
+    tags: ["email", "copy", "sequences", "ai"],
+    comingSoon: true,
+  },
+  {
+    id: "social-content-planner",
+    name: "Social Content Planner",
+    category: "Marketing",
+    description: "Plan weekly content themes and generate post drafts.",
+    icon: Megaphone,
+    tags: ["content", "social", "calendar", "ai"],
+    comingSoon: true,
+  },
+  {
+    id: "website-audit",
+    name: "Website Audit Checklist",
+    category: "Marketing",
+    description: "Run a conversion-focused checklist and track fixes.",
+    icon: Globe,
+    tags: ["conversion", "seo", "checklist"],
+    comingSoon: true,
+  },
+  {
+    id: "customer-interview-kit",
+    name: "Customer Interview Kit",
+    category: "Operations",
+    description: "Interview scripts, note templates, and insight summaries.",
+    icon: MessagesSquare,
+    tags: ["research", "scripts", "notes"],
+    comingSoon: true,
+  },
+  {
+    id: "meeting-notes",
+    name: "Meeting Notes",
+    category: "Productivity",
+    description: "Structured notes with decisions, actions, and follow-ups.",
+    icon: NotebookPen,
+    tags: ["notes", "actions", "templates"],
+    comingSoon: true,
+  },
+  {
+    id: "follow-up-reminders",
+    name: "Follow-up Reminders",
+    category: "Productivity",
+    description: "Track follow-ups and get reminders for your next touch.",
+    icon: CalendarClock,
+    tags: ["reminders", "sales", "ops"],
+    comingSoon: true,
+  },
+  {
+    id: "pricing-page-review",
+    name: "Pricing Page Review",
+    category: "AI",
+    description: "Analyze pricing page clarity and propose improvements.",
+    icon: Sparkles,
+    tags: ["ai", "pricing", "conversion"],
+    comingSoon: true,
+  },
+  {
+    id: "pitch-deck-checker",
+    name: "Pitch Deck Checker",
+    category: "Sales",
+    description: "Score your deck structure and spot missing slides.",
+    icon: Presentation,
+    tags: ["pitch", "fundraising", "story"],
+    comingSoon: true,
+  },
+  {
+    id: "kpi-tracker",
+    name: "KPI Tracker",
+    category: "Operations",
+    description: "Track KPIs weekly and visualize trends.",
+    icon: ChartLine,
+    tags: ["metrics", "weekly", "charts"],
+    comingSoon: true,
+  },
+  {
+    id: "budget-planner",
+    name: "Budget Planner",
+    category: "Finance",
+    description: "Plan monthly budget categories and compare against spend.",
+    icon: BadgeDollarSign,
+    tags: ["budget", "cashflow", "planning"],
+    comingSoon: true,
+  },
+  {
+    id: "invoice-tracker",
+    name: "Invoice Tracker",
+    category: "Finance",
+    description: "Track invoices due, paid, and overdue — exportable.",
+    icon: FileSpreadsheet,
+    tags: ["invoices", "accounts", "csv"],
+    comingSoon: true,
+  },
+  {
+    id: "onboarding-checklists",
+    name: "Onboarding Checklists",
+    category: "Operations",
+    description: "Reusable checklists for hires, customers, and partners.",
+    icon: ClipboardCheck,
+    tags: ["checklists", "templates"],
+    comingSoon: true,
+  },
+  {
+    id: "policy-playbooks",
+    name: "Policy & Playbooks",
+    category: "Operations",
+    description: "Starter playbooks for hiring, security, and ops.",
+    icon: BookOpenCheck,
+    tags: ["docs", "playbooks"],
+    comingSoon: true,
+  },
+  {
+    id: "support-macros",
+    name: "Support Macros",
+    category: "AI",
+    description: "Generate customer support replies and macro templates.",
+    icon: MessageCircle,
+    tags: ["support", "ai", "templates"],
+    comingSoon: true,
+  },
+  {
+    id: "integrations-webhooks",
+    name: "Webhook Automations",
+    category: "Operations",
+    description: "Connect tools via webhooks with simple triggers/actions.",
+    icon: Webhook,
+    tags: ["automations", "webhooks", "integrations"],
+    comingSoon: true,
+  },
+  {
+    id: "workspace-hub",
+    name: "Workspace Hub",
+    category: "Productivity",
+    description: "Quick links to docs, finance, fundraising, and updates.",
+    icon: Building2,
+    tags: ["workspace", "navigation"],
+    comingSoon: true,
+  },
+]
+
+export const APP_CATEGORIES: AppCategory[] = [
+  "Sales",
+  "Marketing",
+  "Operations",
+  "Finance",
+  "Productivity",
+  "AI",
+]
+

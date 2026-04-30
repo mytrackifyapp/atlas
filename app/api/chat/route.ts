@@ -12,6 +12,26 @@ Your role:
 
 export type ChatMessage = { role: "user" | "assistant"; content: string }
 
+const AI_CFO_SYSTEM_PROMPT = `You are the AI CFO for Trackify Atlas.
+
+You help founders and operators make strong financial decisions with speed and clarity.
+
+Your responsibilities:
+- Explain cashflow, burn, runway, budgeting, unit economics, pricing, and financial planning in plain language.
+- Provide structured outputs when helpful (tables, bullet plans, simple formulas).
+- Ask 1-2 clarifying questions when necessary, but still give a best-effort answer with assumptions.
+- Be practical and action-oriented. Keep answers concise unless the user asks for depth.
+
+Constraints:
+- You do NOT have access to the user's private financial data unless they provide it in the chat.
+- Do not invent numbers. If you need data, ask for it and offer example templates.
+`
+
+function systemPromptForAgent(agentId: unknown) {
+  if (agentId === "ai-cfo") return AI_CFO_SYSTEM_PROMPT
+  return FINNA_SYSTEM_PROMPT
+}
+
 export async function POST(request: NextRequest) {
   try {
     const apiKey = process.env.GROQ_API_KEY
@@ -23,6 +43,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
+    const agentId = body.agentId as string | undefined
     const messages = body.messages as ChatMessage[] | undefined
     if (!Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json(
@@ -31,8 +52,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const systemPrompt = systemPromptForAgent(agentId)
     const groqMessages = [
-      { role: "system" as const, content: FINNA_SYSTEM_PROMPT },
+      { role: "system" as const, content: systemPrompt },
       ...messages.map((m) => ({ role: m.role, content: m.content })),
     ]
 

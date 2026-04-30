@@ -8,6 +8,11 @@ import { getSessionWithRole } from "@/lib/auth-helpers"
 import { roleConfigs } from "@/lib/role-config"
 import { LandingAIAssistant } from "@/components/landing-ai-assistant"
 import { InvestmentStageCards } from "@/components/investment-stage-cards"
+import { TrackifyVcTestimonialsMarquee } from "@/components/trackifyvc/testimonials-marquee"
+import { TrackifyVcStats } from "@/components/trackifyvc/stats"
+import { TrackifyVcFaq } from "@/components/trackifyvc/faq"
+import TrackifyVcNavbar from "@/components/trackifyvc/navigation/navbar"
+import { AiAgentsHero } from "@/components/ai-agents-hero"
 
 export default async function Page() {
   const session = await getSessionWithRole()
@@ -20,64 +25,16 @@ export default async function Page() {
   const dashboardUrl = userRole && hasCompletedOnboarding && (userRole === "investor" || userRole === "founder")
     ? roleConfigs[userRole].defaultRoute 
     : "/onboarding"
+
+  const aiAgentsUrl =
+    isAuthenticated && hasCompletedOnboarding
+      ? userRole === "founder"
+        ? "/founder/ai"
+        : "/dashboard/ai"
+      : "/sign-up"
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <Link href="/" className="flex items-center gap-2 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-offset-2">
-              <img src="/images/logo.PNG" alt="Trackify Atlas" className="h-12 w-auto object-contain" />
-            </Link>
-
-            <div className="hidden items-center gap-8 md:flex">
-              <Link
-                href="#features"
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-offset-2 py-2 px-1 -mx-1"
-              >
-                Features
-              </Link>
-              <Link
-                href="#platform"
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-offset-2 py-2 px-1 -mx-1"
-              >
-                Platform
-              </Link>
-              <Link
-                href="#finna"
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-offset-2 py-2 px-1 -mx-1"
-              >
-                Finna AI
-              </Link>
-              <Link
-                href="#ecosystem"
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-offset-2 py-2 px-1 -mx-1"
-              >
-                Ecosystem
-              </Link>
-            </div>
-
-            <div className="flex items-center gap-3">
-              {isAuthenticated ? (
-                <Button size="sm" asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
-                  <Link href={dashboardUrl}>
-                    {hasCompletedOnboarding ? "View Dashboard" : "Complete Onboarding"}
-                  </Link>
-                </Button>
-              ) : (
-                <>
-                  <Button variant="ghost" size="sm" asChild>
-                    <Link href="/sign-in">Sign In</Link>
-                  </Button>
-                  <Button size="sm" asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
-                    <Link href="/sign-up">Get Started</Link>
-                  </Button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </nav>
+      <TrackifyVcNavbar />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-40 lg:pb-28">
@@ -314,6 +271,11 @@ export default async function Page() {
             </Card>
           </div>
         </div>
+      </section>
+
+      {/* AI Agents Teams (marketing) */}
+      <section id="ai-agents" className="border-y border-border/40">
+        <AiAgentsHero ctaHref={aiAgentsUrl} ctaLabel="Begin" />
       </section>
 
       {/* Platform Section */}
@@ -785,6 +747,31 @@ export default async function Page() {
             )}
           </div>
         </div>
+      </section>
+
+      {/* Stats + FAQ (from trackifyvc components) */}
+      <section
+        id="faq"
+        className="scroll-mt-20 border-t border-border/40 bg-black text-white"
+      >
+        <TrackifyVcFaq />
+        <TrackifyVcStats />
+      </section>
+
+      {/* Social proof (from trackifyvc components) */}
+      <section className="py-14 sm:py-18 lg:py-24 border-t border-border/40">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center mb-10 sm:mb-14">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+              Loved by operators
+            </h2>
+            <p className="text-base sm:text-lg text-muted-foreground">
+              Founders and investors use Atlas to run diligence, fundraising,
+              and reporting in one place.
+            </p>
+          </div>
+        </div>
+        <TrackifyVcTestimonialsMarquee />
       </section>
 
       {/* Footer */}

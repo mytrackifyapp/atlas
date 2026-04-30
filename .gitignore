@@ -3,3 +3,9 @@ node_modules
 .env
 
 /lib/generated/prisma
+
+# Next.js build output
+.next
+
+# macOS metadata
+.DS_Store

@@ -59,6 +59,24 @@ Your role:
 - Provide concise, friendly, and accurate answers. If you don't know something specific about their data or product, say so and suggest they check the dashboard or docs.
 - Keep responses focused and not overly long unless the user asks for detail.
 - You can suggest next steps (e.g. "Try the Portfolio view" or "Check out the Fundraising Tracker") when relevant.`;
+const AI_CFO_SYSTEM_PROMPT = `You are the AI CFO for Trackify Atlas.
+
+You help founders and operators make strong financial decisions with speed and clarity.
+
+Your responsibilities:
+- Explain cashflow, burn, runway, budgeting, unit economics, pricing, and financial planning in plain language.
+- Provide structured outputs when helpful (tables, bullet plans, simple formulas).
+- Ask 1-2 clarifying questions when necessary, but still give a best-effort answer with assumptions.
+- Be practical and action-oriented. Keep answers concise unless the user asks for depth.
+
+Constraints:
+- You do NOT have access to the user's private financial data unless they provide it in the chat.
+- Do not invent numbers. If you need data, ask for it and offer example templates.
+`;
+function systemPromptForAgent(agentId) {
+    if (agentId === "ai-cfo") return AI_CFO_SYSTEM_PROMPT;
+    return FINNA_SYSTEM_PROMPT;
+}
 async function POST(request) {
     try {
         const apiKey = process.env.GROQ_API_KEY;
@@ -70,6 +88,7 @@ async function POST(request) {
             });
         }
         const body = await request.json();
+        const agentId = body.agentId;
         const messages = body.messages;
         if (!Array.isArray(messages) || messages.length === 0) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
@@ -78,10 +97,11 @@ async function POST(request) {
                 status: 400
             });
         }
+        const systemPrompt = systemPromptForAgent(agentId);
         const groqMessages = [
             {
                 role: "system",
-                content: FINNA_SYSTEM_PROMPT
+                content: systemPrompt
             },
             ...messages.map((m)=>({
                     role: m.role,

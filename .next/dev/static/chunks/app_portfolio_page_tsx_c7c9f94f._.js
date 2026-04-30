@@ -7,7 +7,7 @@
   "static/chunks/d3660_effect_dist_esm_620cd61b._.js",
   "static/chunks/b449a_lodash_276697da._.js",
   "static/chunks/925b5_recharts_es6_75d2e29a._.js",
-  "static/chunks/node_modules__pnpm_5abee1bb._.js"
+  "static/chunks/node_modules__pnpm_05f92172._.js"
 ],
     source: "dynamic"
 });
