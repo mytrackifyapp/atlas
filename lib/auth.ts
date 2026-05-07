@@ -23,54 +23,28 @@ function getDatabaseName(connectionString: string): string {
 
 const databaseName = getDatabaseName(connectionString)
 
-// Create MongoDB client with proper connection options for Atlas
-// Note: mongodb+srv:// automatically uses TLS, so we don't need to set it explicitly
-const client = new MongoClient(connectionString, {
-  maxPoolSize: 10,
-  minPoolSize: 2,
-  maxIdleTimeMS: 30000,
-  serverSelectionTimeoutMS: 10000,
-  socketTimeoutMS: 45000,
-  connectTimeoutMS: 10000,
-  retryWrites: true,
-  retryReads: true,
-})
-
-// Global client instance to reuse across requests (Next.js pattern)
-const globalForMongo = globalThis as unknown as {
-  _mongoClient?: MongoClient
-  _mongoClientPromise?: Promise<MongoClient>
-}
-
-let clientPromise: Promise<MongoClient>
-
-if (process.env.NODE_ENV === "development") {
-  // In development, use a global variable so the client is not recreated on hot reloads
-  if (!globalForMongo._mongoClientPromise) {
-    globalForMongo._mongoClientPromise = client.connect().catch((error) => {
-      console.error("Failed to connect to MongoDB:", error)
-      // Don't throw here, let Better Auth handle it
-      return client
-    })
-  }
-  clientPromise = globalForMongo._mongoClientPromise
-} else {
-  // In production, create connection promise
-  clientPromise = client.connect().catch((error) => {
-    console.error("Failed to connect to MongoDB:", error)
-    return client
+function createClient() {
+  return new MongoClient(connectionString, {
+    maxPoolSize: 10,
+    minPoolSize: 2,
+    maxIdleTimeMS: 30000,
+    serverSelectionTimeoutMS: 10000,
+    socketTimeoutMS: 45000,
+    connectTimeoutMS: 10000,
+    retryWrites: true,
+    retryReads: true,
   })
 }
 
-// Initialize connection immediately (non-blocking)
-clientPromise.then((connectedClient) => {
-  globalForMongo._mongoClient = connectedClient
-  console.log("MongoDB connected successfully")
-}).catch((error) => {
-  console.error("MongoDB connection error:", error)
-})
+// Global client instance to reuse across requests (Next.js / Vercel serverless safe pattern)
+const globalForMongo = globalThis as unknown as {
+  _betterAuthMongoClient?: MongoClient
+}
 
-// Get database instance - Better Auth will handle connection when needed
+const client = globalForMongo._betterAuthMongoClient ?? createClient()
+globalForMongo._betterAuthMongoClient = client
+
+// Better Auth adapter only needs a Db object; the client is cached above.
 const db = client.db(databaseName)
 
 /**

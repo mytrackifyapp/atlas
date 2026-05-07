@@ -121,41 +121,23 @@ function getDatabaseName(connectionString) {
     }
 }
 const databaseName = getDatabaseName(connectionString);
-// Create MongoDB client with proper connection options for Atlas
-// Note: mongodb+srv:// automatically uses TLS, so we don't need to set it explicitly
-const client = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString, {
-    maxPoolSize: 10,
-    minPoolSize: 2,
-    maxIdleTimeMS: 30000,
-    serverSelectionTimeoutMS: 10000,
-    socketTimeoutMS: 45000,
-    connectTimeoutMS: 10000,
-    retryWrites: true,
-    retryReads: true
-});
-// Global client instance to reuse across requests (Next.js pattern)
+function createClient() {
+    return new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString, {
+        maxPoolSize: 10,
+        minPoolSize: 2,
+        maxIdleTimeMS: 30000,
+        serverSelectionTimeoutMS: 10000,
+        socketTimeoutMS: 45000,
+        connectTimeoutMS: 10000,
+        retryWrites: true,
+        retryReads: true
+    });
+}
+// Global client instance to reuse across requests (Next.js / Vercel serverless safe pattern)
 const globalForMongo = globalThis;
-let clientPromise;
-if ("TURBOPACK compile-time truthy", 1) {
-    // In development, use a global variable so the client is not recreated on hot reloads
-    if (!globalForMongo._mongoClientPromise) {
-        globalForMongo._mongoClientPromise = client.connect().catch((error)=>{
-            console.error("Failed to connect to MongoDB:", error);
-            // Don't throw here, let Better Auth handle it
-            return client;
-        });
-    }
-    clientPromise = globalForMongo._mongoClientPromise;
-} else //TURBOPACK unreachable
-;
-// Initialize connection immediately (non-blocking)
-clientPromise.then((connectedClient)=>{
-    globalForMongo._mongoClient = connectedClient;
-    console.log("MongoDB connected successfully");
-}).catch((error)=>{
-    console.error("MongoDB connection error:", error);
-});
-// Get database instance - Better Auth will handle connection when needed
+const client = globalForMongo._betterAuthMongoClient ?? createClient();
+globalForMongo._betterAuthMongoClient = client;
+// Better Auth adapter only needs a Db object; the client is cached above.
 const db = client.db(databaseName);
 /**
  * Allow both apex and www when `BETTER_AUTH_URL` only lists one — otherwise
@@ -269,64 +251,46 @@ function getDatabaseName(connectionString) {
     }
 }
 const databaseName = getDatabaseName(connectionString);
-// Create MongoDB client with proper connection options for Atlas
-const client = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString, {
-    maxPoolSize: 10,
-    minPoolSize: 2,
-    maxIdleTimeMS: 30000,
-    serverSelectionTimeoutMS: 10000,
-    socketTimeoutMS: 45000,
-    connectTimeoutMS: 10000,
-    retryWrites: true,
-    retryReads: true
-});
 // Global client instance to reuse across requests (Next.js pattern)
 const globalForMongo = globalThis;
-let clientPromise;
-if ("TURBOPACK compile-time truthy", 1) {
-    // In development, use a global variable so the client is not recreated on hot reloads
+function createClient() {
+    return new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString, {
+        maxPoolSize: 10,
+        minPoolSize: 2,
+        maxIdleTimeMS: 30000,
+        serverSelectionTimeoutMS: 10000,
+        socketTimeoutMS: 45000,
+        connectTimeoutMS: 10000,
+        retryWrites: true,
+        retryReads: true
+    });
+}
+function getClientPromise() {
+    // IMPORTANT: Cache in globalThis for BOTH dev and prod.
+    // Vercel lambdas can reuse a warm instance, and we must never close the shared client
+    // during a request (closing it causes "MongoTopologyClosedError: Topology is closed").
     if (!globalForMongo._mongoClientPromise) {
-        globalForMongo._mongoClientPromise = client.connect().catch((error)=>{
-            console.error("Failed to connect to MongoDB:", error);
-            return client;
+        const client = createClient();
+        globalForMongo._mongoClientPromise = client.connect().then((connected)=>{
+            globalForMongo._mongoClient = connected;
+            console.log("MongoDB connected successfully (db.ts)");
+            return connected;
         });
     }
-    clientPromise = globalForMongo._mongoClientPromise;
-} else //TURBOPACK unreachable
-;
-// Initialize connection immediately (non-blocking)
-clientPromise.then((connectedClient)=>{
-    globalForMongo._mongoClient = connectedClient;
-    console.log("MongoDB connected successfully (db.ts)");
-}).catch((error)=>{
-    console.error("MongoDB connection error (db.ts):", error);
-});
+    return globalForMongo._mongoClientPromise;
+}
+let clientPromise = getClientPromise();
 async function getDatabase() {
     try {
-        // Ensure client is connected
         const connectedClient = await clientPromise;
-        // Check if client is still connected, reconnect if needed
-        if (!connectedClient.topology?.isConnected()) {
-            console.warn("MongoDB client disconnected, reconnecting...");
-            await connectedClient.connect();
-        }
         return connectedClient.db(databaseName);
     } catch (error) {
         console.error("Error getting database connection:", error);
-        // Try to reconnect
+        // Try to create a NEW cached client promise.
         try {
-            await client.close();
-            const newClient = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString, {
-                maxPoolSize: 10,
-                minPoolSize: 2,
-                maxIdleTimeMS: 30000,
-                serverSelectionTimeoutMS: 10000,
-                socketTimeoutMS: 45000,
-                connectTimeoutMS: 10000,
-                retryWrites: true,
-                retryReads: true
-            });
-            clientPromise = newClient.connect();
+            globalForMongo._mongoClientPromise = undefined;
+            globalForMongo._mongoClient = undefined;
+            clientPromise = getClientPromise();
             const connectedClient = await clientPromise;
             return connectedClient.db(databaseName);
         } catch (reconnectError) {
@@ -337,8 +301,9 @@ async function getDatabase() {
 }
 async function closeDatabase() {
     try {
-        const connectedClient = await clientPromise;
-        await connectedClient.close();
+        // Intentionally a no-op in serverless/runtime code paths.
+        // Closing the cached client can break concurrent requests.
+        return;
     } catch (error) {
         console.error("Error closing database connection:", error);
     }

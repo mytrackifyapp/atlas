@@ -4125,3 +4125,5 @@ It can also happen if the client has a browser extension installed which messes 
 [01:57:09.707] Server  LOG     FounderPage: Rendering founder dashboard
 [02:19:30.428] Server  LOG     MongoDB connected successfully
 [02:19:47.902] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/sign-in color: rgb(120, 120, 120) color: inherit {"dp":"/sign-in","o":"http://localhost:3000/sign-in","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778147508182} /_vercel/insights/view
+[02:31:15.964] Server  LOG      ✓ Compiled in 316ms
+[02:31:25.232] Server  LOG      ✓ Compiled in 204ms

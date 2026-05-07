@@ -19,79 +19,53 @@ function getDatabaseName(connectionString: string): string {
 
 const databaseName = getDatabaseName(connectionString)
 
-// Create MongoDB client with proper connection options for Atlas
-const client = new MongoClient(connectionString, {
-  maxPoolSize: 10,
-  minPoolSize: 2,
-  maxIdleTimeMS: 30000,
-  serverSelectionTimeoutMS: 10000,
-  socketTimeoutMS: 45000,
-  connectTimeoutMS: 10000,
-  retryWrites: true,
-  retryReads: true,
-})
-
 // Global client instance to reuse across requests (Next.js pattern)
 const globalForMongo = globalThis as unknown as {
   _mongoClient?: MongoClient
   _mongoClientPromise?: Promise<MongoClient>
 }
 
-let clientPromise: Promise<MongoClient>
-
-if (process.env.NODE_ENV === "development") {
-  // In development, use a global variable so the client is not recreated on hot reloads
-  if (!globalForMongo._mongoClientPromise) {
-    globalForMongo._mongoClientPromise = client.connect().catch((error) => {
-      console.error("Failed to connect to MongoDB:", error)
-      return client
-    })
-  }
-  clientPromise = globalForMongo._mongoClientPromise
-} else {
-  // In production, create connection promise
-  clientPromise = client.connect().catch((error) => {
-    console.error("Failed to connect to MongoDB:", error)
-    return client
+function createClient() {
+  return new MongoClient(connectionString, {
+    maxPoolSize: 10,
+    minPoolSize: 2,
+    maxIdleTimeMS: 30000,
+    serverSelectionTimeoutMS: 10000,
+    socketTimeoutMS: 45000,
+    connectTimeoutMS: 10000,
+    retryWrites: true,
+    retryReads: true,
   })
 }
 
-// Initialize connection immediately (non-blocking)
-clientPromise
-  .then((connectedClient) => {
-    globalForMongo._mongoClient = connectedClient
-    console.log("MongoDB connected successfully (db.ts)")
-  })
-  .catch((error) => {
-    console.error("MongoDB connection error (db.ts):", error)
-  })
+function getClientPromise() {
+  // IMPORTANT: Cache in globalThis for BOTH dev and prod.
+  // Vercel lambdas can reuse a warm instance, and we must never close the shared client
+  // during a request (closing it causes "MongoTopologyClosedError: Topology is closed").
+  if (!globalForMongo._mongoClientPromise) {
+    const client = createClient()
+    globalForMongo._mongoClientPromise = client.connect().then((connected) => {
+      globalForMongo._mongoClient = connected
+      console.log("MongoDB connected successfully (db.ts)")
+      return connected
+    })
+  }
+  return globalForMongo._mongoClientPromise
+}
+
+let clientPromise = getClientPromise()
 
 export async function getDatabase(): Promise<Db> {
   try {
-    // Ensure client is connected
     const connectedClient = await clientPromise
-    // Check if client is still connected, reconnect if needed
-    if (!connectedClient.topology?.isConnected()) {
-      console.warn("MongoDB client disconnected, reconnecting...")
-      await connectedClient.connect()
-    }
     return connectedClient.db(databaseName)
   } catch (error) {
     console.error("Error getting database connection:", error)
-    // Try to reconnect
+    // Try to create a NEW cached client promise.
     try {
-      await client.close()
-      const newClient = new MongoClient(connectionString, {
-        maxPoolSize: 10,
-        minPoolSize: 2,
-        maxIdleTimeMS: 30000,
-        serverSelectionTimeoutMS: 10000,
-        socketTimeoutMS: 45000,
-        connectTimeoutMS: 10000,
-        retryWrites: true,
-        retryReads: true,
-      })
-      clientPromise = newClient.connect()
+      globalForMongo._mongoClientPromise = undefined
+      globalForMongo._mongoClient = undefined
+      clientPromise = getClientPromise()
       const connectedClient = await clientPromise
       return connectedClient.db(databaseName)
     } catch (reconnectError) {
@@ -104,8 +78,9 @@ export async function getDatabase(): Promise<Db> {
 // For cleanup if needed
 export async function closeDatabase() {
   try {
-    const connectedClient = await clientPromise
-    await connectedClient.close()
+    // Intentionally a no-op in serverless/runtime code paths.
+    // Closing the cached client can break concurrent requests.
+    return
   } catch (error) {
     console.error("Error closing database connection:", error)
   }
