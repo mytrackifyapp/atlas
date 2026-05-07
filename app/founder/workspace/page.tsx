@@ -3,6 +3,8 @@ import { DashboardShell } from "@/components/dashboard-shell"
 import { WorkspaceView } from "@/components/workspace-view"
 import { getSessionWithRole } from "@/lib/auth-helpers"
 
+export const dynamic = "force-dynamic"
+
 export default async function FounderWorkspacePage() {
   try {
     const session = await getSessionWithRole()

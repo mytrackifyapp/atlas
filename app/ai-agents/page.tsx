@@ -8,6 +8,8 @@ import { getSessionWithRole } from "@/lib/auth-helpers"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 
+export const dynamic = "force-dynamic"
+
 export default async function AiAgentsMarketingPage() {
   const session = await getSessionWithRole()
   const isAuthenticated = !!session

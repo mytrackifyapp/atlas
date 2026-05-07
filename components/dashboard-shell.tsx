@@ -83,7 +83,9 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       {/* Logo */}
       <div className="p-6 border-b border-sidebar-border">
         <Link href="/" className="flex items-center gap-3">
-          <img src="/images/logo.PNG" alt="Trackify Atlas" className="h-10 w-auto object-contain" />
+          <span className="text-xl font-bold tracking-tight text-sidebar-foreground">
+            Trackify Finance
+          </span>
           <div>
             <h1 className="text-xl font-bold text-sidebar-foreground"></h1>
             <p className="text-xs text-muted-foreground"></p>
@@ -264,7 +266,9 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                 {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </Button>
               <Link href="/" className="flex items-center gap-2">
-                <img src="/images/logo.PNG" alt="Trackify Atlas" className="h-8 w-auto object-contain" />
+                <span className="text-base font-bold tracking-tight text-foreground">
+                  Trackify Finance
+                </span>
                 <div>
                   <h1 className="text-base font-bold"></h1>
                   <p className="text-xs text-muted-foreground -mt-0.5"></p>

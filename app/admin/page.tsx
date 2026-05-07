@@ -4,6 +4,8 @@ import { AdminDashboard } from "@/components/admin-dashboard"
 import { getSessionWithRole } from "@/lib/auth-helpers"
 import { isAdmin } from "@/lib/admin-helpers"
 
+export const dynamic = "force-dynamic"
+
 export default async function AdminPage() {
   try {
     const session = await getSessionWithRole()

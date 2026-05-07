@@ -3744,3 +3744,274 @@ It can also happen if the client has a browser extension installed which messes 
 [01:25:32.372] Server  LOG     Found user by _id!
 [01:25:32.372] Server  LOG     User found via "_id" ":" {}
 [01:25:32.373] Server  LOG     Returning session with role: {}
+[01:35:47.969] Server  LOG      ✓ Compiled in 139ms
+[01:35:48.264] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:35:48.396] Server  LOG     Found user by _id!
+[01:35:48.397] Server  LOG     User found via "_id" ":" {}
+[01:35:48.397] Server  LOG     Returning session with role: {}
+[01:35:51.271] Server  LOG      ✓ Compiled in 68ms
+[01:35:51.524] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:35:51.657] Server  LOG     Found user by _id!
+[01:35:51.657] Server  LOG     User found via "_id" ":" {}
+[01:35:51.657] Server  LOG     Returning session with role: {}
+[01:35:55.368] Server  LOG      ✓ Compiled in 64ms
+[01:35:55.617] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:35:55.752] Server  LOG     Found user by _id!
+[01:35:55.752] Server  LOG     User found via "_id" ":" {}
+[01:35:55.752] Server  LOG     Returning session with role: {}
+[01:36:02.424] Server  LOG      ✓ Compiled in 52ms
+[01:36:02.674] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:36:02.809] Server  LOG     Found user by _id!
+[01:36:02.810] Server  LOG     User found via "_id" ":" {}
+[01:36:02.810] Server  LOG     Returning session with role: {}
+[01:36:06.800] Server  LOG      ✓ Compiled in 44ms
+[01:36:07.059] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:36:07.191] Server  LOG     Found user by _id!
+[01:36:07.191] Server  LOG     User found via "_id" ":" {}
+[01:36:07.191] Server  LOG     Returning session with role: {}
+[01:36:10.629] Server  LOG      ✓ Compiled in 45ms
+[01:36:10.880] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:36:11.017] Server  LOG     Found user by _id!
+[01:36:11.017] Server  LOG     User found via "_id" ":" {}
+[01:36:11.017] Server  LOG     Returning session with role: {}
+[01:36:15.765] Server  LOG      ✓ Compiled in 52ms
+[01:36:16.014] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:36:16.148] Server  LOG     Found user by _id!
+[01:36:16.148] Server  LOG     User found via "_id" ":" {}
+[01:36:16.148] Server  LOG     Returning session with role: {}
+[01:36:23.544] Server  LOG      ✓ Compiled in 54ms
+[01:36:23.798] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:36:23.932] Server  LOG     Found user by _id!
+[01:36:23.932] Server  LOG     User found via "_id" ":" {}
+[01:36:23.932] Server  LOG     Returning session with role: {}
+[01:36:29.110] Server  LOG     MongoDB connected successfully
+[01:36:29.110] Server  LOG     MongoDB connected successfully (db.ts)
+[01:36:30.714] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:36:30.850] Server  LOG     Found user by _id!
+[01:36:30.851] Server  LOG     User found via "_id" ":" {}
+[01:36:30.851] Server  LOG     Returning session with role: {}
+[01:36:34.133] Server  LOG      ✓ Compiled in 47ms
+[01:36:34.379] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:36:34.513] Server  LOG     Found user by _id!
+[01:36:34.513] Server  LOG     User found via "_id" ":" {}
+[01:36:34.514] Server  LOG     Returning session with role: {}
+[01:36:38.748] Server  LOG      ✓ Compiled in 49ms
+[01:36:38.988] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:36:39.123] Server  LOG     Found user by _id!
+[01:36:39.123] Server  LOG     User found via "_id" ":" {}
+[01:36:39.123] Server  LOG     Returning session with role: {}
+[01:36:42.320] Server  LOG      ✓ Compiled in 52ms
+[01:36:42.561] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:36:42.694] Server  LOG     Found user by _id!
+[01:36:42.694] Server  LOG     User found via "_id" ":" {}
+[01:36:42.694] Server  LOG     Returning session with role: {}
+[01:36:47.841] Server  LOG      ✓ Compiled in 51ms
+[01:36:48.137] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:36:48.274] Server  LOG     Found user by _id!
+[01:36:48.275] Server  LOG     User found via "_id" ":" {}
+[01:36:48.275] Server  LOG     Returning session with role: {}
+[01:38:24.891] Server  LOG      ✓ Compiled in 60ms
+[01:38:25.157] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:38:25.293] Server  LOG     Found user by _id!
+[01:38:25.293] Server  LOG     User found via "_id" ":" {}
+[01:38:25.293] Server  LOG     Returning session with role: {}
+[01:38:30.270] Server  LOG      ✓ Compiled in 64ms
+[01:38:30.522] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:38:30.657] Server  LOG     Found user by _id!
+[01:38:30.657] Server  LOG     User found via "_id" ":" {}
+[01:38:30.657] Server  LOG     Returning session with role: {}
+[01:38:46.373] Server  LOG      ✓ Compiled in 125ms
+[01:38:46.623] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:38:46.755] Server  LOG     Found user by _id!
+[01:38:46.755] Server  LOG     User found via "_id" ":" {}
+[01:38:46.755] Server  LOG     Returning session with role: {}
+[01:43:02.255] Server  LOG      ✓ Compiled in 260ms
+[01:44:11.854] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/founder color: rgb(120, 120, 120) color: inherit {"dp":"/founder","o":"http://localhost:3000/founder","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778145372073} /_vercel/insights/view
+[01:44:12.026] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:44:12.161] Server  LOG     Found user by _id!
+[01:44:12.161] Server  LOG     User found via "_id" ":" {}
+[01:44:12.162] Server  LOG     Returning session with role: {}
+[01:44:12.864] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778145373080} /_vercel/insights/view
+[01:44:13.030] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:44:13.161] Server  LOG     Found user by _id!
+[01:44:13.161] Server  LOG     User found via "_id" ":" {}
+[01:44:13.162] Server  LOG     Returning session with role: {}
+[01:44:13.581] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:44:13.714] Server  LOG     Found user by _id!
+[01:44:13.715] Server  LOG     User found via "_id" ":" {}
+[01:44:13.715] Server  LOG     Returning session with role: {}
+[01:44:14.077] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:44:14.211] Server  LOG     Found user by _id!
+[01:44:14.212] Server  LOG     User found via "_id" ":" {}
+[01:44:14.213] Server  LOG     Returning session with role: {}
+[01:44:15.035] Server  LOG     MongoDB connected successfully
+[01:44:15.035] Server  LOG     MongoDB connected successfully (db.ts)
+[01:44:16.686] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:44:16.827] Server  LOG     Found user by _id!
+[01:44:16.827] Server  LOG     User found via "_id" ":" {}
+[01:44:16.827] Server  LOG     Returning session with role: {}
+[01:44:17.809] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:44:18.042] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:44:18.042] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[01:44:18.042] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778145378270} /_vercel/insights/view
+[01:45:11.276] Server  LOG      ✓ Compiled in 99ms
+[01:46:05.906] Server  LOG     MongoDB connected successfully
+[01:46:05.906] Server  LOG     MongoDB connected successfully (db.ts)
+[01:46:07.522] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:46:07.656] Server  LOG     Found user by _id!
+[01:46:07.657] Server  LOG     User found via "_id" ":" {}
+[01:46:07.657] Server  LOG     Returning session with role: {}
+[01:46:07.657] Server  LOG     OnboardingPage: Session check: {}
+[01:46:07.657] Server  LOG     OnboardingPage: Onboarding completed, redirecting to: "/dashboard"
+[01:46:07.664] Server  ERROR   Error in onboarding page: Error: NEXT_REDIRECT
+[01:46:07.901] Server  LOG     MongoDB connected successfully
+[01:46:07.901] Server  LOG     MongoDB connected successfully (db.ts)
+[01:46:07.936] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/onboarding color: rgb(120, 120, 120) color: inherit {"dp":"/onboarding","o":"http://localhost:3000/onboarding","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778145488032} /_vercel/insights/view
+[01:46:09.492] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:46:09.497] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:46:09.625] Server  LOG     Found user by _id!
+[01:46:09.625] Server  LOG     User found via "_id" ":" {}
+[01:46:09.625] Server  LOG     Returning session with role: {}
+[01:46:09.634] Server  LOG     Found user by _id!
+[01:46:09.634] Server  LOG     User found via "_id" ":" {}
+[01:46:09.634] Server  LOG     Returning session with role: {}
+[01:46:09.820] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778145490032} /_vercel/insights/view
+[01:46:10.001] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:46:10.136] Server  LOG     Found user by _id!
+[01:46:10.137] Server  LOG     User found via "_id" ":" {}
+[01:46:10.137] Server  LOG     Returning session with role: {}
+[01:46:10.568] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:46:10.702] Server  LOG     Found user by _id!
+[01:46:10.702] Server  LOG     User found via "_id" ":" {}
+[01:46:10.702] Server  LOG     Returning session with role: {}
+[01:47:12.629] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:12.764] Server  LOG     Found user by _id!
+[01:47:12.764] Server  LOG     User found via "_id" ":" {}
+[01:47:12.764] Server  LOG     Returning session with role: {}
+[01:47:13.101] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:47:13.264] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:47:13.264] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/dashboard","route":"/dashboard"}
+[01:47:13.264] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778145553491} /_vercel/insights/view
+[01:47:14.255] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:14.391] Server  LOG     Found user by _id!
+[01:47:14.392] Server  LOG     User found via "_id" ":" {}
+[01:47:14.392] Server  LOG     Returning session with role: {}
+[01:47:25.016] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:25.155] Server  LOG     Found user by _id!
+[01:47:25.155] Server  LOG     User found via "_id" ":" {}
+[01:47:25.155] Server  LOG     Returning session with role: {}
+[01:47:25.302] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:47:25.474] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:47:25.474] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/dashboard","route":"/dashboard"}
+[01:47:25.474] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778145565701} /_vercel/insights/view
+[01:47:25.625] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:25.760] Server  LOG     Found user by _id!
+[01:47:25.760] Server  LOG     User found via "_id" ":" {}
+[01:47:25.760] Server  LOG     Returning session with role: {}
+[01:47:26.752] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:26.890] Server  LOG     Found user by _id!
+[01:47:26.890] Server  LOG     User found via "_id" ":" {}
+[01:47:26.890] Server  LOG     Returning session with role: {}
+[01:47:27.031] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:47:27.188] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:47:27.188] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/dashboard","route":"/dashboard"}
+[01:47:27.188] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778145567416} /_vercel/insights/view
+[01:47:27.350] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:27.484] Server  LOG     Found user by _id!
+[01:47:27.484] Server  LOG     User found via "_id" ":" {}
+[01:47:27.484] Server  LOG     Returning session with role: {}
+[01:47:30.839] Server  LOG     MongoDB connected successfully
+[01:47:30.840] Server  LOG     MongoDB connected successfully (db.ts)
+[01:47:32.463] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:32.601] Server  LOG     Found user by _id!
+[01:47:32.601] Server  LOG     User found via "_id" ":" {}
+[01:47:32.601] Server  LOG     Returning session with role: {}
+[01:47:32.981] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:47:33.216] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:47:33.216] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[01:47:33.216] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778145573444} /_vercel/insights/view
+[01:47:35.191] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:35.328] Server  LOG     Found user by _id!
+[01:47:35.328] Server  LOG     User found via "_id" ":" {}
+[01:47:35.328] Server  LOG     Returning session with role: {}
+[01:47:35.328] Server  LOG     OnboardingPage: Session check: {}
+[01:47:35.328] Server  LOG     OnboardingPage: Onboarding completed, redirecting to: "/dashboard"
+[01:47:35.334] Server  ERROR   Error in onboarding page: Error: NEXT_REDIRECT
+[01:47:35.470] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/onboarding color: rgb(120, 120, 120) color: inherit {"dp":"/onboarding","o":"http://localhost:3000/onboarding","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778145575696} /_vercel/insights/view
+[01:47:35.675] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:35.697] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:35.810] Server  LOG     Found user by _id!
+[01:47:35.810] Server  LOG     User found via "_id" ":" {}
+[01:47:35.811] Server  LOG     Returning session with role: {}
+[01:47:35.831] Server  LOG     Found user by _id!
+[01:47:35.831] Server  LOG     User found via "_id" ":" {}
+[01:47:35.831] Server  LOG     Returning session with role: {}
+[01:47:35.994] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778145576211} /_vercel/insights/view
+[01:47:36.163] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:36.296] Server  LOG     Found user by _id!
+[01:47:36.297] Server  LOG     User found via "_id" ":" {}
+[01:47:36.297] Server  LOG     Returning session with role: {}
+[01:47:36.710] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:36.847] Server  LOG     Found user by _id!
+[01:47:36.847] Server  LOG     User found via "_id" ":" {}
+[01:47:36.848] Server  LOG     Returning session with role: {}
+[01:47:54.665] Server  LOG     MongoDB connected successfully
+[01:47:54.665] Server  LOG     MongoDB connected successfully (db.ts)
+[01:47:56.266] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:56.384] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:56.399] Server  LOG     Found user by _id!
+[01:47:56.400] Server  LOG     User found via "_id" ":" {}
+[01:47:56.400] Server  LOG     Returning session with role: {}
+[01:47:56.400] Server  LOG     FounderPage: Session check: {}
+[01:47:56.400] Server  LOG     FounderPage: Rendering founder dashboard
+[01:47:56.519] Server  LOG     Found user by _id!
+[01:47:56.522] Server  LOG     User found via "_id" ":" {}
+[01:47:56.523] Server  LOG     Returning session with role: {}
+[01:47:56.523] Server  LOG     FounderPage: Session check: {}
+[01:47:56.523] Server  LOG     FounderPage: Rendering founder dashboard
+[01:47:56.582] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/founder color: rgb(120, 120, 120) color: inherit {"dp":"/founder","o":"http://localhost:3000/founder","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778145596800} /_vercel/insights/view
+[01:47:56.779] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:56.912] Server  LOG     Found user by _id!
+[01:47:56.913] Server  LOG     User found via "_id" ":" {}
+[01:47:56.913] Server  LOG     Returning session with role: {}
+[01:47:57.827] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:57.959] Server  LOG     Found user by _id!
+[01:47:57.959] Server  LOG     User found via "_id" ":" {}
+[01:47:57.959] Server  LOG     Returning session with role: {}
+[01:47:57.996] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:58.083] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778145598304} /_vercel/insights/view
+[01:47:58.125] Server  LOG     Found user by _id!
+[01:47:58.126] Server  LOG     User found via "_id" ":" {}
+[01:47:58.126] Server  LOG     Returning session with role: {}
+[01:47:58.247] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:58.379] Server  LOG     Found user by _id!
+[01:47:58.380] Server  LOG     User found via "_id" ":" {}
+[01:47:58.380] Server  LOG     Returning session with role: {}
+[01:47:58.569] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/founder color: rgb(120, 120, 120) color: inherit {"dp":"/founder","o":"http://localhost:3000/founder","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778145598786} /_vercel/insights/view
+[01:47:58.780] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:58.911] Server  LOG     Found user by _id!
+[01:47:58.911] Server  LOG     User found via "_id" ":" {}
+[01:47:58.911] Server  LOG     Returning session with role: {}
+[01:47:59.183] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:47:59.313] Server  LOG     Found user by _id!
+[01:47:59.314] Server  LOG     User found via "_id" ":" {}
+[01:47:59.314] Server  LOG     Returning session with role: {}
+[01:48:00.848] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:48:00.866] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:48:00.980] Server  LOG     Found user by _id!
+[01:48:00.980] Server  LOG     User found via "_id" ":" {}
+[01:48:00.980] Server  LOG     Returning session with role: {}
+[01:48:00.980] Server  LOG     FounderPage: Session check: {}
+[01:48:00.980] Server  LOG     FounderPage: Rendering founder dashboard
+[01:48:01.349] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:48:01.529] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:48:01.529] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/founder","route":"/founder"}
+[01:48:01.529] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/founder color: rgb(120, 120, 120) color: inherit {"dp":"/founder","o":"http://localhost:3000/founder","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778145601757} /_vercel/insights/view
+[01:48:01.677] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[01:48:01.807] Server  LOG     Found user by _id!
+[01:48:01.807] Server  LOG     User found via "_id" ":" {}
+[01:48:01.807] Server  LOG     Returning session with role: {}
+[01:48:01.912] Server  LOG     Found user by _id!
+[01:48:01.913] Server  LOG     User found via "_id" ":" {}
+[01:48:01.913] Server  LOG     Returning session with role: {}
+[01:48:02.710] Server  LOG      ✓ Compiled in 342ms

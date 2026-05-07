@@ -3,6 +3,8 @@ import { DashboardShell } from "@/components/dashboard-shell"
 import { CompanyStructureView } from "@/components/company-structure-view"
 import { getSessionWithRole } from "@/lib/auth-helpers"
 
+export const dynamic = "force-dynamic"
+
 export default async function CompanyStructurePage() {
   try {
     const session = await getSessionWithRole()

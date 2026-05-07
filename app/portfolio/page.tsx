@@ -3,6 +3,8 @@ import { DashboardShell } from "@/components/dashboard-shell"
 import { PortfolioView } from "@/components/portfolio-view"
 import { getSessionWithRole } from "@/lib/auth-helpers"
 
+export const dynamic = "force-dynamic"
+
 export default async function PortfolioPage() {
   try {
     const session = await getSessionWithRole()

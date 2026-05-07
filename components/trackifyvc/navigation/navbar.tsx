@@ -68,12 +68,12 @@ export default function TrackifyVcNavbar() {
                           <ul
                             className={cn(
                               "grid gap-1 p-4 md:w-[400px] lg:w-[500px] rounded-xl bg-white",
-                              link.title === "Features"
+                              String(link.title) === "Features"
                                 ? "lg:grid-cols-[.75fr_1fr]"
                                 : "lg:grid-cols-2",
                             )}
                           >
-                            {link.title === "Features" && (
+                            {String(link.title) === "Features" && (
                               <li className="row-span-4 pr-2 relative rounded-lg overflow-hidden">
                                 <div className="absolute inset-0 !z-10 h-full w-[calc(100%-10px)] bg-[linear-gradient(to_right,rgba(0,0,0,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.08)_1px,transparent_1px)] bg-[size:1rem_1rem]"></div>
                                 <NavigationMenuLink asChild className="z-20 relative">

@@ -3,6 +3,8 @@ import { getSessionWithRole } from "@/lib/auth-helpers"
 import { roleConfigs } from "@/lib/role-config"
 import { OnboardingClient } from "./onboarding-client"
 
+export const dynamic = "force-dynamic"
+
 export default async function OnboardingPage() {
   try {
     // Server-side check: redirect to sign-in if not authenticated

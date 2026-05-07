@@ -14,6 +14,8 @@ import { TrackifyVcFaq } from "@/components/trackifyvc/faq"
 import TrackifyVcNavbar from "@/components/trackifyvc/navigation/navbar"
 import { AiAgentsHero } from "@/components/ai-agents-hero"
 
+export const dynamic = "force-dynamic"
+
 export default async function Page() {
   const session = await getSessionWithRole()
   const isAuthenticated = !!session

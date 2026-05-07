@@ -3,6 +3,8 @@ import { DashboardShell } from "@/components/dashboard-shell"
 import { InvestorUpdatesView } from "@/components/investor-updates-view"
 import { getSessionWithRole } from "@/lib/auth-helpers"
 
+export const dynamic = "force-dynamic"
+
 export default async function InvestorUpdatesPage() {
   try {
     const session = await getSessionWithRole()

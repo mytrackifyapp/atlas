@@ -6,6 +6,8 @@ import { GlbAvatarVoiceTest } from "@/components/glb-avatar-voice-test"
 import { getSessionWithRole } from "@/lib/auth-helpers"
 import { Button } from "@/components/ui/button"
 
+export const dynamic = "force-dynamic"
+
 export default async function GlbAvatarLabPage() {
   const session = await getSessionWithRole()
   if (!session) redirect("/sign-in")

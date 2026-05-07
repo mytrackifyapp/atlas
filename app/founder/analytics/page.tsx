@@ -4,6 +4,8 @@ import { DashboardShell } from "@/components/dashboard-shell"
 import { AnalyticsView } from "@/components/analytics-view"
 import { getSessionWithRole } from "@/lib/auth-helpers"
 
+export const dynamic = "force-dynamic"
+
 export default async function FounderAnalyticsPage() {
   const session = await getSessionWithRole()
   if (!session) redirect("/sign-in")
