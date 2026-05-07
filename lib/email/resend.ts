@@ -13,6 +13,11 @@ export function getResend() {
   return new Resend(apiKey)
 }
 
+function getCeoFrom() {
+  // Must be a verified sender in Resend; display name can change freely.
+  return process.env.RESEND_CEO_FROM ?? 'Divine Gabriel (CEO) <hey@mytrackify.com>'
+}
+
 export type ContactEmailPayload = {
   firstName: string
   lastName: string
@@ -125,6 +130,98 @@ function baseEmailTemplate(opts: {
     </table>
   </body>
 </html>`
+}
+
+export async function sendWelcomeEmail(payload: {
+  toEmail: string
+  toName?: string | null
+  role: "founder" | "investor"
+}) {
+  const resend = getResend()
+  const from = getCeoFrom()
+
+  const firstName =
+    (payload.toName ?? "").trim().split(/\s+/)[0]?.trim() || "there"
+
+  const subject =
+    payload.role === "founder"
+      ? "Welcome to Trackify — founder setup"
+      : "Welcome to Trackify — investor setup"
+
+  const intro =
+    payload.role === "founder"
+      ? `Welcome, <strong style="color:#F5F5F5;">${escapeHtml(firstName)}</strong>. You’re set up as a <strong>Founder</strong>.`
+      : `Welcome, <strong style="color:#F5F5F5;">${escapeHtml(firstName)}</strong>. You’re set up as an <strong>Investor</strong>.`
+
+  const bodyFounder = `
+    <p style="margin:0 0 12px;line-height:1.6;">
+      I’m Divine Gabriel, CEO at Trackify Finance — welcome to Trackify.
+    </p>
+    <p style="margin:0 0 12px;line-height:1.6;">
+      Your founder workspace is ready. Here are the fastest next steps:
+    </p>
+    <ul style="margin:0 0 12px 18px;line-height:1.7;color:rgba(245,245,245,0.85);">
+      <li>Add your fundraising details and targets</li>
+      <li>Upload key documents (deck, model, diligence)</li>
+      <li>Track investors, updates, and momentum weekly</li>
+    </ul>
+    <p style="margin:0;line-height:1.6;color:rgba(245,245,245,0.72);">
+      Reply to this email if you want help setting up your pipeline.
+    </p>
+  `
+
+  const bodyInvestor = `
+    <p style="margin:0 0 12px;line-height:1.6;">
+      I’m Divine Gabriel, CEO at Trackify Finance — welcome to Trackify.
+    </p>
+    <p style="margin:0 0 12px;line-height:1.6;">
+      Your investor dashboard is ready. Here are the fastest next steps:
+    </p>
+    <ul style="margin:0 0 12px 18px;line-height:1.7;color:rgba(245,245,245,0.85);">
+      <li>Add your portfolio companies (or import them)</li>
+      <li>Start a deal flow pipeline and score opportunities</li>
+      <li>Generate reports for internal tracking and LP updates</li>
+    </ul>
+    <p style="margin:0;line-height:1.6;color:rgba(245,245,245,0.72);">
+      Reply to this email if you want a quick walkthrough.
+    </p>
+  `
+
+  const html = baseEmailTemplate({
+    preheader: "Welcome to Trackify",
+    title: "Welcome to Trackify",
+    introHtml: intro,
+    bodyHtml: payload.role === "founder" ? bodyFounder : bodyInvestor,
+    cta: {
+      label: "Open Trackify",
+      href: payload.role === "founder" ? "https://mytrackify.com/founder" : "https://mytrackify.com/portfolio",
+    },
+    footerHtml: `<p style="margin:0;line-height:1.6;color:rgba(245,245,245,0.72);">
+      Sent by Divine Gabriel, CEO • Trackify Finance
+    </p>`,
+  })
+
+  const text = [
+    `Hi ${firstName},`,
+    ``,
+    `I’m Divine Gabriel, CEO at Trackify Finance — welcome to Trackify.`,
+    ``,
+    payload.role === "founder"
+      ? `You’re set up as a Founder. Next steps: fundraising details, docs, and investor tracking.`
+      : `You’re set up as an Investor. Next steps: portfolio companies, deal flow, and reports.`,
+    ``,
+    `Open Trackify: ${payload.role === "founder" ? "https://mytrackify.com/founder" : "https://mytrackify.com/portfolio"}`,
+    ``,
+    `— Divine Gabriel`,
+  ].join("\n")
+
+  return await resend.emails.send({
+    from,
+    to: payload.toEmail,
+    subject,
+    text,
+    html,
+  })
 }
 
 export async function sendContactEmail(payload: ContactEmailPayload) {

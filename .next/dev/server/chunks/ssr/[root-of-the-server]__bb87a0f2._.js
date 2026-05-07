@@ -163,7 +163,7 @@ const db = client.db(databaseName);
  * Merge with optional `BETTER_AUTH_TRUSTED_ORIGINS` (comma-separated).
  */ function alternatePublicOrigins() {
     const fromEnv = process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",").map((s)=>s.trim().replace(/\/$/, "")).filter(Boolean) ?? [];
-    const primary = (process.env.BETTER_AUTH_URL || ("TURBOPACK compile-time value", "http://localhost:3000") || "").trim().replace(/\/$/, "");
+    const primary = (process.env.BETTER_AUTH_URL || ("TURBOPACK compile-time value", "http://localhost:3000") || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "") || "").trim().replace(/\/$/, "");
     const extra = new Set();
     for (const e of fromEnv){
         try {
@@ -190,7 +190,9 @@ const db = client.db(databaseName);
     ];
 }
 const auth = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$better$2d$auth$40$1$2e$4$2e$7_$40$prisma$2b$client$40$7$2e$1$2e$0_prisma$40$7$2e$1$2e$0_$40$types$2b$react$40$19$2e$2$2e$7_react$2d$dom$40$19$2e$2$2e$_bd7c77fb510da8d9502659b8eb9a6693$2f$node_modules$2f$better$2d$auth$2f$dist$2f$auth$2f$auth$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["betterAuth"])({
-    trustedOrigins: alternatePublicOrigins(),
+    ...alternatePublicOrigins().length ? {
+        trustedOrigins: alternatePublicOrigins()
+    } : {},
     database: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$better$2d$auth$40$1$2e$4$2e$7_$40$prisma$2b$client$40$7$2e$1$2e$0_prisma$40$7$2e$1$2e$0_$40$types$2b$react$40$19$2e$2$2e$7_react$2d$dom$40$19$2e$2$2e$_bd7c77fb510da8d9502659b8eb9a6693$2f$node_modules$2f$better$2d$auth$2f$dist$2f$adapters$2f$mongodb$2d$adapter$2f$mongodb$2d$adapter$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["mongodbAdapter"])(db, {
         client
     }),

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { getDatabase } from "@/lib/db"
+import { sendWelcomeEmail } from "@/lib/email/resend"
 
 export async function POST(request: NextRequest) {
   try {
@@ -152,6 +153,25 @@ export async function POST(request: NextRequest) {
       modifiedCount: result.modifiedCount,
       verified: true
     })
+
+    // Send welcome email once per user (after onboarding is completed).
+    // Track via `welcomeEmailSentAt` to avoid duplicates.
+    try {
+      if (!updatedUser.welcomeEmailSentAt && updatedUser.email) {
+        await sendWelcomeEmail({
+          toEmail: updatedUser.email,
+          toName: updatedUser.name ?? null,
+          role,
+        })
+        await db.collection("user").updateOne(
+          queryFilter,
+          { $set: { welcomeEmailSentAt: new Date() } }
+        )
+      }
+    } catch (e) {
+      console.error("Welcome email failed:", e)
+      // Best-effort: don't block onboarding completion.
+    }
 
     return NextResponse.json({ 
       success: true, 

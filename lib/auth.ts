@@ -86,6 +86,7 @@ function alternatePublicOrigins(): string[] {
   const primary = (
     process.env.BETTER_AUTH_URL ||
     process.env.NEXT_PUBLIC_BETTER_AUTH_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "") ||
     ""
   )
     .trim()
@@ -120,7 +121,9 @@ function alternatePublicOrigins(): string[] {
 }
 
 export const auth = betterAuth({
-  trustedOrigins: alternatePublicOrigins(),
+  ...(alternatePublicOrigins().length
+    ? { trustedOrigins: alternatePublicOrigins() }
+    : {}),
   database: mongodbAdapter(db, {
     client,
   }),
