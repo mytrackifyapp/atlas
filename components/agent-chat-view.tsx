@@ -9,7 +9,11 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
+import { AvatarImmersiveShell } from "@/components/avatar-immersive-shell"
+import { LiveAvatarPanel } from "@/components/live-avatar-panel"
+import { SynthesiaPanel } from "@/components/synthesia-panel"
 import { TalkingAvatar } from "@/components/talking-avatar"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 type Props = {
   agentId: string
@@ -138,6 +142,10 @@ export function AgentChatView({ agentId }: Props) {
     }
   }
 
+  const hasLiveAvatar = Boolean(agent?.useLiveAvatar)
+  const hasSynthesia = Boolean(agent?.useSynthesia)
+  const multiAvatarTabs = hasLiveAvatar || hasSynthesia
+
   return (
     <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       <div className="flex flex-col gap-1">
@@ -214,17 +222,78 @@ export function AgentChatView({ agentId }: Props) {
         </Card>
 
         <div className="space-y-4">
-          <TalkingAvatar
-            text={lastAssistantText}
-            autoSpeak={false}
-            speakRequest={speakRequest}
-            imageSrc={agent?.imageSrc}
-            name={agent?.name}
-            onSpeakDone={() => {
-              setSpeakRequest(null)
-              queueMicrotask(maybeDequeueSpeech)
-            }}
-          />
+          {multiAvatarTabs ? (
+            <Tabs defaultValue="voice" className="w-full">
+              <TabsList
+                className={cn(
+                  "grid w-full h-10 rounded-xl",
+                  hasLiveAvatar && hasSynthesia && "grid-cols-3",
+                  hasLiveAvatar !== hasSynthesia && "grid-cols-2"
+                )}
+              >
+                <TabsTrigger value="voice" className="rounded-lg text-xs sm:text-sm px-1">
+                  Voice (ElevenLabs)
+                </TabsTrigger>
+                {hasLiveAvatar ? (
+                  <TabsTrigger value="live" className="rounded-lg text-xs sm:text-sm px-1">
+                    LiveAvatar
+                  </TabsTrigger>
+                ) : null}
+                {hasSynthesia ? (
+                  <TabsTrigger value="synthesia" className="rounded-lg text-xs sm:text-sm px-1">
+                    Synthesia
+                  </TabsTrigger>
+                ) : null}
+              </TabsList>
+              <TabsContent value="voice" className="mt-4 space-y-0 focus-visible:outline-none">
+                <AvatarImmersiveShell
+                  title={agent?.name ? `${agent.name} · Voice` : "Voice avatar"}
+                >
+                  <TalkingAvatar
+                    text={lastAssistantText}
+                    autoSpeak={false}
+                    speakRequest={speakRequest}
+                    imageSrc={agent?.imageSrc}
+                    name={agent?.name}
+                    onSpeakDone={() => {
+                      setSpeakRequest(null)
+                      queueMicrotask(maybeDequeueSpeech)
+                    }}
+                  />
+                </AvatarImmersiveShell>
+              </TabsContent>
+              {hasLiveAvatar ? (
+                <TabsContent value="live" className="mt-4 focus-visible:outline-none">
+                  <LiveAvatarPanel
+                    agentId={agentId}
+                    immersiveTitle={agent?.name ? `${agent.name} · Live` : "Live avatar"}
+                  />
+                </TabsContent>
+              ) : null}
+              {hasSynthesia ? (
+                <TabsContent value="synthesia" className="mt-4 focus-visible:outline-none">
+                  <SynthesiaPanel
+                    videoRef={agent?.synthesiaVideoId}
+                    immersiveTitle={agent?.name ? `${agent.name} · Synthesia` : "Synthesia"}
+                  />
+                </TabsContent>
+              ) : null}
+            </Tabs>
+          ) : (
+            <AvatarImmersiveShell title={agent?.name ? `${agent.name} · Voice` : "Voice avatar"}>
+              <TalkingAvatar
+                text={lastAssistantText}
+                autoSpeak={false}
+                speakRequest={speakRequest}
+                imageSrc={agent?.imageSrc}
+                name={agent?.name}
+                onSpeakDone={() => {
+                  setSpeakRequest(null)
+                  queueMicrotask(maybeDequeueSpeech)
+                }}
+              />
+            </AvatarImmersiveShell>
+          )}
           <Card className="p-4 sm:p-6 border-border/50">
             <div className="text-sm font-medium">Quick prompts</div>
             <div className="mt-3 grid gap-2">

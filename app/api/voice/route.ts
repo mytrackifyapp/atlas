@@ -4,6 +4,29 @@ export const dynamic = "force-dynamic"
 
 // Minimal ElevenLabs TTS wrapper for MVP.
 // Client: POST { text: string, voiceId?: string }
+
+type ElevenLabsVoicesResponse = {
+  voices?: Array<{
+    voice_id: string
+    name?: string
+    category?: string
+  }>
+}
+
+async function pickDefaultVoiceId(apiKey: string): Promise<string | null> {
+  const res = await fetch("https://api.elevenlabs.io/v1/voices", {
+    headers: {
+      Accept: "application/json",
+      "xi-api-key": apiKey,
+    },
+  })
+  if (!res.ok) return null
+  const json = (await res.json().catch(() => null)) as ElevenLabsVoicesResponse | null
+  const voices = json?.voices ?? []
+  const allowed = voices.filter((v) => v.voice_id && v.category !== "library")
+  return allowed[0]?.voice_id ?? null
+}
+
 export async function POST(request: NextRequest) {
   try {
     const apiKey = process.env.ELEVENLABS_API_KEY
@@ -20,9 +43,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "text is required" }, { status: 400 })
     }
 
-    const voiceId =
-      (body.voiceId ?? process.env.ELEVENLABS_DEFAULT_VOICE_ID ?? "").trim() ||
-      "21m00Tcm4TlvDq8ikWAM" // fallback voice
+    const envVoiceId = (process.env.ELEVENLABS_DEFAULT_VOICE_ID ?? "").trim()
+    const requestedVoiceId = (body.voiceId ?? "").trim()
+    const voiceId = requestedVoiceId || envVoiceId || (await pickDefaultVoiceId(apiKey)) || ""
+    if (!voiceId) {
+      return NextResponse.json(
+        {
+          error: "No usable ElevenLabs voice found",
+          details:
+            "Set ELEVENLABS_DEFAULT_VOICE_ID to a voice you own (not a Voice Library voice), or pass voiceId from the client.",
+        },
+        { status: 400 }
+      )
+    }
 
     const url = `https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(voiceId)}`
     const res = await fetch(url, {

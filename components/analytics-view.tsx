@@ -1,10 +1,11 @@
 "use client"
 
+import { useEffect, useMemo, useState } from "react"
 import { PageHeader } from "@/components/page-header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { Download, TrendingUp } from "lucide-react"
+import { Download, TrendingUp, RefreshCw } from "lucide-react"
 import {
   BarChart,
   Bar,
@@ -18,42 +19,66 @@ import {
   ResponsiveContainer,
 } from "recharts"
 
-const portfolioPerformance = [
-  { month: "Jan '24", value: 12500000, invested: 9750000, roi: 28 },
-  { month: "Feb '24", value: 13200000, invested: 9750000, roi: 35 },
-  { month: "Mar '24", value: 14100000, invested: 9750000, roi: 45 },
-  { month: "Apr '24", value: 15800000, invested: 9750000, roi: 62 },
-  { month: "May '24", value: 16200000, invested: 9750000, roi: 66 },
-  { month: "Jun '24", value: 17500000, invested: 9750000, roi: 79 },
-]
+type RangeKey = "1m" | "3m" | "6m" | "1y" | "all"
 
-const dealFlowMetrics = [
-  { month: "Jan", received: 45, reviewed: 38, invested: 2 },
-  { month: "Feb", received: 52, reviewed: 45, invested: 3 },
-  { month: "Mar", received: 48, reviewed: 41, invested: 2 },
-  { month: "Apr", received: 61, reviewed: 52, invested: 4 },
-  { month: "May", received: 58, reviewed: 49, invested: 3 },
-  { month: "Jun", received: 67, reviewed: 58, invested: 5 },
-]
-
-const sectorPerformance = [
-  { sector: "AI/ML", returns: 85, invested: 4200000 },
-  { sector: "HealthTech", returns: 68, invested: 2800000 },
-  { sector: "FinTech", returns: 52, invested: 1200000 },
-  { sector: "CleanTech", returns: -8, invested: 1800000 },
-  { sector: "SaaS", returns: 91, invested: 5500000 },
-]
-
-const cashFlowData = [
-  { month: "Jan", inflow: 450000, outflow: 1200000 },
-  { month: "Feb", inflow: 380000, outflow: 0 },
-  { month: "Mar", inflow: 520000, outflow: 2500000 },
-  { month: "Apr", inflow: 680000, outflow: 0 },
-  { month: "May", inflow: 420000, outflow: 750000 },
-  { month: "Jun", inflow: 890000, outflow: 0 },
-]
+type AnalyticsResponse = {
+  kpis: {
+    totalRoiPercent: number
+    irrPercent: number
+    avgDealSize: number
+    deploymentRatePercent: number
+  }
+  portfolioPerformance: Array<{ month: string; value: number; invested: number; roi: number }>
+  dealFlowMetrics: Array<{ month: string; received: number; reviewed: number; invested: number }>
+  sectorPerformance: Array<{ sector: string; returns: number; invested: number }>
+  cashFlowData: Array<{ month: string; inflow: number; outflow: number }>
+}
 
 export function AnalyticsView() {
+  const [range, setRange] = useState<RangeKey>("6m")
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [data, setData] = useState<AnalyticsResponse | null>(null)
+
+  const fetchAnalytics = async (r: RangeKey) => {
+    try {
+      setLoading(true)
+      setError(null)
+      const res = await fetch(`/api/analytics?range=${encodeURIComponent(r)}`)
+      const body = (await res.json().catch(() => null)) as any
+      if (!res.ok) throw new Error(body?.error || "Failed to load analytics")
+      setData(body?.data ?? null)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to load analytics")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchAnalytics(range)
+  }, [range])
+
+  const kpis = data?.kpis
+
+  const portfolioPerformance = useMemo(() => data?.portfolioPerformance ?? [], [data])
+  const dealFlowMetrics = useMemo(() => data?.dealFlowMetrics ?? [], [data])
+  const sectorPerformance = useMemo(() => data?.sectorPerformance ?? [], [data])
+  const cashFlowData = useMemo(() => data?.cashFlowData ?? [], [data])
+
+  const exportJson = async () => {
+    const json = JSON.stringify({ range, data }, null, 2)
+    const blob = new Blob([json], { type: "application/json" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `analytics-${range}.json`
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <div className="space-y-4 sm:space-y-6 lg:space-y-8 p-4 sm:p-6 lg:p-8">
       <PageHeader
@@ -61,7 +86,7 @@ export function AnalyticsView() {
         description="In-depth analysis of your investment performance"
         actions={
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
-            <Select defaultValue="6m">
+            <Select value={range} onValueChange={(v) => setRange(v as RangeKey)}>
               <SelectTrigger className="w-full sm:w-[140px]">
                 <SelectValue />
               </SelectTrigger>
@@ -73,7 +98,24 @@ export function AnalyticsView() {
                 <SelectItem value="all">All Time</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="sm" className="w-full sm:w-auto">
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full sm:w-auto"
+              onClick={() => fetchAnalytics(range)}
+              disabled={loading}
+            >
+              <RefreshCw className={`h-4 w-4 sm:mr-2 ${loading ? "animate-spin" : ""}`} />
+              <span className="hidden sm:inline">Refresh</span>
+              <span className="sm:hidden">Refresh</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full sm:w-auto"
+              onClick={exportJson}
+              disabled={!data}
+            >
               <Download className="h-4 w-4 sm:mr-2" />
               <span className="hidden sm:inline">Export Report</span>
               <span className="sm:hidden">Export</span>
@@ -82,16 +124,27 @@ export function AnalyticsView() {
         }
       />
 
+      {error ? (
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-sm text-red-400">{error}</p>
+            <Button variant="outline" size="sm" className="mt-3" onClick={() => fetchAnalytics(range)}>
+              Retry
+            </Button>
+          </CardContent>
+        </Card>
+      ) : null}
+
       {/* Key Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <Card>
           <CardContent className="pt-6">
             <div className="space-y-2">
               <p className="text-sm font-medium text-muted-foreground">Total ROI</p>
-              <p className="text-3xl font-bold">79.5%</p>
+              <p className="text-3xl font-bold">{kpis ? `${kpis.totalRoiPercent}%` : "—"}</p>
               <div className="flex items-center text-sm text-primary">
                 <TrendingUp className="h-4 w-4 mr-1" />
-                <span>+12.3% vs last quarter</span>
+                <span>{kpis ? "Updated from live data" : "Loading…"}</span>
               </div>
             </div>
           </CardContent>
@@ -100,10 +153,10 @@ export function AnalyticsView() {
           <CardContent className="pt-6">
             <div className="space-y-2">
               <p className="text-sm font-medium text-muted-foreground">IRR</p>
-              <p className="text-3xl font-bold">42.8%</p>
+              <p className="text-3xl font-bold">{kpis ? `${kpis.irrPercent}%` : "—"}</p>
               <div className="flex items-center text-sm text-primary">
                 <TrendingUp className="h-4 w-4 mr-1" />
-                <span>Above target</span>
+                <span>{kpis ? "Heuristic estimate" : "Loading…"}</span>
               </div>
             </div>
           </CardContent>
@@ -112,8 +165,10 @@ export function AnalyticsView() {
           <CardContent className="pt-6">
             <div className="space-y-2">
               <p className="text-sm font-medium text-muted-foreground">Avg Deal Size</p>
-              <p className="text-3xl font-bold">$1.95M</p>
-              <p className="text-sm text-muted-foreground">Across 5 companies</p>
+              <p className="text-3xl font-bold">
+                {kpis ? `$${(kpis.avgDealSize / 1_000_000).toFixed(2)}M` : "—"}
+              </p>
+              <p className="text-sm text-muted-foreground">{data ? "Across portfolio companies" : "Loading…"}</p>
             </div>
           </CardContent>
         </Card>
@@ -121,8 +176,8 @@ export function AnalyticsView() {
           <CardContent className="pt-6">
             <div className="space-y-2">
               <p className="text-sm font-medium text-muted-foreground">Deployment Rate</p>
-              <p className="text-3xl font-bold">68%</p>
-              <p className="text-sm text-muted-foreground">Of committed capital</p>
+              <p className="text-3xl font-bold">{kpis ? `${kpis.deploymentRatePercent}%` : "—"}</p>
+              <p className="text-sm text-muted-foreground">Placeholder until committed capital is modeled</p>
             </div>
           </CardContent>
         </Card>

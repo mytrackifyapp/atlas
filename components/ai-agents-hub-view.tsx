@@ -204,6 +204,9 @@ export function AiAgentsHubView() {
             </div>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
+            <Button variant="outline" size="sm" asChild>
+              <Link href={`${agentBaseHref}/avatar-3d`}>GLB viewer</Link>
+            </Button>
             <div className="relative">
               <Search className="h-4 w-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
               <Input

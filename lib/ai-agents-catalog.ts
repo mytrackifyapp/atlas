@@ -38,6 +38,17 @@ export type AiAgent = {
   tags: string[]
   href?: string
   comingSoon?: boolean
+  /** HeyGen LiveAvatar: show embed tab (requires `LIVEAVATAR_*` env or per-agent IDs). */
+  useLiveAvatar?: boolean
+  /** Optional UUIDs from [LiveAvatar](https://app.liveavatar.com); falls back to env vars. */
+  liveAvatar?: {
+    avatarId?: string
+    contextId?: string
+  }
+  /** [Synthesia](https://www.synthesia.io/) published video embed tab (`NEXT_PUBLIC_SYNTHESIA_VIDEO_ID` or `synthesiaVideoId`). */
+  useSynthesia?: boolean
+  /** Synthesia share video id or embed URL path segment; overrides env when set. */
+  synthesiaVideoId?: string
 }
 
 export const AI_AGENTS_CATALOG: AiAgent[] = [
@@ -60,6 +71,8 @@ export const AI_AGENTS_CATALOG: AiAgent[] = [
     imageSrc: "/cfo.png",
     tags: ["runway", "burn", "cashflow", "budget"],
     comingSoon: true,
+    useLiveAvatar: true,
+    useSynthesia: true,
   },
   {
     id: "ai-sales-rep",

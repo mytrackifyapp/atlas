@@ -5,45 +5,10 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Calendar, Users, Rocket, TrendingUp } from "lucide-react"
+import { AcceleratorApplyCard } from "@/components/accelerator-apply-card"
 
-const cohortData = [
-  {
-    id: "1",
-    name: "PayStack Clone",
-    logo: "PS",
-    stage: "Week 8",
-    mrr: "$125K",
-    growth: "+45%",
-    status: "On Track",
-  },
-  {
-    id: "2",
-    name: "AgriTech Solutions",
-    logo: "AS",
-    stage: "Week 8",
-    mrr: "$65K",
-    growth: "+32%",
-    status: "On Track",
-  },
-  {
-    id: "3",
-    name: "HealthConnect",
-    logo: "HC",
-    stage: "Week 8",
-    mrr: "$48K",
-    growth: "+28%",
-    status: "Needs Support",
-  },
-  {
-    id: "4",
-    name: "EduPlatform",
-    logo: "EP",
-    stage: "Week 8",
-    mrr: "$52K",
-    growth: "+38%",
-    status: "On Track",
-  },
-]
+const COHORT_NAME = "Trackify Finance 2026"
+const COHORT_LAUNCH_MONTH = "November"
 
 const mentors = [
   { name: "Sarah Johnson", expertise: "GTM Strategy", sessions: 12 },
@@ -59,18 +24,22 @@ export function AcceleratorDashboard() {
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <span>Accelerator</span>
         <span>/</span>
-        <span className="text-foreground">Africa 2025 Cohort</span>
+        <span className="text-foreground">{COHORT_NAME}</span>
       </div>
 
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Africa 2025 Cohort</h1>
-          <p className="text-muted-foreground mt-1">12-week program • 8 startups • Demo Day on March 15, 2025</p>
+          <h1 className="text-3xl font-bold tracking-tight">{COHORT_NAME}</h1>
+          <p className="text-muted-foreground mt-1">
+            Cohort launching in {COHORT_LAUNCH_MONTH} • Apply / join the waitlist to get early access
+          </p>
         </div>
-        <Button>
-          <Rocket className="h-4 w-4 mr-2" />
-          View Demo Day
+        <Button asChild>
+          <a href="#apply" className="inline-flex items-center">
+            <Rocket className="h-4 w-4 mr-2" />
+            Apply now
+          </a>
         </Button>
       </div>
 
@@ -79,102 +48,91 @@ export function AcceleratorDashboard() {
         <Card>
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
-              <CardDescription>Total Startups</CardDescription>
+              <CardDescription>Program length</CardDescription>
               <Users className="h-4 w-4 text-muted-foreground" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">8</div>
-            <div className="text-sm text-muted-foreground mt-1">Active companies</div>
+            <div className="text-2xl font-bold">12 weeks</div>
+            <div className="text-sm text-muted-foreground mt-1">Hands-on support</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
-              <CardDescription>Combined MRR</CardDescription>
+              <CardDescription>Focus</CardDescription>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$580K</div>
-            <div className="text-sm text-emerald-600 mt-1">+42% avg growth</div>
+            <div className="text-2xl font-bold">Finance</div>
+            <div className="text-sm text-muted-foreground mt-1">Builders & operators</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
-              <CardDescription>Mentor Sessions</CardDescription>
+              <CardDescription>Mentor sessions</CardDescription>
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">45</div>
-            <div className="text-sm text-muted-foreground mt-1">This week</div>
+            <div className="text-2xl font-bold">Weekly</div>
+            <div className="text-sm text-muted-foreground mt-1">1:1 + office hours</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
-              <CardDescription>Weeks Remaining</CardDescription>
+              <CardDescription>Launch</CardDescription>
               <Rocket className="h-4 w-4 text-muted-foreground" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">4</div>
-            <div className="text-sm text-muted-foreground mt-1">Until Demo Day</div>
+            <div className="text-2xl font-bold">{COHORT_LAUNCH_MONTH}</div>
+            <div className="text-sm text-muted-foreground mt-1">2026</div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Cohort Overview */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Cohort Companies</CardTitle>
-          <CardDescription>Performance overview of all startups in the program</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {cohortData.map((startup) => (
-              <div
-                key={startup.id}
-                className="p-4 border border-border rounded-lg hover:border-primary/50 transition-colors"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-3">
-                    <Avatar className="h-12 w-12">
-                      <AvatarFallback className="bg-primary text-primary-foreground">{startup.logo}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <h4 className="font-semibold">{startup.name}</h4>
-                      <p className="text-sm text-muted-foreground">{startup.stage}</p>
-                      <div className="flex items-center gap-3 mt-2 text-sm">
-                        <div>
-                          <span className="text-muted-foreground">MRR:</span>{" "}
-                          <span className="font-medium">{startup.mrr}</span>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Growth:</span>{" "}
-                          <span className="font-medium text-emerald-600">{startup.growth}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <Badge
-                    variant="secondary"
-                    className={
-                      startup.status === "On Track"
-                        ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
-                        : "bg-amber-500/10 text-amber-700 dark:text-amber-400"
-                    }
-                  >
-                    {startup.status}
-                  </Badge>
-                </div>
+      {/* Program overview + Apply */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>What you’ll get</CardTitle>
+            <CardDescription>Designed for finance startups preparing for growth and fundraising</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="p-4 border border-border rounded-lg">
+              <div className="font-semibold">Weekly support</div>
+              <div className="text-sm text-muted-foreground mt-1">
+                1:1 mentor sessions, office hours, and tactical reviews.
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+            </div>
+            <div className="p-4 border border-border rounded-lg">
+              <div className="font-semibold">Fundraising readiness</div>
+              <div className="text-sm text-muted-foreground mt-1">
+                Narrative, deck, metrics, diligence prep, and investor pipeline strategy.
+              </div>
+            </div>
+            <div className="p-4 border border-border rounded-lg">
+              <div className="font-semibold">Operator community</div>
+              <div className="text-sm text-muted-foreground mt-1">
+                Join a peer group of founders shipping toward the same launch window.
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="outline">Finance</Badge>
+              <Badge variant="outline">12 weeks</Badge>
+              <Badge variant="outline">November 2026 launch</Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div id="apply">
+          <AcceleratorApplyCard />
+        </div>
+      </div>
 
       {/* Mentors */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -203,26 +161,34 @@ export function AcceleratorDashboard() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Demo Day Preview</CardTitle>
-            <CardDescription>Upcoming showcase event for investors</CardDescription>
+            <CardTitle>Cohort timeline</CardTitle>
+            <CardDescription>Trackify Finance 2026 cohort launch window</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="p-4 bg-muted rounded-lg">
-                <div className="font-semibold mb-1">Africa 2025 Demo Day</div>
-                <div className="text-sm text-muted-foreground">March 15, 2025 • 2:00 PM WAT</div>
-                <div className="text-sm text-muted-foreground mt-2">Hybrid event: Lagos Hub + Virtual</div>
-              </div>
-              <div>
-                <div className="text-sm font-medium mb-2">Confirmed Investors</div>
-                <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline">Africa Ventures</Badge>
-                  <Badge variant="outline">TechStars</Badge>
-                  <Badge variant="outline">Seedcamp</Badge>
-                  <Badge variant="outline">+12 more</Badge>
+                <div className="font-semibold mb-1">{COHORT_NAME}</div>
+                <div className="text-sm text-muted-foreground">
+                  Launching {COHORT_LAUNCH_MONTH} 2026 • Remote-first
+                </div>
+                <div className="text-sm text-muted-foreground mt-2">
+                  Apply now to get early access and onboarding instructions.
                 </div>
               </div>
-              <Button className="w-full">View Full Schedule</Button>
+              <div>
+                <div className="text-sm font-medium mb-2">Focus areas</div>
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline">GTM</Badge>
+                  <Badge variant="outline">Unit economics</Badge>
+                  <Badge variant="outline">Risk & compliance</Badge>
+                  <Badge variant="outline">Fundraising</Badge>
+                </div>
+              </div>
+              <Button className="w-full" asChild>
+                <a href="#apply" className="inline-flex items-center justify-center">
+                  Apply / Join waitlist
+                </a>
+              </Button>
             </div>
           </CardContent>
         </Card>
