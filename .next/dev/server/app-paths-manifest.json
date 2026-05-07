@@ -54,5 +54,6 @@
   "/page": "app/page.js",
   "/portfolio/page": "app/portfolio/page.js",
   "/reports/page": "app/reports/page.js",
+  "/sign-in/page": "app/sign-in/page.js",
   "/workspace/page": "app/workspace/page.js"
 }

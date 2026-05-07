@@ -34,7 +34,8 @@ export default function SignUpPage() {
       if (result.error) {
         setError(result.error.message || "Failed to sign up")
       } else {
-        router.push("/onboarding")
+        // Hard navigate so the server sees fresh cookies/session.
+        window.location.href = "/onboarding"
       }
     } catch (err) {
       setError("An unexpected error occurred")
@@ -55,10 +56,10 @@ export default function SignUpPage() {
           Back to home
         </Link>
         <div className="space-y-8">
-          <img src="/images/logo.PNG" alt="Trackify Atlas" className="h-14 w-auto object-contain" />
+          <div className="text-2xl font-bold tracking-tight text-foreground">Trackify Finance</div>
           <div>
             <h1 className="text-3xl xl:text-4xl font-bold tracking-tight text-foreground mb-3">
-              Join Trackify Atlas
+              Join Trackify Finance
             </h1>
             <p className="text-lg text-muted-foreground max-w-md">
               Create your account to start tracking deals, managing your portfolio, and connecting with Africa&apos;s startup ecosystem.
@@ -66,7 +67,7 @@ export default function SignUpPage() {
           </div>
         </div>
         <p className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Trackify Atlas. All rights reserved.
+          © {new Date().getFullYear()} Trackify Finance. All rights reserved.
         </p>
       </div>
 
@@ -83,7 +84,7 @@ export default function SignUpPage() {
         <Card className="w-full max-w-md border-border/50 shadow-lg shadow-primary/5 rounded-2xl overflow-hidden">
           <CardHeader className="space-y-1 pb-2">
             <div className="flex justify-center mb-4">
-              <img src="/images/logo.PNG" alt="Trackify Atlas" className="h-12 w-auto object-contain lg:hidden" />
+              <div className="text-xl font-bold tracking-tight text-foreground lg:hidden">Trackify Finance</div>
             </div>
             <CardTitle className="text-2xl font-semibold text-center">Create your account</CardTitle>
             <CardDescription className="text-center text-muted-foreground">
