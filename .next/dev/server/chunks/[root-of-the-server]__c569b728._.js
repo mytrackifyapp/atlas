@@ -75,41 +75,23 @@ function getDatabaseName(connectionString) {
     }
 }
 const databaseName = getDatabaseName(connectionString);
-// Create MongoDB client with proper connection options for Atlas
-// Note: mongodb+srv:// automatically uses TLS, so we don't need to set it explicitly
-const client = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString, {
-    maxPoolSize: 10,
-    minPoolSize: 2,
-    maxIdleTimeMS: 30000,
-    serverSelectionTimeoutMS: 10000,
-    socketTimeoutMS: 45000,
-    connectTimeoutMS: 10000,
-    retryWrites: true,
-    retryReads: true
-});
-// Global client instance to reuse across requests (Next.js pattern)
+function createClient() {
+    return new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"](connectionString, {
+        maxPoolSize: 10,
+        minPoolSize: 2,
+        maxIdleTimeMS: 30000,
+        serverSelectionTimeoutMS: 10000,
+        socketTimeoutMS: 45000,
+        connectTimeoutMS: 10000,
+        retryWrites: true,
+        retryReads: true
+    });
+}
+// Global client instance to reuse across requests (Next.js / Vercel serverless safe pattern)
 const globalForMongo = globalThis;
-let clientPromise;
-if ("TURBOPACK compile-time truthy", 1) {
-    // In development, use a global variable so the client is not recreated on hot reloads
-    if (!globalForMongo._mongoClientPromise) {
-        globalForMongo._mongoClientPromise = client.connect().catch((error)=>{
-            console.error("Failed to connect to MongoDB:", error);
-            // Don't throw here, let Better Auth handle it
-            return client;
-        });
-    }
-    clientPromise = globalForMongo._mongoClientPromise;
-} else //TURBOPACK unreachable
-;
-// Initialize connection immediately (non-blocking)
-clientPromise.then((connectedClient)=>{
-    globalForMongo._mongoClient = connectedClient;
-    console.log("MongoDB connected successfully");
-}).catch((error)=>{
-    console.error("MongoDB connection error:", error);
-});
-// Get database instance - Better Auth will handle connection when needed
+const client = globalForMongo._betterAuthMongoClient ?? createClient();
+globalForMongo._betterAuthMongoClient = client;
+// Better Auth adapter only needs a Db object; the client is cached above.
 const db = client.db(databaseName);
 /**
  * Allow both apex and www when `BETTER_AUTH_URL` only lists one — otherwise
