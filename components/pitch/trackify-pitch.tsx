@@ -298,7 +298,7 @@ export function TrackifyPitch() {
             </h1>
             <p className="mt-2 text-xl sm:text-2xl font-medium text-emerald-800">Atlas</p>
             <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed">
-              Trackify Finance is building the operating system for startups and investors in Africa—combining
+              Trackify Finance is building the operating system for startups and investors in Africa combining
               financial management, capital access, AI-powered business operations, and cross-border payments into one
               unified platform through Trackify and Atlas.
             </p>
@@ -335,10 +335,10 @@ export function TrackifyPitch() {
             <SectionLabel>Our solution</SectionLabel>
             <SectionHeading>One platform for the full venture lifecycle</SectionHeading>
             <p className="text-[15px] leading-relaxed text-foreground/90 max-w-3xl">
-              <strong className="text-foreground">Trackify Atlas</strong> is the flagship product of Trackify Finance—a
+              <strong className="text-foreground">Trackify finance</strong> is a
               unified OS for venture capital, portfolio management, founder fundraising (including receiving capital),
-              cross-border payments, and an AI employee team—across Africa. We combine fund-grade accounting,
-              capital-markets expertise, and production engineering to replace fragmented spreadsheets with one platform.
+              cross-border payments, and an AI employee team across Africa. We combine fund grade accounting,
+              capital markets expertise, and production engineering to replace fragmented spreadsheets with one platform.
             </p>
           </section>
 
@@ -505,7 +505,7 @@ export function TrackifyPitch() {
           </section> */}
 
           {/* Fundraising deep-dive */}
-          <section className="print:break-inside-avoid">
+          {/* <section className="print:break-inside-avoid">
             <SectionLabel>Fundraising</SectionLabel>
             <SectionHeading>More than a tracker—receive capital on-platform</SectionHeading>
             <p className="text-[15px] leading-relaxed text-muted-foreground max-w-3xl mb-4">
@@ -527,7 +527,7 @@ export function TrackifyPitch() {
                 </li>
               ))}
             </ul>
-          </section>
+          </section> */}
 
           {/* Product modules */}
           <section>
