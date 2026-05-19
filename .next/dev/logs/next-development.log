@@ -1,216 +1,12 @@
-[00:00:00.845] Server  LOG      ✓ Ready in 677ms
-[00:00:09.796] Server  LOG     MongoDB connected successfully (db.ts)
-[00:00:11.233] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
-
-- A server/client branch `if (typeof window !== 'undefined')`.
-- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
-- Date formatting in a user's locale which doesn't match the server.
-- External changing data without sending a snapshot of it along with the HTML.
-- Invalid HTML tag nesting.
-
-It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
-
-%s%s https://react.dev/link/hydration-mismatch 
-
-  ...
-    <div className="size-full" style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
-      <MaxWidthWrapper className="flex items...">
-        <section className="h-full mx-...">
-          ...
-            <NavigationMenuCollectionItemSlot scope={undefined} value="radix-_R_2...">
-              <Slot data-radix-collection-item="" ref={function}>
-                <SlotClone data-radix-collection-item="" ref={function}>
-                  <NavigationMenuCollectionItemSlot scope={undefined}>
-                    <Slot data-radix-collection-item="" ref={function}>
-                      <SlotClone data-radix-collection-item="" ref={function}>
-                        <Primitive.button asChild={true} data-radix-collection-item="" ref={function} ...>
-                          <Slot data-radix-collection-item="" onKeyDown={function handleEvent} ref={function}>
-                            <SlotClone data-radix-collection-item="" onKeyDown={function handleEvent} ref={function}>
-                              <Primitive.button id="radix-_R_1..." disabled={undefined} data-disabled={undefined} ...>
-                                <button
-+                                 id="radix-_R_16indlb_-trigger-radix-_R_2n6indlb_"
--                                 id="radix-_R_161indlb_-trigger-radix-_R_2n61indlb_"
-                                  disabled={undefined}
-                                  data-disabled={undefined}
-                                  data-state="closed"
-                                  aria-expanded={false}
-+                                 aria-controls="radix-_R_16indlb_-content-radix-_R_2n6indlb_"
--                                 aria-controls="radix-_R_161indlb_-content-radix-_R_2n61indlb_"
-                                  data-slot="navigation-menu-trigger"
-                                  className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 p..."
-                                  onPointerEnter={function handleEvent}
-                                  onPointerMove={function handleEvent}
-                                  onPointerLeave={function handleEvent}
-                                  onClick={function handleEvent}
-                                  onKeyDown={function}
-                                  data-radix-collection-item=""
-                                  ref={function}
-                                >
-          <div>
-          <MobileNavbar isLoggedIn={false}>
-            <div className="flex lg:hi...">
-              <Sheet open={false} onOpenChange={function bound dispatchSetState}>
-                <Dialog data-slot="sheet" open={false} onOpenChange={function bound dispatchSetState}>
-                  <DialogProvider scope={undefined} triggerRef={{current:null}} contentRef={{current:null}} ...>
-                    <SheetTrigger asChild={true}>
-                      <DialogTrigger data-slot="sheet-trigger" asChild={true}>
-                        <Primitive.button type="button" aria-haspopup="dialog" aria-expanded={false} ...>
-                          <Slot type="button" aria-haspopup="dialog" aria-expanded={false} aria-controls="radix-_R_e..." ...>
-                            <SlotClone type="button" aria-haspopup="dialog" aria-expanded={false} ...>
-                              <Button size="icon" variant="ghost" className="text-neutr..." type="button" ...>
-                                <button
-                                  data-slot="sheet-trigger"
-                                  className={"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded..."}
-                                  type="button"
-                                  aria-haspopup="dialog"
-                                  aria-expanded={false}
-+                                 aria-controls="radix-_R_eindlb_"
--                                 aria-controls="radix-_R_e1indlb_"
-                                  data-state="closed"
-                                  onClick={function handleEvent}
-                                  ref={function}
-                                >
-                    ...
-
-[00:00:11.233] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:11.233] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:00:11.233] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778974693404} /_vercel/insights/view
-[00:00:11.233] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
-[00:03:27.141] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:03:27.142] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/cv","route":"/cv"}
-[00:03:27.142] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/cv color: rgb(120, 120, 120) color: inherit {"dp":"/cv","o":"http://localhost:3000/cv","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778974890392} /_vercel/insights/view
-[00:03:27.265] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
-[00:18:52.223] Server  LOG      ✓ Compiled in 127ms
-[00:18:53.231] Browser ERROR   ./components/cv/divine-gabriel-cv.tsx:143:19
+[00:00:00.701] Server  LOG      ✓ Ready in 561ms
+[00:00:05.260] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:05.260] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/pitch","route":"/pitch"}
+[00:00:05.260] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/pitch color: rgb(120, 120, 120) color: inherit {"dp":"/pitch","o":"http://localhost:3000/pitch","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1779184295575} /_vercel/insights/view
+[00:00:05.423] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
+[00:01:14.456] Browser ERROR   ./app/pitch/page.tsx:19:7
 Parsing ecmascript source code failed
-  141 |                 </p>
-  142 |               </div>
-> 143 |             </div>
-      |                   ^
-> 144 |             <div className="flex flex-col gap-2 text-sm text-muted-foreground sm:text-right sm:shrink-0">
-      | ^^^^^^^^^^^^^
-  145 |               <a
-  146 |                 href="mailto:hey@mytrackify.com"
-  147 |                 className="inline-flex items-center gap-2 hover:text-foreground transition-colors sm:justify-end"
-
-Expected '</', got 'jsx text (
-            )'
-
-Import trace:
-  Server Component:
-    ./components/cv/divine-gabriel-cv.tsx
-    ./app/cv/page.tsx
-[00:19:06.231] Browser ERROR   ./components/cv/divine-gabriel-cv.tsx:143:19
-Parsing ecmascript source code failed
-  141 |                 </p>
-  142 |               </div>
-> 143 |             </div>
-      |                   ^
-> 144 |             <div className="flex flex-col gap-2 text-sm text-muted-foreground sm:text-right sm:shrink-0">
-      | ^^^^^^^^^^^^^
-  145 |               <a
-  146 |                 href="mailto:hey@mytrackify.com"
-  147 |                 className="inline-flex items-center gap-2 hover:text-foreground transition-colors sm:justify-end"
-
-Expected '</', got 'jsx text (
-            )'
-
-Import trace:
-  Server Component:
-    ./components/cv/divine-gabriel-cv.tsx
-    ./app/cv/page.tsx
-[00:19:11.490] Server  LOG      ✓ Compiled in 40ms
-[00:19:14.326] Server  LOG      ✓ Compiled in 54ms
-[00:21:19.060] Server  LOG      ✓ Compiled in 105ms
-[00:21:19.163] Browser ERROR   ./components/cv/divine-gabriel-cv.tsx:278:31
-Parsing ecmascript source code failed
-  276 |                         <motion.div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-800/12 text-emerald-800">
-  277 |                           <Icon className="h-4 w-4" aria-hidden />
-> 278 |                         </div>
-      |                               ^
-> 279 |                         <h3 className="font-semibold text-foreground text-sm">{item.title}</h3>
-      | ^^^^^^^^^^^^^^^^^^^^^^^^^
-  280 |                       </div>
-  281 |                       <p className="text-sm leading-relaxed text-muted-foreground">{item.description}</p>
-  282 |                     </li>
-
-Expected '</', got 'jsx text (
-                        )'
-
-Import trace:
-  Server Component:
-    ./components/cv/divine-gabriel-cv.tsx
-    ./app/cv/page.tsx
-[00:21:20.678] Browser ERROR   ./components/cv/divine-gabriel-cv.tsx:278:31
-Parsing ecmascript source code failed
-  276 |                         <motion.div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-800/12 text-emerald-800">
-  277 |                           <Icon className="h-4 w-4" aria-hidden />
-> 278 |                         </div>
-      |                               ^
-> 279 |                         <h3 className="font-semibold text-foreground text-sm">{item.title}</h3>
-      | ^^^^^^^^^^^^^^^^^^^^^^^^^
-  280 |                       </div>
-  281 |                       <p className="text-sm leading-relaxed text-muted-foreground">{item.description}</p>
-  282 |                     </li>
-
-Expected '</', got 'jsx text (
-                        )'
-
-Import trace:
-  Server Component:
-    ./components/cv/divine-gabriel-cv.tsx
-    ./app/cv/page.tsx
-[00:21:28.292] Server  LOG      ✓ Compiled in 88ms
-[00:21:29.231] Browser ERROR   ./components/cv/divine-gabriel-cv.tsx:278:31
-Parsing ecmascript source code failed
-  276 |                         <motion.div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-800/12 text-emerald-800">
-  277 |                           <Icon className="h-4 w-4" aria-hidden />
-> 278 |                         </div>
-      |                               ^
-> 279 |                         <h3 className="font-semibold text-foreground text-sm">{item.title}</h3>
-      | ^^^^^^^^^^^^^^^^^^^^^^^^^
-  280 |                       </div>
-  281 |                       <p className="text-sm leading-relaxed text-muted-foreground">{item.description}</p>
-  282 |                     </li>
-
-Expected '</', got 'jsx text (
-                        )'
-
-Import trace:
-  Server Component:
-    ./components/cv/divine-gabriel-cv.tsx
-    ./app/cv/page.tsx
-[00:21:30.375] Server  LOG      ✓ Compiled in 84ms
-[00:21:31.231] Browser ERROR   ./components/cv/divine-gabriel-cv.tsx:278:31
-Parsing ecmascript source code failed
-  276 |                         <motion.div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-800/12 text-emerald-800">
-  277 |                           <Icon className="h-4 w-4" aria-hidden />
-> 278 |                         </div>
-      |                               ^
-> 279 |                         <h3 className="font-semibold text-foreground text-sm">{item.title}</h3>
-      | ^^^^^^^^^^^^^^^^^^^^^^^^^
-  280 |                       </div>
-  281 |                       <p className="text-sm leading-relaxed text-muted-foreground">{item.description}</p>
-  282 |                     </li>
-
-Expected '</', got 'jsx text (
-                        )'
-
-Import trace:
-  Server Component:
-    ./components/cv/divine-gabriel-cv.tsx
-    ./app/cv/page.tsx
-[00:21:32.246] Server  ERROR    ⨯ ReferenceError: motion is not defined
-[00:21:33.232] Browser ERROR   uncaughtError: ReferenceError: motion is not defined
-[00:21:39.231] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:21:39.231] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/cv","route":"/cv"}
-[00:21:39.231] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/cv color: rgb(120, 120, 120) color: inherit {"dp":"/cv","o":"http://localhost:3000/cv","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1778975980819} /_vercel/insights/view
-[00:21:39.231] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
-[00:21:41.669] Server  LOG      ✓ Compiled in 118ms
-[00:21:42.231] Browser ERROR   ./app/cv/page.tsx:19:7
-Parsing ecmascript source code failed
-  17 |       <CvPrintBar />
-  18 |       <DivineGabrielCv />
+  17 |       <PitchPrintBar />
+  18 |       <TrackifyPitch />
 > 19 |     </div>
      |       ^^^
   20 |   )
@@ -218,125 +14,26 @@ Parsing ecmascript source code failed
   22 |
 
 Expected corresponding JSX closing tag for <motion.div>
-[00:29:01.881] Server  LOG      ✓ Compiled in 90ms
-[00:29:01.986] Browser ERROR   ./components/cv/divine-gabriel-cv.tsx:138:21
+[00:01:15.508] Server  ERROR    ⨯ ReferenceError: motion is not defined
+[00:01:15.635] Browser ERROR   uncaughtError: ReferenceError: motion is not defined
+[00:01:20.415] Browser ERROR   ./app/pitch/page.tsx:19:7
 Parsing ecmascript source code failed
-  136 |                   priority
-  137 |                 />
-> 138 |               </div>
-      |                     ^
-> 139 |               <div>
-      | ^^^^^^^^^^^^^^^
-  140 |                 <p className="text-sm font-semibold text-emerald-800 mb-1">Trackify Finance</p>
-  141 |                 <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-  142 |                   Divine Gabriel
+  17 |       <PitchPrintBar />
+  18 |       <TrackifyPitch />
+> 19 |     </div>
+     |       ^^^
+  20 |   )
+  21 | }
+  22 |
 
-Expected '</', got 'jsx text (
-              )'
-
-Import trace:
-  Server Component:
-    ./components/cv/divine-gabriel-cv.tsx
-    ./app/cv/page.tsx
-[29:48:23.518] Server  LOG      ✓ Compiled in 192ms
-[29:49:33.151] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[29:49:33.151] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/pitch","route":"/pitch"}
-[29:49:33.151] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/pitch color: rgb(120, 120, 120) color: inherit {"dp":"/pitch","o":"http://localhost:3000/pitch","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1779082054431} /_vercel/insights/view
-[29:49:33.345] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
-[30:06:34.307] Browser ERROR   unhandledRejection: TypeError: Cannot assign to read only property 'tronLink' of object '#<Window>'
-[30:06:34.307] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[30:06:34.307] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/pitch","route":"/pitch"}
-[30:06:34.307] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/pitch color: rgb(120, 120, 120) color: inherit {"dp":"/pitch","o":"http://localhost:3000/pitch","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1779083075526} /_vercel/insights/view
-[30:06:34.458] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
-[30:07:03.658] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
-[30:07:03.658] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[30:07:03.658] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/pitch","route":"/pitch"}
-[30:07:03.658] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/pitch color: rgb(120, 120, 120) color: inherit {"dp":"/pitch","o":"http://localhost:3000/pitch","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1779083104875} /_vercel/insights/view
-[30:12:51.773] Server  LOG      ✓ Compiled in 116ms
-[30:12:52.773] Browser ERROR   ./components/pitch/trackify-pitch.tsx:666:1
-Parsing ecmascript source code failed
-  664 |     </div>
-  665 |   )
-> 666 | }
-      | ^
-  667 |
-
-Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
-
-Import trace:
-  Server Component:
-    ./components/pitch/trackify-pitch.tsx
-    ./app/pitch/page.tsx
-[30:13:23.606] Server  LOG      ✓ Compiled in 109ms
-[30:13:23.775] Browser ERROR   ./components/pitch/trackify-pitch.tsx:665:1
-Parsing ecmascript source code failed
-  663 |     </div>
-  664 |   )
-> 665 | }
-      | ^
-  666 |
-
-Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
-
-Import trace:
-  Server Component:
-    ./components/pitch/trackify-pitch.tsx
-    ./app/pitch/page.tsx
-[30:13:24.879] Server  LOG      ✓ Compiled in 95ms
-[30:13:26.774] Browser ERROR   ./components/pitch/trackify-pitch.tsx:665:1
-Parsing ecmascript source code failed
-  663 |     </div>
-  664 |   )
-> 665 | }
-      | ^
-  666 |
-
-Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
-
-Import trace:
-  Server Component:
-    ./components/pitch/trackify-pitch.tsx
-    ./app/pitch/page.tsx
-[30:13:26.774] Browser ERROR   ./components/pitch/trackify-pitch.tsx:665:1
-Parsing ecmascript source code failed
-  663 |     </div>
-  664 |   )
-> 665 | }
-      | ^
-  666 |
-
-Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
-
-Import trace:
-  Server Component:
-    ./components/pitch/trackify-pitch.tsx
-    ./app/pitch/page.tsx
-[30:13:26.774] Browser ERROR   ./components/pitch/trackify-pitch.tsx:665:1
-Parsing ecmascript source code failed
-  663 |     </div>
-  664 |   )
-> 665 | }
-      | ^
-  666 |
-
-Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
-
-Import trace:
-  Server Component:
-    ./components/pitch/trackify-pitch.tsx
-    ./app/pitch/page.tsx
-[30:13:39.060] Server  LOG      ✓ Compiled in 110ms
-[30:13:39.774] Browser ERROR   ./components/pitch/trackify-pitch.tsx:665:1
-Parsing ecmascript source code failed
-  663 |     </div>
-  664 |   )
-> 665 | }
-      | ^
-  666 |
-
-Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
-
-Import trace:
-  Server Component:
-    ./components/pitch/trackify-pitch.tsx
-    ./app/pitch/page.tsx
+Expected corresponding JSX closing tag for <motion.div>
+[00:01:25.609] Browser ERROR   unhandledRejection: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
+[00:01:25.609] Browser ERROR   unhandledRejection: TypeError: Cannot assign to read only property 'tronLink' of object '#<Window>'
+[00:01:25.609] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:01:25.609] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/pitch","route":"/pitch"}
+[00:01:25.609] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/pitch color: rgb(120, 120, 120) color: inherit {"dp":"/pitch","o":"http://localhost:3000/pitch","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1779184375924} /_vercel/insights/view
+[00:01:29.276] Server  LOG      ✓ Compiled in 355ms
+[00:01:30.023] Server  LOG      ✓ Compiled in 84ms
+[00:01:41.712] Server  LOG      ✓ Compiled in 92ms
+[00:02:31.932] Server  LOG      ✓ Compiled in 31ms
+[00:02:33.444] Server  LOG      ✓ Compiled in 41ms

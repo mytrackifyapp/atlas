@@ -181,3 +181,16 @@
 .animate-marquee-vertical {
   animation: marquee-vertical var(--duration, 30s) linear infinite;
 }
+
+/* Pitch deck: screen = black + lime; print = light paper */
+@media print {
+  .pitch-deck {
+    --background: oklch(0.99 0 0);
+    --foreground: oklch(0.15 0 0);
+    --muted-foreground: oklch(0.45 0 0);
+    --border: oklch(0.88 0 0);
+    --muted: oklch(0.96 0 0);
+    background-color: white !important;
+    color: oklch(0.15 0 0) !important;
+  }
+}

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function PitchPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground print:bg-white">
+    <div className="pitch-deck dark min-h-screen bg-black text-white text-lg sm:text-xl">
       <PitchPrintBar />
       <TrackifyPitch />
     </div>
