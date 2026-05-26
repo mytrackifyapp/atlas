@@ -34,6 +34,12 @@ export default function LandingPage() {
               >
                 Ecosystem
               </Link>
+              <Link
+                href="/pricing"
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Pricing
+              </Link>
             </div>
 
             <div className="flex items-center gap-3">
@@ -686,6 +692,9 @@ export default function LandingPage() {
               </Link>
               <Link href="/terms" className="hover:text-foreground transition-colors">
                 Terms
+              </Link>
+              <Link href="/refund-policy" className="hover:text-foreground transition-colors">
+                Refunds
               </Link>
               <Link href="/security" className="hover:text-foreground transition-colors">
                 Security

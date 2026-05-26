@@ -128,29 +128,17 @@ export default function TrackifyVcNavbar() {
           </div>
 
           {!isLoggedIn && (
-            <div className="hidden lg:flex items-center">
-              <div className="flex items-center gap-x-4">
-                <Link
-                  href="/sign-in"
-                  className={buttonVariants({
-                    size: "sm",
-                    variant: "ghost",
-                    className: "text-neutral-800 hover:text-neutral-950 hover:bg-black/5",
-                  })}
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/sign-up"
-                  className={buttonVariants({
-                    size: "sm",
-                    className: "rounded-full",
-                  })}
-                >
-                  Get Started
-                  <ZapIcon className="size-3.5 ml-1.5 text-orange-500 fill-orange-500" />
-                </Link>
-              </div>
+            <div className="hidden lg:flex items-center shrink-0">
+              <Link
+                href="/sign-up"
+                className={buttonVariants({
+                  size: "sm",
+                  className: "rounded-full",
+                })}
+              >
+                Get Started
+                <ZapIcon className="size-3.5 ml-1.5 text-orange-500 fill-orange-500" />
+              </Link>
             </div>
           )}
 

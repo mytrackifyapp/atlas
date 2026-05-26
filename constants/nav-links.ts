@@ -5,6 +5,7 @@ import {
   Mail,
   NewspaperIcon,
   ScrollText,
+  Tag,
   Wand2,
   Brain,
 } from "lucide-react"
@@ -29,6 +30,11 @@ export const NAV_LINKS = [
     title: "About",
     href: "/about",
     icon: Info,
+  },
+  {
+    title: "Pricing",
+    href: "/pricing",
+    icon: Tag,
   },
   {
     title: "Resources",

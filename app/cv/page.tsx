@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { CvPrintBar } from "@/components/cv/cv-print-bar"
 import { DivineGabrielCv } from "@/components/cv/divine-gabriel-cv"
+import { DeckDocumentTheme } from "@/components/deck/deck-document-theme"
 
 export const metadata: Metadata = {
   title: "CV · Divine Gabriel",
@@ -13,7 +14,8 @@ export const metadata: Metadata = {
 
 export default function CvPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-950/[0.04] via-background to-background text-foreground print:bg-white">
+    <div className="cv-deck pitch-deck dark min-h-screen bg-black text-white">
+      <DeckDocumentTheme rootClass="cv-print-root" />
       <CvPrintBar />
       <DivineGabrielCv />
     </div>

@@ -1,4 +1,4 @@
-import Image from "next/image"
+import { DeckImage } from "@/components/deck/deck-image"
 import {
   ArrowRight,
   BarChart3,
@@ -276,7 +276,7 @@ export function TrackifyPitch() {
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-8 sm:py-14 text-lg sm:text-xl print:max-w-none print:py-6 print:text-base">
       {/* Cover */}
       <header className="relative border-b border-white/10 pb-12 mb-12 sm:pb-16 sm:mb-14 print:pb-8 print:mb-8">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/35 via-transparent to-transparent pointer-events-none print:hidden" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/35 via-transparent to-transparent pointer-events-none" />
         <div className="relative">
             <p className="text-base sm:text-lg font-semibold text-primary mb-4">Confidential · Pitch overview</p>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white max-w-4xl">
@@ -566,13 +566,12 @@ export function TrackifyPitch() {
                 that infrastructure layer.
               </p>
             </div>
-            <div className="relative aspect-[4/3] rounded-xl border border-white/15 overflow-hidden shadow-lg shadow-primary/10">
-              <Image
+            <div className="rounded-xl border border-white/15 overflow-hidden shadow-lg shadow-primary/10">
+              <DeckImage
                 src="/images/img1.PNG"
                 alt="Trackify Atlas investor dashboard"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 480px"
+                priority
+                className="deck-image-banner w-full h-auto object-cover"
               />
             </div>
           </section>
@@ -604,17 +603,18 @@ export function TrackifyPitch() {
           </section>
 
           {/* Team */}
-          <section className="border-t border-white/10 pt-12 print:break-inside-avoid">
+          <section className="border-t border-white/10 pt-12">
             <SectionLabel>Leadership</SectionLabel>
             <SectionHeading>Built by operators who understand capital and code</SectionHeading>
-            <div className="flex flex-col sm:flex-row gap-6 items-start">
-              <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl border-2 border-primary/50 ring-2 ring-primary/25">
-                <Image
+            <div className="flex flex-col sm:flex-row gap-6 items-start print:break-inside-avoid">
+              <div className="deck-image-frame h-24 w-24 shrink-0 overflow-hidden rounded-2xl border-2 border-primary/50 ring-2 ring-primary/25">
+                <DeckImage
                   src="/cv/divine-gabriel.png"
                   alt="Divine Gabriel"
-                  fill
-                  className="object-cover object-[center_15%]"
-                  sizes="96px"
+                  width={96}
+                  height={96}
+                  priority
+                  className="deck-image-avatar h-full w-full object-cover object-[center_15%]"
                 />
               </div>
               <div>
@@ -635,7 +635,7 @@ export function TrackifyPitch() {
           </section>
 
           {/* CTA */}
-          <section className="text-center border-t border-white/15 pt-10 print:break-inside-avoid">
+          <section className="text-center border-t border-white/15 pt-10">
             <SectionLabel>Get in touch</SectionLabel>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-primary mb-4">
               Partner with Trackify Finance
@@ -646,7 +646,7 @@ export function TrackifyPitch() {
             <div className="flex flex-wrap justify-center gap-4 text-base sm:text-lg">
               <a
                 href="mailto:hey@mytrackify.com?subject=Trackify%20Partnership"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-6 py-3 font-medium hover:bg-primary/90 transition-colors print:border print:border-neutral-800 print:text-neutral-900 print:bg-white"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-6 py-3 font-medium hover:bg-primary/90 transition-colors"
               >
                 hey@mytrackify.com
                 <ArrowRight className="h-5 w-5" aria-hidden />

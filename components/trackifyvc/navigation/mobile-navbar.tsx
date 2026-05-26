@@ -41,21 +41,12 @@ export default function MobileNavbar({ isLoggedIn }: { isLoggedIn: boolean }) {
           </SheetClose>
           <div className="flex flex-col items-start w-full py-2 mt-10 px-2">
             {!isLoggedIn && (
-              <div className="flex items-center justify-evenly w-full space-x-2 px-2">
-                <Link
-                  href="/sign-in"
-                  className={buttonVariants({
-                    variant: "outline",
-                    className: "w-full bg-transparent border-white/15 text-white hover:bg-white/5",
-                  })}
-                >
-                  Sign In
-                </Link>
+              <div className="w-full px-2">
                 <Link
                   href="/sign-up"
                   className={buttonVariants({ className: "w-full rounded-full" })}
                 >
-                  Sign Up
+                  Get Started
                 </Link>
               </div>
             )}

@@ -182,15 +182,98 @@
   animation: marquee-vertical var(--duration, 30s) linear infinite;
 }
 
-/* Pitch deck: screen = black + lime; print = light paper */
+/* Pitch & CV: preserve dark theme in print/PDF (match on-screen black + lime) */
+@page {
+  size: auto;
+  margin: 12mm;
+  background-color: #000000;
+}
+
 @media print {
-  .pitch-deck {
-    --background: oklch(0.99 0 0);
-    --foreground: oklch(0.15 0 0);
-    --muted-foreground: oklch(0.45 0 0);
-    --border: oklch(0.88 0 0);
-    --muted: oklch(0.96 0 0);
-    background-color: white !important;
-    color: oklch(0.15 0 0) !important;
+  :root {
+    color-scheme: dark;
+  }
+
+  html.pitch-print-root,
+  html.cv-print-root,
+  html:has(.pitch-deck),
+  html:has(.cv-deck) {
+    background: #000000 !important;
+    background-color: #000000 !important;
+    color-scheme: dark;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html.pitch-print-root body,
+  html.cv-print-root body,
+  body.pitch-print-root,
+  body.cv-print-root,
+  body:has(.pitch-deck),
+  body:has(.cv-deck) {
+    background: #000000 !important;
+    background-color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .pitch-deck,
+  .cv-deck,
+  .pitch-deck > *,
+  .cv-deck > * {
+    background-color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .pitch-deck *,
+  .cv-deck * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Deck images — keep layout identical to screen; do not override avatar dimensions */
+  .pitch-deck img.deck-image,
+  .cv-deck img.deck-image {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: static !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .pitch-deck .deck-image-banner,
+  .cv-deck .deck-image-banner {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 320px !important;
+    object-fit: contain !important;
+  }
+
+  .pitch-deck .deck-image-avatar,
+  .cv-deck .deck-image-avatar {
+    width: 6rem !important;
+    height: 6rem !important;
+    min-width: 6rem !important;
+    min-height: 6rem !important;
+    max-width: 6rem !important;
+    max-height: 6rem !important;
+    flex-shrink: 0 !important;
+    object-fit: cover !important;
+    object-position: center 15% !important;
+  }
+
+  .pitch-deck .deck-image-frame,
+  .cv-deck .deck-image-frame {
+    width: 6rem !important;
+    height: 6rem !important;
+    min-width: 6rem !important;
+    min-height: 6rem !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
   }
 }

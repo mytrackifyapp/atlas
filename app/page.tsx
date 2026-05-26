@@ -856,6 +856,9 @@ export default async function Page() {
               <Link href="/terms" className="hover:text-foreground transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-offset-2 py-0.5">
                 Terms
               </Link>
+              <Link href="/refund-policy" className="hover:text-foreground transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-offset-2 py-0.5">
+                Refunds
+              </Link>
               <Link href="/security" className="hover:text-foreground transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-offset-2 py-0.5">
                 Security
               </Link>
