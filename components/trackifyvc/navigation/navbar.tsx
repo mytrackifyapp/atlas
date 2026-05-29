@@ -42,22 +42,27 @@ export default function TrackifyVcNavbar() {
       )}
     >
       <AnimationContainer reverse delay={0.1} className="size-full">
-        <MaxWidthWrapper className="flex items-center justify-between">
-          <div className="flex items-center space-x-12">
-            <Link href="/#home" className="flex items-center gap-6">
-              <span className="text-xl md:text-1xl font-bold font-heading tracking-tight text-neutral-950">
-                Trackify Finance
-              </span>
-            </Link>
+        <MaxWidthWrapper className="flex items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+          <Link
+            href="/#home"
+            className="shrink-0 pr-2 sm:pr-4"
+          >
+            <span className="whitespace-nowrap text-base font-bold font-heading tracking-tight text-neutral-950 lg:text-lg">
+              Trackify Finance
+            </span>
+          </Link>
 
-            <NavigationMenu className="hidden lg:flex" viewport={false}>
-              <NavigationMenuList>
+            <NavigationMenu
+              className="hidden min-w-0 flex-1 justify-start lg:flex [&>div]:justify-start"
+              viewport={false}
+            >
+              <NavigationMenuList className="flex-wrap justify-start gap-0.5">
                 {NAV_LINKS.map((link) => (
                   <NavigationMenuItem key={link.title}>
                     {"menu" in link && link.menu ? (
                       <>
-                        <NavigationMenuTrigger className="bg-transparent text-neutral-800 hover:bg-black/5 hover:text-neutral-950 focus:bg-black/5 focus:text-neutral-950 data-[state=open]:bg-black/5">
-                          <span className="inline-flex items-center gap-2">
+                        <NavigationMenuTrigger className="h-9 bg-transparent px-2.5 text-neutral-800 hover:bg-black/5 hover:text-neutral-950 focus:bg-black/5 focus:text-neutral-950 data-[state=open]:bg-black/5 xl:px-3">
+                          <span className="inline-flex items-center gap-1.5">
                             {"icon" in link && link.icon ? (
                               <link.icon className="h-4 w-4 text-neutral-700" />
                             ) : null}
@@ -108,7 +113,7 @@ export default function TrackifyVcNavbar() {
                       <NavigationMenuLink asChild>
                         <Link
                           href={link.href}
-                          className="inline-flex h-9 items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium text-neutral-800 transition-colors hover:bg-black/5 hover:text-neutral-950 focus:bg-black/5 focus:text-neutral-950 outline-none"
+                          className="inline-flex h-9 items-center justify-center rounded-md bg-transparent px-2.5 py-2 text-sm font-medium text-neutral-800 transition-colors hover:bg-black/5 hover:text-neutral-950 focus:bg-black/5 focus:text-neutral-950 outline-none xl:px-3"
                         >
                           {"icon" in link && link.icon ? (
                             <span className="inline-flex items-center gap-2">
@@ -125,7 +130,6 @@ export default function TrackifyVcNavbar() {
                 ))}
               </NavigationMenuList>
             </NavigationMenu>
-          </div>
 
           {!isLoggedIn && (
             <div className="hidden lg:flex items-center shrink-0">

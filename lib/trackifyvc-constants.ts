@@ -56,6 +56,13 @@ export const TRACKIFYVC_MISSION = [
 
 export const TRACKIFYVC_BLOGS = [
   {
+    title:
+      "Trackify Finance launched Atlas, a capital operating system for founders and investors in Africa",
+    desc: "A unified platform for investors and startups across Africa — announced at Africa Fintech Summit, launching January 2026.",
+    image: "/blog/atlas-launch-africa.png",
+    category: "Product Launch",
+  },
+  {
     title: "Trackify in pitch competition at AFTS Accra",
     desc: "we are excited to announce our founder will be pitching about our product at the AFTS Accra ",
     image: "/images/afts2.jpg",

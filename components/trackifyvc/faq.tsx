@@ -10,9 +10,9 @@ import Image from "next/image"
 
 const FAQS = [
   {
-    question: "Who is Atlas for?",
+    question: "Who is Trackify for?",
     answer:
-      "Atlas is built for venture investors and founders across Africa—track deal flow, manage portfolios, run diligence, and keep fundraising organized.",
+      "Trackify is built for venture investors and founders across Africa—track deal flow, manage portfolios, run diligence, and keep fundraising organized.",
   },
   {
     question: "Do founders and investors share the same workspace?",
@@ -32,7 +32,7 @@ const FAQS = [
   {
     question: "What happens after I sign in?",
     answer:
-      "You’ll be redirected to your dashboard. If onboarding isn’t completed yet, Atlas routes you to onboarding first, then to the correct dashboard based on your role.",
+      "You’ll be redirected to your dashboard. If onboarding isn’t completed yet, Trackify routes you to onboarding first, then to the correct dashboard based on your role.",
   },
 ]
 

@@ -55,63 +55,68 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-28">
+      <section className="relative overflow-hidden pt-28 pb-12 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl text-center">
-            <Badge
-              variant="secondary"
-              className="mb-6 border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium text-foreground"
-            >
-              <Sparkles className="mr-1.5 h-3 w-3 inline-block text-primary" />
-              Africa Startup Ecosystem Platform
-            </Badge>
+          <div className="relative overflow-hidden rounded-[2rem] border border-border/50 bg-card shadow-xl">
+            {/* Background image */}
+            <img
+              src="/trackify-ui-hero.jpg"
+              alt="Trackify Atlas product UI background"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            {/* Overlays for legibility */}
+            <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/55 to-background/15" />
+            <div className="absolute inset-0 bg-[radial-gradient(60%_55%_at_50%_20%,rgba(255,255,255,0.65)_0%,rgba(255,255,255,0)_60%)]" />
 
-            <h1 className="text-5xl font-bold tracking-tight text-balance lg:text-7xl mb-6">
-              Navigate Africa's venture landscape with precision
-            </h1>
+            <div className="relative px-6 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24">
+              <div className="mx-auto max-w-3xl text-center">
+                <Badge
+                  variant="secondary"
+                  className="mb-6 border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-medium text-foreground"
+                >
+                  <Sparkles className="mr-1.5 h-3 w-3 inline-block text-primary" />
+                  Atlas by Trackify Finance
+                </Badge>
 
-            <p className="text-lg text-muted-foreground mb-10 text-pretty max-w-2xl mx-auto leading-relaxed">
-              The complete platform for investors to manage portfolios and founders to track fundraising across Africa's
-              most dynamic startup ecosystem.
-            </p>
+                <h1 className="text-4xl font-bold tracking-tight text-balance sm:text-5xl lg:text-6xl mb-5">
+                  Where fundraising gets clarity
+                </h1>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button
-                size="lg"
-                asChild
-                className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 h-12 text-base"
-              >
-                <Link href="/founder">
-                  Start Free Trial
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                asChild
-                className="h-12 px-8 text-base border-border hover:bg-accent bg-transparent"
-              >
-                <Link href="#platform">View Platform</Link>
-              </Button>
-            </div>
+                <p className="text-base sm:text-lg text-muted-foreground mb-10 text-pretty max-w-2xl mx-auto leading-relaxed">
+                  A subscription workspace for founders and investors to run fundraising, manage documents, track
+                  updates, and stay investor-ready — all in one place.
+                </p>
 
-            <div className="mt-16 flex items-center justify-center gap-12 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                <span>1,200+ Startups Tracked</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                <span>$2.4B+ Funding Monitored</span>
+                <div className="flex items-center justify-center">
+                  <Button
+                    size="lg"
+                    asChild
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 px-10 h-12 text-base"
+                  >
+                    <Link href="/founder">
+                      Get Started
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+
+                <div className="mt-12 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                    <span>1,200+ startups tracked</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                    <span>$2.4B+ funding monitored</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                    <span>Built for Africa & global teams</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Background Elements */}
-        <div className="absolute inset-0 -z-10 overflow-hidden">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl" />
         </div>
       </section>
 
@@ -685,7 +690,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="pt-8 border-t border-border/40 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-            <p>© 2025 Trackify Atlas. All rights reserved.</p>
+            <p>© 2026 Trackify Atlas. All rights reserved.</p>
             <div className="flex gap-6">
               <Link href="/privacy" className="hover:text-foreground transition-colors">
                 Privacy

@@ -22,7 +22,7 @@ export default function BlogSection() {
             {TRACKIFYVC_BLOGS.map((blog, index) => (
               <Container key={index}>
                 <Link
-                  href={`/blog/${blog.title.toLowerCase().replace(/\\s+/g, "-")}`}
+                  href={`/blog/${blog.title.toLowerCase().replace(/\s+/g, "-")}`}
                   className="flex flex-col w-full group"
                 >
                   <div className="relative w-full bg-foreground/5 border border-border/20 rounded-lg lg:rounded-xl overflow-hidden">
