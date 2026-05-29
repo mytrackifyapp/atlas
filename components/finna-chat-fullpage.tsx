@@ -3,16 +3,17 @@
 import { useState, useRef, useEffect } from "react"
 import Link from "next/link"
 import { Send, Loader2, ArrowLeft } from "lucide-react"
+import { ChatMessageText } from "@/components/chat-message-text"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 const FINNA_ICON = "/icons/finna.PNG"
 
 const suggestedActions = [
-  "What is Trackify Atlas?",
-  "How does the platform work?",
-  "Tell me about Africa's startup ecosystem",
-  "What features are available?",
+  "What is Trackify?",
+  "What can the founder dashboard do?",
+  "How does investor deal flow work?",
+  "Where is finance management?",
   "How do I get started?",
   "What are the pricing plans?",
 ]
@@ -91,7 +92,7 @@ export function FinnaChatFullPage() {
             </div>
             <div className="min-w-0">
               <h1 className="text-lg font-semibold truncate">Finna AI</h1>
-              <p className="text-xs text-muted-foreground">Your Atlas assistant</p>
+              <p className="text-xs text-muted-foreground">Your Trackify assistant</p>
             </div>
           </div>
         </div>
@@ -107,7 +108,7 @@ export function FinnaChatFullPage() {
               </div>
               <p className="text-base font-medium text-foreground mb-2">Hi, I'm Finna</p>
               <p className="text-sm text-muted-foreground mb-8 max-w-md">
-                Ask me about Trackify Atlas, fundraising, or the African startup ecosystem.
+                Ask me about Trackify, your dashboard, fundraising, or the African startup ecosystem.
               </p>
               <p className="text-xs text-muted-foreground mb-4">Try asking:</p>
               <div className="flex flex-wrap gap-2 justify-center">
@@ -143,7 +144,11 @@ export function FinnaChatFullPage() {
                         : "bg-muted rounded-bl-md border border-border/40"
                     }`}
                   >
-                    <span className="whitespace-pre-wrap">{msg.content}</span>
+                    {msg.role === "assistant" ? (
+                      <ChatMessageText content={msg.content} />
+                    ) : (
+                      <span className="whitespace-pre-wrap">{msg.content}</span>
+                    )}
                   </div>
                 </div>
               ))}

@@ -212,11 +212,11 @@ export default async function Page() {
                 key={feature.title}
                 className="group relative flex min-h-[168px] flex-col justify-between overflow-hidden rounded-3xl border border-white/15 bg-white/[0.07] p-7 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-all duration-300 hover:border-white/25 hover:bg-white/[0.11] hover:shadow-[0_16px_48px_rgba(0,0,0,0.55)] sm:min-h-[176px] sm:p-8 before:pointer-events-none before:absolute before:inset-x-10 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/35 before:to-transparent"
               >
-                <div className="relative z-10 space-y-3">
-                  <div className="h-0.5 w-8 rounded-full bg-primary/80 transition-all duration-300 group-hover:w-12" />
+                <div className="relative z-10 space-y-2">
                   <h3 className="text-lg font-semibold tracking-tight text-white sm:text-xl">
                     {feature.title}
                   </h3>
+                  <div className="h-0.5 w-8 rounded-full bg-primary/80 transition-all duration-300 group-hover:w-12" />
                 </div>
                 <p className="relative z-10 mt-4 text-sm leading-relaxed text-white/60 sm:text-[0.9375rem]">
                   {feature.description}
@@ -404,11 +404,11 @@ export default async function Page() {
                 key={feature.title}
                 className="group relative flex min-h-[168px] flex-col justify-between overflow-hidden rounded-3xl border border-white/15 bg-white/[0.07] p-7 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-all duration-300 hover:border-white/25 hover:bg-white/[0.11] hover:shadow-[0_16px_48px_rgba(0,0,0,0.55)] sm:min-h-[176px] sm:p-8 before:pointer-events-none before:absolute before:inset-x-10 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/35 before:to-transparent"
               >
-                <div className="relative z-10 space-y-3">
-                  <div className="h-0.5 w-8 rounded-full bg-primary/80 transition-all duration-300 group-hover:w-12" />
+                <div className="relative z-10 space-y-2">
                   <h3 className="text-lg font-semibold tracking-tight text-white sm:text-xl">
                     {feature.title}
                   </h3>
+                  <div className="h-0.5 w-8 rounded-full bg-primary/80 transition-all duration-300 group-hover:w-12" />
                 </div>
                 <p className="relative z-10 mt-4 text-sm leading-relaxed text-white/60 sm:text-[0.9375rem]">
                   {feature.description}

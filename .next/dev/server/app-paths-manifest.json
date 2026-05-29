@@ -1,6 +1,8 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
   "/ai-agents/page": "app/ai-agents/page.js",
   "/api/auth/[...all]/route": "app/api/auth/[...all]/route.js",
+  "/api/chat/route": "app/api/chat/route.js",
   "/blog/page": "app/blog/page.js",
   "/contact/page": "app/contact/page.js",
   "/finna/page": "app/finna/page.js",

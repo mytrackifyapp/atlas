@@ -67,7 +67,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     features: [
       "Everything in Pro",
       "Up to 10 seats",
-      "Investor / Atlas dashboard access",
+      "Investor dashboard access",
       "Deal flow pipeline & scoring",
       "Portfolio analytics",
       "Unlimited AI employees",

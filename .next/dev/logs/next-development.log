@@ -345,3 +345,63 @@ Import trace:
 [00:35:49.030] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/security color: rgb(120, 120, 120) color: inherit {"dp":"/security","o":"http://localhost:3000/security","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043763513} /_vercel/insights/view
 [00:35:59.732] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/#home color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/#home","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043774207} /_vercel/insights/view
 [00:36:18.640] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/privacy color: rgb(120, 120, 120) color: inherit {"dp":"/privacy","o":"http://localhost:3000/privacy","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043793128} /_vercel/insights/view
+[01:01:39.586] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045314060} /_vercel/insights/view
+[01:01:42.166] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/privacy color: rgb(120, 120, 120) color: inherit {"dp":"/privacy","o":"http://localhost:3000/privacy","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045316649} /_vercel/insights/view
+[01:01:46.231] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045320702} /_vercel/insights/view
+[01:01:54.770] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/blog color: rgb(120, 120, 120) color: inherit {"dp":"/blog","o":"http://localhost:3000/blog","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045329248} /_vercel/insights/view
+[01:02:13.518] Browser ERROR   unhandledRejection: TypeError: Cannot assign to read only property 'tronLink' of object '#<Window>'
+[01:02:13.518] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:02:13.518] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/trackify-finance-launched-atlas,-a-capital-operating-system-for-founders-and-investors-in-africa","route":"/blog/trackify-finance-launched-atlas,-a-capital-operating-system-for-founders-and-investors-in-africa"}
+[01:02:13.518] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/blog/trackify-finance-launched-atlas,-a-capital-operating-system-for-founders-and-investors-in-africa color: rgb(120, 120, 120) color: inherit {"dp":"/blog/trackify-finance-launched-atlas,-a-capital-operating-system-for-founders-and-investors-in-africa","o":"http://localhost:3000/blog/trackify-finance-launched-atlas,-a-capital-operating-system-for-founders-and-investors-in-africa","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045348002} /_vercel/insights/view
+[01:02:13.667] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
+[01:02:15.615] Browser ERROR   unhandledRejection: TypeError: Cannot assign to read only property 'tronLink' of object '#<Window>'
+[01:02:15.615] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:02:15.615] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog","route":"/blog"}
+[01:02:15.615] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/blog color: rgb(120, 120, 120) color: inherit {"dp":"/blog","o":"http://localhost:3000/blog","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045350048} /_vercel/insights/view
+[01:02:15.615] Browser WARN    Image with src "/blog/atlas-launch-africa.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[01:02:15.814] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
+[01:02:16.601] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:02:16.601] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/trackify-in-pitch-competition-at-afts-accra","route":"/blog/trackify-in-pitch-competition-at-afts-accra"}
+[01:02:16.601] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/blog/trackify-in-pitch-competition-at-afts-accra color: rgb(120, 120, 120) color: inherit {"dp":"/blog/trackify-in-pitch-competition-at-afts-accra","o":"http://localhost:3000/blog/trackify-in-pitch-competition-at-afts-accra","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045351086} /_vercel/insights/view
+[01:02:16.601] Browser ERROR   unhandledRejection: TypeError: Cannot assign to read only property 'tronLink' of object '#<Window>'
+[01:02:16.895] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
+[01:02:18.648] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:02:18.648] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog","route":"/blog"}
+[01:02:18.648] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/blog color: rgb(120, 120, 120) color: inherit {"dp":"/blog","o":"http://localhost:3000/blog","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045353102} /_vercel/insights/view
+[01:02:18.648] Browser ERROR   unhandledRejection: TypeError: Cannot assign to read only property 'tronLink' of object '#<Window>'
+[01:02:18.648] Browser WARN    Image with src "/blog/atlas-launch-africa.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[01:02:18.885] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
+[01:03:11.849] Server  LOG      ✓ Compiled in 87ms
+[01:03:12.539] Browser ERROR   uncaughtError: ReferenceError: Link is not defined
+[01:03:13.926] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[01:03:14.074] Server  LOG      ✓ Compiled in 36ms
+[01:03:15.540] Browser ERROR   unhandledRejection: TypeError: Cannot assign to read only property 'tronLink' of object '#<Window>'
+[01:03:15.540] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:03:15.540] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog","route":"/blog"}
+[01:03:15.540] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/blog color: rgb(120, 120, 120) color: inherit {"dp":"/blog","o":"http://localhost:3000/blog","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045409509} /_vercel/insights/view
+[01:03:16.539] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
+[01:03:24.144] Browser WARN    Image with src "/blog/atlas-launch-africa.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[01:03:26.809] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/#home color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/#home","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045421286} /_vercel/insights/view
+[01:12:40.614] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ai-agents color: rgb(120, 120, 120) color: inherit {"dp":"/ai-agents","o":"http://localhost:3000/ai-agents","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045975109} /_vercel/insights/view
+[01:12:45.050] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/#home color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/#home","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045979543} /_vercel/insights/view
+[01:12:48.355] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/finna color: rgb(120, 120, 120) color: inherit {"dp":"/finna","o":"http://localhost:3000/finna","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045982854} /_vercel/insights/view
+[01:17:19.283] Server  LOG      ✓ Compiled in 67ms
+[01:17:22.797] Server  LOG      ✓ Compiled in 46ms
+[01:17:23.276] Server  LOG      ✓ Compiled in 36ms
+[01:17:24.318] Server  LOG      ✓ Compiled in 44ms
+[01:17:24.773] Server  LOG      ✓ Compiled in 38ms
+[01:17:25.216] Server  LOG      ✓ Compiled in 36ms
+[01:17:25.998] Server  LOG      ✓ Compiled in 43ms
+[01:19:51.054] Browser ERROR   unhandledRejection: TypeError: Cannot assign to read only property 'tronLink' of object '#<Window>'
+[01:19:51.054] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:19:51.054] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/finna","route":"/finna"}
+[01:19:51.054] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/finna color: rgb(120, 120, 120) color: inherit {"dp":"/finna","o":"http://localhost:3000/finna","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780046405553} /_vercel/insights/view
+[01:19:51.158] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
+[01:22:05.027] Server  LOG      ✓ Compiled in 55ms
+[01:22:05.407] Server  LOG      ✓ Compiled in 117ms
+[01:22:05.838] Server  LOG      ✓ Compiled in 34ms
+[01:22:06.242] Server  LOG      ✓ Compiled in 46ms
+[01:22:11.388] Server  LOG      ✓ Compiled in 45ms

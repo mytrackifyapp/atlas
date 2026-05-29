@@ -5,15 +5,16 @@ import Link from "next/link"
 import { Send, Loader2, X, Maximize2 } from "lucide-react"
 
 const FINNA_ICON = "/icons/finna.PNG"
+import { ChatMessageText } from "@/components/chat-message-text"
 import { Button } from "@/components/ui/button"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 
 const suggestedActions = [
-  "What is Trackify Atlas?",
-  "How does the platform work?",
-  "Tell me about Africa's startup ecosystem",
-  "What features are available?",
+  "What is Trackify?",
+  "What can the founder dashboard do?",
+  "How does investor deal flow work?",
+  "Where is finance management?",
   "How do I get started?",
   "What are the pricing plans?",
 ]
@@ -120,7 +121,7 @@ export function AIAssistant() {
                 </div>
                 <div className="min-w-0">
                   <CardTitle className="text-base font-semibold truncate">Finna AI</CardTitle>
-                  <p className="text-xs text-muted-foreground">Your Atlas assistant</p>
+                  <p className="text-xs text-muted-foreground">Your Trackify assistant</p>
                 </div>
               </div>
               <div className="flex items-center gap-1">
@@ -151,7 +152,7 @@ export function AIAssistant() {
                   </div>
                   <p className="text-sm font-medium text-foreground mb-1">Hi, I'm Finna</p>
                   <p className="text-sm text-muted-foreground mb-6 max-w-[260px]">
-                    Ask me about Trackify Atlas, fundraising, or the African startup ecosystem.
+                    Ask me about Trackify, your dashboard, fundraising, or the African startup ecosystem.
                   </p>
                   <p className="text-xs text-muted-foreground mb-3">Try asking:</p>
                   <div className="flex flex-wrap gap-2 justify-center">
@@ -187,7 +188,11 @@ export function AIAssistant() {
                             : "bg-muted rounded-bl-md border border-border/40"
                         }`}
                       >
-                        <span className="whitespace-pre-wrap">{msg.content}</span>
+                        {msg.role === "assistant" ? (
+                          <ChatMessageText content={msg.content} />
+                        ) : (
+                          <span className="whitespace-pre-wrap">{msg.content}</span>
+                        )}
                       </div>
                     </div>
                   ))}

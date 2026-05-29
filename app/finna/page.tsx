@@ -2,8 +2,8 @@ import { FinnaChatFullPage } from "@/components/finna-chat-fullpage"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Finna AI | Trackify Atlas",
-  description: "Chat with Finna, your AI assistant for Trackify Atlas.",
+  title: "Finna AI | Trackify",
+  description: "Chat with Finna, your AI assistant for Trackify — finance, fundraising, and portfolio guidance.",
 }
 
 export default function FinnaPage() {

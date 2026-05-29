@@ -1,7 +1,6 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
 
 import Container from "@/components/trackifyvc/global/container"
 import Wrapper from "@/components/trackifyvc/global/wrapper"
@@ -21,17 +20,14 @@ export default function BlogSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
             {TRACKIFYVC_BLOGS.map((blog, index) => (
               <Container key={index}>
-                <Link
-                  href={`/blog/${blog.title.toLowerCase().replace(/\s+/g, "-")}`}
-                  className="flex flex-col w-full group"
-                >
+                <article className="flex flex-col w-full">
                   <div className="relative w-full bg-foreground/5 border border-border/20 rounded-lg lg:rounded-xl overflow-hidden">
                     <Image
                       src={blog.image}
                       alt={blog.title}
                       width={1024}
                       height={1024}
-                      className="object-contain size-full rounded-lg lg:rounded-xl transition-transform duration-300 group-hover:scale-105"
+                      className="object-contain size-full rounded-lg lg:rounded-xl"
                     />
                   </div>
                   <div className="flex flex-col mt-4">
@@ -43,7 +39,7 @@ export default function BlogSection() {
                     </h3>
                     <p className="text-muted-foreground text-sm mt-1">{blog.desc}</p>
                   </div>
-                </Link>
+                </article>
               </Container>
             ))}
           </div>

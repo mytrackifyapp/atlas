@@ -1,7 +1,6 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
 
 import Wrapper from "@/components/trackifyvc/global/wrapper"
 import Container from "@/components/trackifyvc/global/container"
@@ -40,14 +39,9 @@ export default function TrackifyVcOriginalBlogs() {
                     <span className="inline-block px-3 py-1 rounded-sm bg-neutral-800/80 text-xs text-foreground/80 w-max">
                       {item.category}
                     </span>
-                    <Link
-                      href={`/blog/${encodeURIComponent(
-                        item.title.toLowerCase().replace(/\s+/g, "-")
-                      )}`}
-                      className="text-lg lg:text-xl font-semibold mt-2"
-                    >
+                    <h3 className="text-lg lg:text-xl font-semibold mt-2">
                       {item.title}
-                    </Link>
+                    </h3>
                     <p className="text-muted-foreground text-sm mt-1">{item.desc}</p>
                   </div>
                 </div>

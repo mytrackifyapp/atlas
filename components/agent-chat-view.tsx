@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from "react"
 import { SendHorizonal, Sparkles } from "lucide-react"
 
 import type { ChatMessage } from "@/app/api/chat/route"
+import { ChatMessageText } from "@/components/chat-message-text"
 import { AI_AGENTS_CATALOG } from "@/lib/ai-agents-catalog"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -187,7 +188,11 @@ export function AgentChatView({ agentId }: Props) {
                       : "bg-muted/30 border-border/60"
                   )}
                 >
-                  {m.content}
+                  {m.role === "assistant" ? (
+                    <ChatMessageText content={m.content} />
+                  ) : (
+                    m.content
+                  )}
                 </div>
               </div>
             ))}
