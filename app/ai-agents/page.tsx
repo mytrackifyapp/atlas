@@ -1,12 +1,12 @@
 import Link from "next/link"
-import { redirect } from "next/navigation"
 
-import TrackifyVcNavbar from "@/components/trackifyvc/navigation/navbar"
 import { AiAgentsHero } from "@/components/ai-agents-hero"
+import { AiAgentsMarketingNav } from "@/components/ai-agents-marketing-nav"
+import { AiAgentsShowcase } from "@/components/ai-agents-showcase"
 import { AI_AGENTS_CATALOG } from "@/lib/ai-agents-catalog"
+import { getAgentPagePath } from "@/lib/ai-agents-marketing"
 import { getSessionWithRole } from "@/lib/auth-helpers"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
 
 export const dynamic = "force-dynamic"
 
@@ -26,54 +26,70 @@ export default async function AiAgentsMarketingPage() {
         : "/sign-up"
 
   return (
-    <div className="min-h-screen bg-background">
-      <TrackifyVcNavbar />
+    <div className="min-h-screen bg-neutral-950 text-white">
+      <div className="relative">
+        <AiAgentsMarketingNav isAuthenticated={isAuthenticated} ctaHref={aiDashboardHref} />
+        <AiAgentsHero variant="marketing" ctaHref={aiDashboardHref} ctaLabel="Get Trackify" />
+      </div>
 
-      <main className="pt-24">
-        <AiAgentsHero ctaHref={aiDashboardHref} ctaLabel="Begin" />
+      <AiAgentsShowcase />
 
-        <section className="py-16 sm:py-20">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Meet your AI agents</h2>
-              <p className="mt-3 text-base sm:text-lg text-muted-foreground">
-                Enable specialist roles like AI CFO, AI Lawyer, and AI Marketer to speed up execution across your team.
-              </p>
-              <div className="mt-6 flex items-center justify-center gap-3 flex-wrap">
-                <Button asChild>
-                  <Link href={aiDashboardHref}>Open AI Agents</Link>
+      <section id="agents" className="border-t border-white/10 py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Meet your AI agents</h2>
+            <p className="mt-4 text-base text-white/65 sm:text-lg">
+              Enable specialist roles like CFO, Vera, and Marketer to speed up execution
+              across your team.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Button
+                asChild
+                className="rounded-full bg-[#4483f2] px-8 text-white hover:bg-[#3a75e0]"
+              >
+                <Link href={aiDashboardHref}>Open AI Agents</Link>
+              </Button>
+              {!isAuthenticated ? (
+                <Button
+                  asChild
+                  variant="outline"
+                  className="rounded-full border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white"
+                >
+                  <Link href="/sign-in">Sign in</Link>
                 </Button>
-                {!isAuthenticated ? (
-                  <Button asChild variant="outline">
-                    <Link href="/sign-in">Sign in</Link>
-                  </Button>
-                ) : null}
-              </div>
-            </div>
-
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {AI_AGENTS_CATALOG.slice(0, 9).map((a) => (
-                <Card key={a.id} className="p-6 border-border/50">
-                  <div className="text-xs text-muted-foreground">{a.category}</div>
-                  <div className="mt-2 text-lg font-semibold">{a.name}</div>
-                  <div className="mt-2 text-sm text-muted-foreground leading-relaxed">{a.description}</div>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {a.tags.slice(0, 4).map((t) => (
-                      <span
-                        key={t}
-                        className="text-[11px] px-2 py-0.5 rounded-full bg-muted/40 border text-muted-foreground"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </Card>
-              ))}
+              ) : null}
             </div>
           </div>
-        </section>
-      </main>
+
+          <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {AI_AGENTS_CATALOG.map((a) => (
+              <Link
+                key={a.id}
+                href={getAgentPagePath(a.id)}
+                className="group rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition-colors hover:border-white/20 hover:bg-white/[0.07]"
+              >
+                <div className="text-xs font-medium uppercase tracking-wider text-white/45">
+                  {a.category}
+                </div>
+                <div className="mt-2 text-lg font-semibold text-white group-hover:text-[#4483f2] transition-colors">
+                  {a.name}
+                </div>
+                <p className="mt-2 text-sm leading-relaxed text-white/60">{a.description}</p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {a.tags.slice(0, 4).map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[11px] text-white/55"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
-

@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react"
-import { BarChart3, Briefcase, Home, Lightbulb, MessageSquare, Rocket, Users, Shield, LayoutPanelTop, Building2, Wallet, Sparkles, Brain } from "lucide-react"
+import { BarChart3, Briefcase, Home, Lightbulb, Megaphone, MessageSquare, Rocket, Users, Shield, LayoutPanelTop, Building2, Wallet, Sparkles, Brain, Target } from "lucide-react"
 
 export type UserRole = "investor" | "founder"
 
@@ -94,6 +94,18 @@ export const roleConfigs: Record<UserRole, RoleConfig> = {
         description: "Manage your raise",
       },
       {
+        name: "Sales",
+        href: "/founder/sales",
+        icon: Target,
+        description: "B2B leads & outbound pipeline",
+      },
+      {
+        name: "Social",
+        href: "/founder/social",
+        icon: Megaphone,
+        description: "AI-generated branded social posts",
+      },
+      {
         name: "Workspace",
         href: "/founder/workspace",
         icon: LayoutPanelTop,
@@ -147,6 +159,10 @@ export const adminNavigation: NavItem[] = [
 
 export function getRoleConfig(role: UserRole): RoleConfig {
   return roleConfigs[role]
+}
+
+export function getSettingsHref(role: UserRole): string {
+  return role === "founder" ? "/founder/settings" : "/dashboard/settings"
 }
 
 export function getRoleFromPath(pathname: string): UserRole {

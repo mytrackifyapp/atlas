@@ -13,9 +13,13 @@ type Props = {
   voiceId?: string
   autoSpeak?: boolean
   speakRequest?: { id: number; text: string } | null
+  /** Increment to cancel in-flight speech (e.g. new user message). */
+  speechEpoch?: number
   onSpeakDone?: (id: number) => void
   imageSrc?: string
   name?: string
+  /** Hides manual replay controls when voice conversation handles playback. */
+  embedded?: boolean
 }
 
 export function TalkingAvatar({
@@ -23,9 +27,11 @@ export function TalkingAvatar({
   voiceId,
   autoSpeak = true,
   speakRequest,
+  speechEpoch = 0,
   onSpeakDone,
   imageSrc,
   name = "AI Agent",
+  embedded = false,
 }: Props) {
   const [speaking, setSpeaking] = useState(false)
   const [mouth, setMouth] = useState(0)
@@ -34,33 +40,48 @@ export function TalkingAvatar({
   const audioCtxRef = useRef<AudioContext | null>(null)
   const rafRef = useRef<number | null>(null)
   const lastSpokenRef = useRef<string>("")
+  const speakGenerationRef = useRef(0)
+  const abortRef = useRef<AbortController | null>(null)
+  const activeRequestIdRef = useRef<number | null>(null)
+  const handledRequestIdRef = useRef<number | null>(null)
 
   const safeText = useMemo(() => text.trim(), [text])
 
+  function stopPlayback() {
+    abortRef.current?.abort()
+    abortRef.current = null
+    speakGenerationRef.current += 1
+    if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    rafRef.current = null
+    audioRef.current?.pause()
+    audioRef.current = null
+    audioCtxRef.current?.close().catch(() => {})
+    audioCtxRef.current = null
+    setSpeaking(false)
+    setMouth(0)
+  }
+
   useEffect(() => {
     return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
-      rafRef.current = null
-      audioRef.current?.pause()
-      audioRef.current = null
-      audioCtxRef.current?.close().catch(() => {})
-      audioCtxRef.current = null
+      stopPlayback()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  async function speak(force?: { text?: string }) {
+  async function speak(force?: { text?: string; requestId?: number }) {
     const speakText = (force?.text ?? safeText).trim()
     if (!speakText) return
 
-    // Stop any current playback
-    audioRef.current?.pause()
-    audioRef.current = null
-    if (rafRef.current) cancelAnimationFrame(rafRef.current)
-    rafRef.current = null
-    audioCtxRef.current?.close().catch(() => {})
-    audioCtxRef.current = null
-    setVoiceError(null)
+    const generation = ++speakGenerationRef.current
+    const requestId = force?.requestId ?? speakRequest?.id ?? null
+    activeRequestIdRef.current = requestId
 
+    stopPlayback()
+    speakGenerationRef.current = generation
+
+    const aborter = new AbortController()
+    abortRef.current = aborter
+    setVoiceError(null)
     setSpeaking(true)
     setMouth(0)
 
@@ -69,7 +90,10 @@ export function TalkingAvatar({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: speakText, voiceId }),
+        signal: aborter.signal,
       })
+
+      if (generation !== speakGenerationRef.current) return
 
       if (!res.ok) {
         const json = await res.json().catch(() => null)
@@ -79,6 +103,8 @@ export function TalkingAvatar({
       }
 
       const buf = await res.arrayBuffer()
+      if (generation !== speakGenerationRef.current) return
+
       const blob = new Blob([buf], { type: "audio/mpeg" })
       const url = URL.createObjectURL(blob)
 
@@ -97,6 +123,7 @@ export function TalkingAvatar({
       analyser.connect(audioCtx.destination)
 
       const tick = () => {
+        if (generation !== speakGenerationRef.current) return
         analyser.getByteTimeDomainData(data)
         let sum = 0
         for (let i = 0; i < data.length; i++) {
@@ -110,28 +137,44 @@ export function TalkingAvatar({
       }
 
       audio.onended = () => {
+        if (generation !== speakGenerationRef.current) {
+          URL.revokeObjectURL(url)
+          return
+        }
         setSpeaking(false)
         setMouth(0)
         if (rafRef.current) cancelAnimationFrame(rafRef.current)
         rafRef.current = null
         URL.revokeObjectURL(url)
-        onSpeakDone?.(speakRequest?.id ?? -1)
+        onSpeakDone?.(activeRequestIdRef.current ?? -1)
       }
 
       // Browsers may block autoplay until user gesture.
       await audioCtx.resume()
+      if (generation !== speakGenerationRef.current) {
+        URL.revokeObjectURL(url)
+        return
+      }
       await audio.play()
       tick()
     } catch (e) {
+      if (aborter.signal.aborted || generation !== speakGenerationRef.current) return
       const msg = e instanceof Error ? e.message : "Voice failed"
       setVoiceError(
         msg.includes("NotAllowedError") ? "Click Speak once to enable audio." : msg
       )
       setSpeaking(false)
       setMouth(0)
-      onSpeakDone?.(speakRequest?.id ?? -1)
+      onSpeakDone?.(activeRequestIdRef.current ?? -1)
     }
   }
+
+  useEffect(() => {
+    if (!speechEpoch) return
+    handledRequestIdRef.current = null
+    stopPlayback()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [speechEpoch])
 
   useEffect(() => {
     if (!autoSpeak) return
@@ -146,27 +189,42 @@ export function TalkingAvatar({
 
   useEffect(() => {
     if (!speakRequest) return
-    speak({ text: speakRequest.text })
+    if (handledRequestIdRef.current === speakRequest.id) return
+    handledRequestIdRef.current = speakRequest.id
+    speak({ text: speakRequest.text, requestId: speakRequest.id })
+
+    return () => {
+      abortRef.current?.abort()
+      speakGenerationRef.current += 1
+      handledRequestIdRef.current = null
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [speakRequest?.id])
 
   return (
-    <Card className="p-4 sm:p-6 border-border/50">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <div className="text-sm font-medium">Avatar</div>
-          <div className="text-xs text-muted-foreground">
-            MVP mouth animation (audio-driven). Swap with a 3D model later.
+    <Card className={cn("border-border/50", embedded ? "p-3 border-0 shadow-none bg-transparent" : "p-4 sm:p-6")}>
+      {!embedded ? (
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <div className="text-sm font-medium">Avatar</div>
+            <div className="text-xs text-muted-foreground">
+              Lip-synced voice playback for agent responses.
+            </div>
           </div>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => speak()}
+            disabled={!safeText || speaking}
+          >
+            <Volume2 className="h-4 w-4 mr-2" />
+            {speaking ? "Speaking…" : "Replay"}
+          </Button>
         </div>
-        <Button size="sm" variant="outline" onClick={speak} disabled={!safeText || speaking}>
-          <Volume2 className="h-4 w-4 mr-2" />
-          {speaking ? "Speaking…" : "Speak"}
-        </Button>
-      </div>
+      ) : null}
       {voiceError ? <div className="mt-3 text-xs text-destructive">{voiceError}</div> : null}
 
-      <div className="mt-5 flex items-center justify-center">
+      <div className={cn("flex items-center justify-center", embedded ? "mt-0" : "mt-5")}>
         <div className="relative h-40 w-40 rounded-2xl border border-border/60 bg-muted/20 overflow-hidden">
           {imageSrc ? (
             <Image

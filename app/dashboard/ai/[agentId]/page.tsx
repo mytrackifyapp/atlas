@@ -1,10 +1,11 @@
 import { redirect } from "next/navigation"
 
+import { AgentDetailView } from "@/components/agent-detail-view"
 import { DashboardShell } from "@/components/dashboard-shell"
-import { AgentChatView } from "@/components/agent-chat-view"
+import { isCatalogAgentId, resolveAgentId } from "@/lib/ai-agents-catalog"
 import { getSessionWithRole } from "@/lib/auth-helpers"
 
-export default async function DashboardAgentChatPage({
+export default async function DashboardAgentPage({
   params,
 }: {
   params: Promise<{ agentId: string }>
@@ -16,10 +17,13 @@ export default async function DashboardAgentChatPage({
   const { agentId } = await params
   if (!agentId) redirect("/dashboard/ai")
 
+  const resolved = resolveAgentId(agentId)
+  if (!isCatalogAgentId(resolved)) redirect("/dashboard/ai")
+  if (resolved !== agentId) redirect(`/dashboard/ai/${resolved}`)
+
   return (
     <DashboardShell>
-      <AgentChatView agentId={agentId} />
+      <AgentDetailView agentId={resolved} />
     </DashboardShell>
   )
 }
-

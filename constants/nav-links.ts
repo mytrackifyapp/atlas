@@ -1,5 +1,6 @@
 import {
   Briefcase,
+  Building2,
   CreditCard,
   DatabaseZap,
   Mail,
@@ -85,28 +86,33 @@ export const NAV_LINKS = [
       {
         title: "For Investors",
         tagline: "Portfolio, deal flow, and insights in one dashboard.",
-        href: "/#platform",
+        href: "/solutions/investors",
         icon: Briefcase,
       },
       {
         title: "For Founders",
         tagline: "Run fundraising, docs, and updates end-to-end.",
-        href: "/#features-founders",
+        href: "/solutions/founders",
         icon: Rocket,
       },
       {
         title: "For Startups",
         tagline: "Stay investor-ready with finance and execution tools.",
-        href: "/#features-founders",
+        href: "/solutions/startups",
         icon: Users,
       },
       {
         title: "Accelerators",
         tagline: "Support cohorts with structure, reporting, and playbooks.",
-        href: "/accelerator",
+        href: "/solutions/accelerators",
         icon: Rocket,
       },
     ],
+  },
+  {
+    title: "Companies",
+    href: "/companies",
+    icon: Building2,
   },
   {
     title: "AI Agents",

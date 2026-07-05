@@ -4,10 +4,13 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Moon, Settings, Sun, Menu, X, LogOut, User } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
+import { AIAssistant } from "@/components/ai-assistant"
+import { DashboardMobileNav } from "@/components/dashboard-mobile-nav"
+import { DashboardSidebar } from "@/components/dashboard-sidebar"
+import { DashboardSidebarShell } from "@/components/dashboard-sidebar-shell"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,34 +19,39 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { cn } from "@/lib/utils"
-import { AIAssistant } from "@/components/ai-assistant"
-import { getRoleConfig, getRoleFromPath, sharedNavigation, adminNavigation, type UserRole } from "@/lib/role-config"
 import { authClient } from "@/lib/auth-client"
+import { getRoleConfig, getRoleFromPath, getSettingsHref, type UserRole } from "@/lib/role-config"
+import { cn } from "@/lib/utils"
+import { LogOut, Moon, Settings, Sun } from "lucide-react"
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
   const { data: session } = authClient.useSession()
-  
-  // Get role from session or fallback to pathname-based detection
-  const sessionRole = (session?.user as any)?.role as UserRole | undefined
+
   const pathRole = getRoleFromPath(pathname)
-  // Initialize with path-based role to match current view
   const [userRole, setUserRole] = useState<UserRole>(pathRole)
   const [theme, setTheme] = useState<"light" | "dark">("light")
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
-
-  const roleConfig = getRoleConfig(userRole)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   const handleSignOut = async () => {
     await authClient.signOut()
     router.push("/sign-in")
   }
 
+  const handleRoleChange = (value: UserRole) => {
+    const config = getRoleConfig(value)
+    setUserRole(value)
+    router.push(config.defaultRoute)
+  }
+
   useEffect(() => {
-    // Update role based on current pathname to keep switcher in sync
+    setTheme(document.documentElement.classList.contains("dark") ? "dark" : "light")
+  }, [])
+
+  useEffect(() => {
     const detectedRole = getRoleFromPath(pathname)
     if (detectedRole !== userRole) {
       setUserRole(detectedRole)
@@ -54,15 +62,13 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     setIsMobileMenuOpen(false)
   }, [pathname])
 
-  // Check admin status
   useEffect(() => {
     const checkAdminStatus = async () => {
       try {
         const response = await fetch("/api/admin/check")
         const data = await response.json()
         setIsAdmin(data.isAdmin || false)
-      } catch (error) {
-        console.error("Error checking admin status:", error)
+      } catch {
         setIsAdmin(false)
       }
     }
@@ -78,229 +84,66 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     document.documentElement.classList.toggle("dark")
   }
 
-  const sidebarContent = (
-    <>
-      {/* Logo */}
-      <div className="p-6 border-b border-sidebar-border">
-        <Link href="/" className="flex items-center gap-3">
-          <span className="text-xl font-bold tracking-tight text-sidebar-foreground">
-            Trackify Finance
-          </span>
-          <div>
-            <h1 className="text-xl font-bold text-sidebar-foreground"></h1>
-            <p className="text-xs text-muted-foreground"></p>
-          </div>
-        </Link>
-      </div>
+  const sidebarProps = {
+    userRole,
+    onRoleChange: handleRoleChange,
+    collapsed: sidebarCollapsed,
+    onToggleCollapsed: () => setSidebarCollapsed((c) => !c),
+    isAdmin,
+    theme,
+    onToggleTheme: toggleTheme,
+    session,
+    onSignOut: handleSignOut,
+  }
 
-      <div className="p-4 border-b border-sidebar-border">
-        <Select
-          value={userRole}
-          onValueChange={(value: UserRole) => {
-            const config = getRoleConfig(value)
-            // Update state and navigate
-            setUserRole(value)
-            router.push(config.defaultRoute)
-          }}
-        >
-          <SelectTrigger className="bg-sidebar-accent h-10">
-            <SelectValue placeholder="Select view..." />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="investor">🎯 Investor View</SelectItem>
-            <SelectItem value="founder">🚀 Founder View</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-        {roleConfig.navigation.map((item, index) => {
-          const isActive = pathname === item.href
-          // Use a unique key combining role, name, and index to avoid duplicates
-          const uniqueKey = `${userRole}-${item.name}-${index}`
-          return (
-            <Link
-              key={uniqueKey}
-              href={item.href}
-              className={cn(
-                "group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
-                isActive
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
-                  : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground",
-              )}
-            >
-              <item.icon
-                className={cn(
-                  "h-4 w-4 transition-colors",
-                  isActive ? "text-emerald-700 dark:text-emerald-400" : "",
-                )}
-              />
-              <span>{item.name}</span>
-            </Link>
-          )
-        })}
-
-        <div className="pt-3 mt-3 border-t border-sidebar-border">
-          {sharedNavigation.map((item, index) => {
-            const resolvedHref =
-              item.href === "/ai" ? (userRole === "founder" ? "/founder/ai" : "/dashboard/ai") : item.href
-            const isActive = pathname === resolvedHref
-            // Use a unique key for shared navigation items
-            const uniqueKey = `shared-${item.name}-${index}`
-            return (
-              <Link
-                key={uniqueKey}
-                href={resolvedHref}
-                className={cn(
-                  "group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
-                  isActive
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground",
-                )}
-              >
-                <item.icon
-                  className={cn(
-                    "h-4 w-4 transition-colors",
-                    isActive ? "text-emerald-700 dark:text-emerald-400" : "",
-                  )}
-                />
-                <span>{item.name}</span>
-              </Link>
-            )
-          })}
-        </div>
-
-        {/* Admin Navigation */}
-        {isAdmin && (
-          <div className="pt-3 mt-3 border-t border-sidebar-border">
-            {adminNavigation.map((item, index) => {
-              const isActive = pathname === item.href
-              const uniqueKey = `admin-${item.name}-${index}`
-              return (
-                <Link
-                  key={uniqueKey}
-                  href={item.href}
-                  className={cn(
-                    "group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
-                    isActive
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
-                      : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground",
-                  )}
-                >
-                  <item.icon
-                    className={cn(
-                      "h-4 w-4 transition-colors",
-                      isActive ? "text-emerald-700 dark:text-emerald-400" : "",
-                    )}
-                  />
-                  <span>{item.name}</span>
-                </Link>
-              )
-            })}
-          </div>
-        )}
-      </nav>
-
-      <div className="p-3 border-t border-sidebar-border space-y-1">
-        <Button variant="ghost" className="w-full justify-start text-sidebar-foreground h-10" onClick={toggleTheme}>
-          {theme === "light" ? <Moon className="h-4 w-4 mr-3" /> : <Sun className="h-4 w-4 mr-3" />}
-          {theme === "light" ? "Dark" : "Light"} Mode
-        </Button>
-        <Button variant="ghost" className="w-full justify-start text-sidebar-foreground h-10">
-          <Settings className="h-4 w-4 mr-3" />
-          Settings
-        </Button>
-        {session?.user && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="w-full justify-start text-sidebar-foreground h-10">
-                <User className="h-4 w-4 mr-3" />
-                <span className="truncate">{session.user.name || session.user.email}</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{session.user.name}</p>
-                  <p className="text-xs leading-none text-muted-foreground">{session.user.email}</p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleSignOut}>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Sign Out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
-      </div>
-    </>
-  )
+  const isOnAiRoute = pathname.includes("/ai")
 
   return (
-    <div className="flex h-screen bg-background">
-      <aside className="hidden lg:flex w-64 border-r border-border bg-sidebar flex-col">{sidebarContent}</aside>
+    <div className="flex h-[100dvh] bg-[#f4f4f5] dark:bg-neutral-950">
+      {/* Desktop sidebar */}
+      <aside
+        className={cn(
+          "hidden shrink-0 p-2 transition-[width] duration-200 lg:block",
+          sidebarCollapsed ? "w-[76px]" : "w-[272px]",
+        )}
+      >
+        <DashboardSidebarShell>
+          <DashboardSidebar {...sidebarProps} />
+        </DashboardSidebarShell>
+      </aside>
 
-      {isMobileMenuOpen && (
+      {/* Mobile drawer */}
+      {isMobileMenuOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden">
-          {/* Backdrop */}
-          <div className="fixed inset-0 bg-black/50" onClick={() => setIsMobileMenuOpen(false)} />
-          {/* Sidebar */}
-          <aside className="fixed inset-y-0 left-0 w-72 border-r border-border bg-sidebar flex flex-col animate-in slide-in-from-left duration-300">
-            {sidebarContent}
+          <div className="fixed inset-0 bg-black/60" onClick={() => setIsMobileMenuOpen(false)} />
+          <aside className="fixed inset-y-0 left-0 w-[min(300px,88vw)] animate-in slide-in-from-left duration-300">
+            <DashboardSidebarShell className="h-full rounded-r-2xl rounded-l-none border-l-0">
+              <DashboardSidebar {...sidebarProps} collapsed={false} mobileDrawer />
+            </DashboardSidebarShell>
           </aside>
         </div>
-      )}
+      ) : null}
 
-      {/* Main Content */}
-      <main className="flex-1 overflow-y-auto">
-        <div className="lg:hidden sticky top-0 z-40 bg-background border-b border-border px-4 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              >
-                {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+      {/* Main content */}
+      <main className="min-w-0 flex-1 overflow-y-auto">
+        <div className="sticky top-0 z-30 border-b border-black/10 bg-white/95 px-3 py-2.5 backdrop-blur dark:border-[#2a2a2a] dark:bg-neutral-950/95 lg:hidden">
+          <div className="flex items-center justify-between gap-3">
+            <Link href="/" className="truncate text-base font-semibold tracking-tight text-black dark:text-white">
+              Trackify Finances
+            </Link>
+            <div className="flex shrink-0 items-center gap-1">
+              <Button variant="ghost" size="icon" className="h-9 w-9" onClick={toggleTheme}>
+                {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+                <span className="sr-only">Toggle theme</span>
               </Button>
-              <Link href="/" className="flex items-center gap-2">
-                <span className="text-base font-bold tracking-tight text-foreground">
-                  Trackify Finance
-                </span>
-                <div>
-                  <h1 className="text-base font-bold"></h1>
-                  <p className="text-xs text-muted-foreground -mt-0.5"></p>
-                </div>
-              </Link>
-            </div>
-            <div className="flex items-center gap-2">
-              <Select
-                value={userRole}
-                onValueChange={(value: UserRole) => {
-                  const config = getRoleConfig(value)
-                  // Update state and navigate
-                  setUserRole(value)
-                  router.push(config.defaultRoute)
-                }}
-              >
-                <SelectTrigger className="h-9 w-[140px] text-xs">
-                  <SelectValue placeholder="View..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="investor">🎯 Investor</SelectItem>
-                  <SelectItem value="founder">🚀 Founder</SelectItem>
-                </SelectContent>
-              </Select>
-              {session?.user && (
+              {session?.user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="icon" className="h-9 w-9">
                       <Avatar className="h-8 w-8">
-                        <AvatarImage src={session.user.image || undefined} alt={session.user.name || ""} />
+                        <AvatarImage src={session.user.image || undefined} />
                         <AvatarFallback>
-                          {session.user.name?.charAt(0).toUpperCase() || session.user.email?.charAt(0).toUpperCase() || "U"}
+                          {session.user.name?.charAt(0).toUpperCase() || "U"}
                         </AvatarFallback>
                       </Avatar>
                     </Button>
@@ -308,30 +151,40 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                   <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuLabel>
                       <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">{session.user.name}</p>
-                        <p className="text-xs leading-none text-muted-foreground">{session.user.email}</p>
+                        <p className="text-sm font-medium">{session.user.name}</p>
+                        <p className="text-xs text-muted-foreground">{session.user.email}</p>
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href={getSettingsHref(userRole)}>
+                        <Settings className="mr-2 h-4 w-4" />
+                        Settings
+                      </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleSignOut}>
                       <LogOut className="mr-2 h-4 w-4" />
-                      <span>Sign Out</span>
+                      Sign out
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              )}
-              <Button variant="ghost" size="icon" className="h-9 w-9" onClick={toggleTheme}>
-                {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-              </Button>
+              ) : null}
             </div>
           </div>
         </div>
 
-        {children}
+        <div className="px-3 py-3 pb-[calc(4.75rem+env(safe-area-inset-bottom))] lg:p-6 lg:pb-6">
+          {children}
+        </div>
       </main>
 
-      {/* AI Assistant */}
-      <AIAssistant />
+      <DashboardMobileNav
+        userRole={userRole}
+        isMenuOpen={isMobileMenuOpen}
+        onMenuOpen={() => setIsMobileMenuOpen((open) => !open)}
+      />
+
+      {!isOnAiRoute ? <AIAssistant compactMobile /> : null}
     </div>
   )
 }

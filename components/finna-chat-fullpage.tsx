@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { Send, Loader2, ArrowLeft } from "lucide-react"
 import { ChatMessageText } from "@/components/chat-message-text"
 import { Button } from "@/components/ui/button"
@@ -21,20 +22,26 @@ const suggestedActions = [
 type ChatMessage = { role: "user" | "assistant"; content: string }
 
 export function FinnaChatFullPage() {
+  const searchParams = useSearchParams()
   const [message, setMessage] = useState("")
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const initialQueryHandled = useRef(false)
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages, isLoading])
 
-  const sendToFinna = async (userContent: string) => {
-    const newMessages: ChatMessage[] = [...messages, { role: "user", content: userContent }]
-    setMessages(newMessages)
+  const sendToFinna = useCallback(async (userContent: string) => {
     setMessage("")
     setIsLoading(true)
+
+    let newMessages: ChatMessage[] = []
+    setMessages((prev) => {
+      newMessages = [...prev, { role: "user", content: userContent }]
+      return newMessages
+    })
 
     try {
       const res = await fetch("/api/chat", {
@@ -64,7 +71,14 @@ export function FinnaChatFullPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    const q = searchParams.get("q")?.trim()
+    if (!q || initialQueryHandled.current) return
+    initialQueryHandled.current = true
+    void sendToFinna(q)
+  }, [searchParams, sendToFinna])
 
   const handleSend = () => {
     const text = message.trim()

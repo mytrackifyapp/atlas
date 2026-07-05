@@ -1,407 +1,68 @@
-[00:00:01.998] Server  LOG      ✓ Ready in 1752ms
-[00:00:06.289] Browser ERROR   unhandledRejection: TypeError: Cannot assign to read only property 'tronLink' of object '#<Window>'
-[00:00:06.289] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:06.289] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:00:06.289] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780041620824} /_vercel/insights/view
-[00:00:06.431] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
-[00:00:06.749] Server  LOG     MongoDB connected successfully (db.ts)
-[00:02:29.331] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ai-agents color: rgb(120, 120, 120) color: inherit {"dp":"/ai-agents","o":"http://localhost:3000/ai-agents","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780041763863} /_vercel/insights/view
-[00:02:33.813] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780041768341} /_vercel/insights/view
-[00:02:44.915] Browser ERROR   ./app/page.tsx:508:17
-Parsing ecmascript source code failed
-  506 |           </div>
-  507 |         </div>
-> 508 |       </section>
-      |                 ^
-> 509 |
-      | ^
-> 510 |       {/* Discover sections (Finna AI + AI Employees) */}
-      | ^^^^^^^
-  511 |       <section className="scroll-mt-20 bg-background py-14 sm:py-16 lg:py-20">
-  512 |         <div className="mx-auto max-w-5xl px-6 lg:px-8">
-  513 |           <h2 className="text-center text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-
-Expected '</', got 'jsx text (
-
-      )'
-[00:02:47.336] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ai-agents color: rgb(120, 120, 120) color: inherit {"dp":"/ai-agents","o":"http://localhost:3000/ai-agents","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780041781867} /_vercel/insights/view
-[00:03:06.654] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/#home color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/#home","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780041801183} /_vercel/insights/view
-[00:05:30.821] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ai-agents color: rgb(120, 120, 120) color: inherit {"dp":"/ai-agents","o":"http://localhost:3000/ai-agents","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780041945362} /_vercel/insights/view
-[00:05:37.131] Server  LOG      ✓ Compiled in 47ms
-[00:05:40.740] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/#home color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/#home","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780041955277} /_vercel/insights/view
-[00:05:41.930] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/sign-up color: rgb(120, 120, 120) color: inherit {"dp":"/sign-up","o":"http://localhost:3000/sign-up","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780041956475} /_vercel/insights/view
-[00:05:43.912] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780041958451} /_vercel/insights/view
-[00:05:55.316] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:05:55.316] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:05:55.316] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780041969835} /_vercel/insights/view
-[00:05:55.316] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
-[00:05:59.159] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ai-agents color: rgb(120, 120, 120) color: inherit {"dp":"/ai-agents","o":"http://localhost:3000/ai-agents","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780041973701} /_vercel/insights/view
-[00:06:01.004] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780041975544} /_vercel/insights/view
-[00:06:02.215] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ai-agents color: rgb(120, 120, 120) color: inherit {"dp":"/ai-agents","o":"http://localhost:3000/ai-agents","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780041976756} /_vercel/insights/view
-[00:06:09.875] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780041984414} /_vercel/insights/view
-[00:06:11.096] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/finna color: rgb(120, 120, 120) color: inherit {"dp":"/finna","o":"http://localhost:3000/finna","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780041985641} /_vercel/insights/view
-[00:06:13.258] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780041987798} /_vercel/insights/view
-[00:08:00.084] Server  LOG      ✓ Compiled in 145ms
-[00:08:00.379] Server  LOG      ✓ Compiled in 54ms
-[00:08:02.269] Server  LOG      ✓ Compiled in 43ms
-[00:10:08.316] Server  LOG      ✓ Compiled in 162ms
-[00:12:20.432] Server  LOG      ✓ Compiled in 75ms
-[00:16:45.916] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/integrations color: rgb(120, 120, 120) color: inherit {"dp":"/integrations","o":"http://localhost:3000/integrations","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780042620460} /_vercel/insights/view
-[00:17:17.594] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/blog color: rgb(120, 120, 120) color: inherit {"dp":"/blog","o":"http://localhost:3000/blog","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780042652138} /_vercel/insights/view
-[00:17:30.518] Server  LOG      ✓ Compiled in 88ms
-[00:17:31.545] Server  LOG      ✓ Compiled in 51ms
-[00:19:03.194] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/integrations color: rgb(120, 120, 120) color: inherit {"dp":"/integrations","o":"http://localhost:3000/integrations","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780042757735} /_vercel/insights/view
-[00:19:05.787] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/#home color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/#home","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780042760319} /_vercel/insights/view
-[00:23:13.512] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ai-agents color: rgb(120, 120, 120) color: inherit {"dp":"/ai-agents","o":"http://localhost:3000/ai-agents","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043007972} /_vercel/insights/view
-[00:23:16.400] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/#home color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/#home","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043010869} /_vercel/insights/view
-[00:23:21.921] Server  LOG      ✓ Compiled in 83ms
-[00:23:22.020] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ai-agents color: rgb(120, 120, 120) color: inherit {"dp":"/ai-agents","o":"http://localhost:3000/ai-agents","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043016493} /_vercel/insights/view
-[00:23:23.062] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/#home color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/#home","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043017532} /_vercel/insights/view
-[00:23:27.450] Server  LOG      ✓ Compiled in 56ms
-[00:24:15.307] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ai-agents color: rgb(120, 120, 120) color: inherit {"dp":"/ai-agents","o":"http://localhost:3000/ai-agents","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043069778} /_vercel/insights/view
-[00:24:25.547] Server  LOG      ✓ Compiled in 77ms
-[00:24:28.014] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/#home color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/#home","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043082485} /_vercel/insights/view
-[00:26:02.669] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/contact color: rgb(120, 120, 120) color: inherit {"dp":"/contact","o":"http://localhost:3000/contact","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043177142} /_vercel/insights/view
-[00:26:11.423] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/#home color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/#home","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043185834} /_vercel/insights/view
-[00:28:35.112] Server  LOG      ✓ Compiled in 219ms
-[00:30:46.188] Server  LOG      ✓ Compiled in 224ms
-[00:30:54.625] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:30:54.923] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
-
-- A server/client branch `if (typeof window !== 'undefined')`.
-- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
-- Date formatting in a user's locale which doesn't match the server.
-- External changing data without sending a snapshot of it along with the HTML.
-- Invalid HTML tag nesting.
-
-It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
-
-%s%s https://react.dev/link/hydration-mismatch 
-
-  ...
-    <div className="size-full" style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
-      <MaxWidthWrapper className="flex items...">
-        <section className="h-full mx-...">
-          ...
-            <ul data-orientation="horizontal" data-slot="navigation..." className="group flex..." dir="ltr" ...>
-              <NavigationMenuItem>
-              ...
-                <SlotClone data-radix-collection-item="" ref={function}>
-                  <NavigationMenuCollectionItemSlot scope={undefined}>
-                    <Slot data-radix-collection-item="" ref={function}>
-                      <SlotClone data-radix-collection-item="" ref={function}>
-                        <Primitive.button asChild={true} data-radix-collection-item="" ref={function} ...>
-                          <Slot data-radix-collection-item="" onKeyDown={function handleEvent} ref={function}>
-                            <SlotClone data-radix-collection-item="" onKeyDown={function handleEvent} ref={function}>
-                              <Primitive.button id="radix-_R_1..." disabled={undefined} data-disabled={undefined} ...>
-                                <button
-+                                 id="radix-_R_16indlb_-trigger-radix-_R_176indlb_"
--                                 id="radix-_R_j1indlb_-trigger-radix-_R_jj1indlb_"
-                                  disabled={undefined}
-                                  data-disabled={undefined}
-                                  data-state="closed"
-                                  aria-expanded={false}
-+                                 aria-controls="radix-_R_16indlb_-content-radix-_R_176indlb_"
--                                 aria-controls="radix-_R_j1indlb_-content-radix-_R_jj1indlb_"
-                                  data-slot="navigation-menu-trigger"
-                                  className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 p..."
-                                  onPointerEnter={function handleEvent}
-                                  onPointerMove={function handleEvent}
-                                  onPointerLeave={function handleEvent}
-                                  onClick={function handleEvent}
-                                  onKeyDown={function}
-                                  data-radix-collection-item=""
-                                  ref={function}
-                                >
-              ...
-                <SlotClone data-radix-collection-item="" ref={function}>
-                  <NavigationMenuCollectionItemSlot scope={undefined}>
-                    <Slot data-radix-collection-item="" ref={function}>
-                      <SlotClone data-radix-collection-item="" ref={function}>
-                        <Primitive.button asChild={true} data-radix-collection-item="" ref={function} ...>
-                          <Slot data-radix-collection-item="" onKeyDown={function handleEvent} ref={function}>
-                            <SlotClone data-radix-collection-item="" onKeyDown={function handleEvent} ref={function}>
-                              <Primitive.button id="radix-_R_1..." disabled={undefined} data-disabled={undefined} ...>
-                                <button
-+                                 id="radix-_R_16indlb_-trigger-radix-_R_1n6indlb_"
--                                 id="radix-_R_j1indlb_-trigger-radix-_R_rj1indlb_"
-                                  disabled={undefined}
-                                  data-disabled={undefined}
-                                  data-state="closed"
-                                  aria-expanded={false}
-+                                 aria-controls="radix-_R_16indlb_-content-radix-_R_1n6indlb_"
--                                 aria-controls="radix-_R_j1indlb_-content-radix-_R_rj1indlb_"
-                                  data-slot="navigation-menu-trigger"
-                                  className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 p..."
-                                  onPointerEnter={function handleEvent}
-                                  onPointerMove={function handleEvent}
-                                  onPointerLeave={function handleEvent}
-                                  onClick={function handleEvent}
-                                  onKeyDown={function}
-                                  data-radix-collection-item=""
-                                  ref={function}
-                                >
-              <NavigationMenuItem>
-              <NavigationMenuItem>
-              ...
-                <SlotClone data-radix-collection-item="" ref={function}>
-                  <NavigationMenuCollectionItemSlot scope={undefined}>
-                    <Slot data-radix-collection-item="" ref={function}>
-                      <SlotClone data-radix-collection-item="" ref={function}>
-                        <Primitive.button asChild={true} data-radix-collection-item="" ref={function} ...>
-                          <Slot data-radix-collection-item="" onKeyDown={function handleEvent} ref={function}>
-                            <SlotClone data-radix-collection-item="" onKeyDown={function handleEvent} ref={function}>
-                              <Primitive.button id="radix-_R_1..." disabled={undefined} data-disabled={undefined} ...>
-                                <button
-+                                 id="radix-_R_16indlb_-trigger-radix-_R_376indlb_"
--                                 id="radix-_R_j1indlb_-trigger-radix-_R_1jj1indlb_"
-                                  disabled={undefined}
-                                  data-disabled={undefined}
-                                  data-state="closed"
-                                  aria-expanded={false}
-+                                 aria-controls="radix-_R_16indlb_-content-radix-_R_376indlb_"
--                                 aria-controls="radix-_R_j1indlb_-content-radix-_R_1jj1indlb_"
-                                  data-slot="navigation-menu-trigger"
-                                  className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 p..."
-                                  onPointerEnter={function handleEvent}
-                                  onPointerMove={function handleEvent}
-                                  onPointerLeave={function handleEvent}
-                                  onClick={function handleEvent}
-                                  onKeyDown={function}
-                                  data-radix-collection-item=""
-                                  ref={function}
-                                >
-              ...
-          <div>
-          <MobileNavbar isLoggedIn={false}>
-            <div className="flex lg:hi...">
-              <Sheet open={false} onOpenChange={function bound dispatchSetState}>
-                <Dialog data-slot="sheet" open={false} onOpenChange={function bound dispatchSetState}>
-                  <DialogProvider scope={undefined} triggerRef={{current:null}} contentRef={{current:null}} ...>
-                    <SheetTrigger asChild={true}>
-                      <DialogTrigger data-slot="sheet-trigger" asChild={true}>
-                        <Primitive.button type="button" aria-haspopup="dialog" aria-expanded={false} ...>
-                          <Slot type="button" aria-haspopup="dialog" aria-expanded={false} aria-controls="radix-_R_e..." ...>
-                            <SlotClone type="button" aria-haspopup="dialog" aria-expanded={false} ...>
-                              <Button size="icon" variant="ghost" className="text-neutr..." type="button" ...>
-                                <button
-                                  data-slot="sheet-trigger"
-                                  className={"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded..."}
-                                  type="button"
-                                  aria-haspopup="dialog"
-                                  aria-expanded={false}
-+                                 aria-controls="radix-_R_eindlb_"
--                                 aria-controls="radix-_R_71indlb_"
-                                  data-state="closed"
-                                  onClick={function handleEvent}
-                                  ref={function}
-                                >
-                    ...
-
-[00:30:54.923] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:30:54.923] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:30:54.923] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043469396} /_vercel/insights/view
-[00:30:58.279] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:30:58.436] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:30:58.436] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:30:58.436] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043472910} /_vercel/insights/view
-[00:31:00.451] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/sign-up color: rgb(120, 120, 120) color: inherit {"dp":"/sign-up","o":"http://localhost:3000/sign-up","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043474924} /_vercel/insights/view
-[00:34:07.108] Server  LOG      ✓ Compiled in 223ms
-[00:34:07.341] Server  LOG      ✓ Compiled in 122ms
-[00:34:07.539] Browser ERROR   ./components/trackifyvc/navigation/navbar.tsx:133:17
-Parsing ecmascript source code failed
-  131 |               </NavigationMenuList>
-  132 |             </NavigationMenu>
-> 133 |           </div>
-      |                 ^
-> 134 |
-      | ^
-> 135 |           {!isLoggedIn && (
-      | ^^^^^^^^^^^
-  136 |             <div className="hidden lg:flex items-center shrink-0">
-  137 |               <Link
-  138 |                 href="/sign-up"
-
-Expected '</', got 'jsx text (
-
-          )'
-
-Import trace:
-  Server Component:
-    ./components/trackifyvc/navigation/navbar.tsx
-    ./app/page.tsx
-[00:34:07.539] Browser ERROR   ./components/trackifyvc/navigation/navbar.tsx:133:17
-Parsing ecmascript source code failed
-  131 |               </NavigationMenuList>
-  132 |             </NavigationMenu>
-> 133 |           </div>
-      |                 ^
-> 134 |
-      | ^
-> 135 |           {!isLoggedIn && (
-      | ^^^^^^^^^^^
-  136 |             <div className="hidden lg:flex items-center shrink-0">
-  137 |               <Link
-  138 |                 href="/sign-up"
-
-Expected '</', got 'jsx text (
-
-          )'
-
-Import trace:
-  Server Component:
-    ./components/trackifyvc/navigation/navbar.tsx
-    ./app/page.tsx
-[00:34:07.539] Browser ERROR   ./components/trackifyvc/navigation/navbar.tsx:133:17
-Parsing ecmascript source code failed
-  131 |               </NavigationMenuList>
-  132 |             </NavigationMenu>
-> 133 |           </div>
-      |                 ^
-> 134 |
-      | ^
-> 135 |           {!isLoggedIn && (
-      | ^^^^^^^^^^^
-  136 |             <div className="hidden lg:flex items-center shrink-0">
-  137 |               <Link
-  138 |                 href="/sign-up"
-
-Expected '</', got 'jsx text (
-
-          )'
-
-Import trace:
-  Server Component:
-    ./components/trackifyvc/navigation/navbar.tsx
-    ./app/page.tsx
-[00:34:07.539] Browser ERROR   ./components/trackifyvc/navigation/navbar.tsx:133:17
-Parsing ecmascript source code failed
-  131 |               </NavigationMenuList>
-  132 |             </NavigationMenu>
-> 133 |           </div>
-      |                 ^
-> 134 |
-      | ^
-> 135 |           {!isLoggedIn && (
-      | ^^^^^^^^^^^
-  136 |             <div className="hidden lg:flex items-center shrink-0">
-  137 |               <Link
-  138 |                 href="/sign-up"
-
-Expected '</', got 'jsx text (
-
-          )'
-
-Import trace:
-  Server Component:
-    ./components/trackifyvc/navigation/navbar.tsx
-    ./app/page.tsx
-[00:34:08.264] Server  LOG      ✓ Compiled in 68ms
-[00:34:08.640] Browser ERROR   ./components/trackifyvc/navigation/navbar.tsx:133:17
-Parsing ecmascript source code failed
-  131 |               </NavigationMenuList>
-  132 |             </NavigationMenu>
-> 133 |           </div>
-      |                 ^
-> 134 |
-      | ^
-> 135 |           {!isLoggedIn && (
-      | ^^^^^^^^^^^
-  136 |             <div className="hidden lg:flex items-center shrink-0">
-  137 |               <Link
-  138 |                 href="/sign-up"
-
-Expected '</', got 'jsx text (
-
-          )'
-
-Import trace:
-  Server Component:
-    ./components/trackifyvc/navigation/navbar.tsx
-    ./app/page.tsx
-[00:34:08.673] Browser ERROR   ./components/trackifyvc/navigation/navbar.tsx:133:17
-Parsing ecmascript source code failed
-  131 |               </NavigationMenuList>
-  132 |             </NavigationMenu>
-> 133 |           </div>
-      |                 ^
-> 134 |
-      | ^
-> 135 |           {!isLoggedIn && (
-      | ^^^^^^^^^^^
-  136 |             <div className="hidden lg:flex items-center shrink-0">
-  137 |               <Link
-  138 |                 href="/sign-up"
-
-Expected '</', got 'jsx text (
-
-          )'
-
-Import trace:
-  Server Component:
-    ./components/trackifyvc/navigation/navbar.tsx
-    ./app/page.tsx
-[00:34:12.842] Server  LOG      ✓ Compiled in 96ms
-[00:35:49.030] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/security color: rgb(120, 120, 120) color: inherit {"dp":"/security","o":"http://localhost:3000/security","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043763513} /_vercel/insights/view
-[00:35:59.732] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/#home color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/#home","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043774207} /_vercel/insights/view
-[00:36:18.640] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/privacy color: rgb(120, 120, 120) color: inherit {"dp":"/privacy","o":"http://localhost:3000/privacy","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780043793128} /_vercel/insights/view
-[01:01:39.586] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045314060} /_vercel/insights/view
-[01:01:42.166] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/privacy color: rgb(120, 120, 120) color: inherit {"dp":"/privacy","o":"http://localhost:3000/privacy","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045316649} /_vercel/insights/view
-[01:01:46.231] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045320702} /_vercel/insights/view
-[01:01:54.770] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/blog color: rgb(120, 120, 120) color: inherit {"dp":"/blog","o":"http://localhost:3000/blog","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045329248} /_vercel/insights/view
-[01:02:13.518] Browser ERROR   unhandledRejection: TypeError: Cannot assign to read only property 'tronLink' of object '#<Window>'
-[01:02:13.518] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:02:13.518] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/trackify-finance-launched-atlas,-a-capital-operating-system-for-founders-and-investors-in-africa","route":"/blog/trackify-finance-launched-atlas,-a-capital-operating-system-for-founders-and-investors-in-africa"}
-[01:02:13.518] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/blog/trackify-finance-launched-atlas,-a-capital-operating-system-for-founders-and-investors-in-africa color: rgb(120, 120, 120) color: inherit {"dp":"/blog/trackify-finance-launched-atlas,-a-capital-operating-system-for-founders-and-investors-in-africa","o":"http://localhost:3000/blog/trackify-finance-launched-atlas,-a-capital-operating-system-for-founders-and-investors-in-africa","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045348002} /_vercel/insights/view
-[01:02:13.667] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
-[01:02:15.615] Browser ERROR   unhandledRejection: TypeError: Cannot assign to read only property 'tronLink' of object '#<Window>'
-[01:02:15.615] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:02:15.615] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog","route":"/blog"}
-[01:02:15.615] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/blog color: rgb(120, 120, 120) color: inherit {"dp":"/blog","o":"http://localhost:3000/blog","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045350048} /_vercel/insights/view
-[01:02:15.615] Browser WARN    Image with src "/blog/atlas-launch-africa.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
-[01:02:15.814] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
-[01:02:16.601] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:02:16.601] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/trackify-in-pitch-competition-at-afts-accra","route":"/blog/trackify-in-pitch-competition-at-afts-accra"}
-[01:02:16.601] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/blog/trackify-in-pitch-competition-at-afts-accra color: rgb(120, 120, 120) color: inherit {"dp":"/blog/trackify-in-pitch-competition-at-afts-accra","o":"http://localhost:3000/blog/trackify-in-pitch-competition-at-afts-accra","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045351086} /_vercel/insights/view
-[01:02:16.601] Browser ERROR   unhandledRejection: TypeError: Cannot assign to read only property 'tronLink' of object '#<Window>'
-[01:02:16.895] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
-[01:02:18.648] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:02:18.648] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog","route":"/blog"}
-[01:02:18.648] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/blog color: rgb(120, 120, 120) color: inherit {"dp":"/blog","o":"http://localhost:3000/blog","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045353102} /_vercel/insights/view
-[01:02:18.648] Browser ERROR   unhandledRejection: TypeError: Cannot assign to read only property 'tronLink' of object '#<Window>'
-[01:02:18.648] Browser WARN    Image with src "/blog/atlas-launch-africa.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
-[01:02:18.885] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
-[01:03:11.849] Server  LOG      ✓ Compiled in 87ms
-[01:03:12.539] Browser ERROR   uncaughtError: ReferenceError: Link is not defined
-[01:03:13.926] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[01:03:14.074] Server  LOG      ✓ Compiled in 36ms
-[01:03:15.540] Browser ERROR   unhandledRejection: TypeError: Cannot assign to read only property 'tronLink' of object '#<Window>'
-[01:03:15.540] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:03:15.540] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog","route":"/blog"}
-[01:03:15.540] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/blog color: rgb(120, 120, 120) color: inherit {"dp":"/blog","o":"http://localhost:3000/blog","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045409509} /_vercel/insights/view
-[01:03:16.539] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
-[01:03:24.144] Browser WARN    Image with src "/blog/atlas-launch-africa.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
-[01:03:26.809] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/#home color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/#home","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045421286} /_vercel/insights/view
-[01:12:40.614] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ai-agents color: rgb(120, 120, 120) color: inherit {"dp":"/ai-agents","o":"http://localhost:3000/ai-agents","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045975109} /_vercel/insights/view
-[01:12:45.050] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/#home color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/#home","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045979543} /_vercel/insights/view
-[01:12:48.355] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/finna color: rgb(120, 120, 120) color: inherit {"dp":"/finna","o":"http://localhost:3000/finna","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780045982854} /_vercel/insights/view
-[01:17:19.283] Server  LOG      ✓ Compiled in 67ms
-[01:17:22.797] Server  LOG      ✓ Compiled in 46ms
-[01:17:23.276] Server  LOG      ✓ Compiled in 36ms
-[01:17:24.318] Server  LOG      ✓ Compiled in 44ms
-[01:17:24.773] Server  LOG      ✓ Compiled in 38ms
-[01:17:25.216] Server  LOG      ✓ Compiled in 36ms
-[01:17:25.998] Server  LOG      ✓ Compiled in 43ms
-[01:19:51.054] Browser ERROR   unhandledRejection: TypeError: Cannot assign to read only property 'tronLink' of object '#<Window>'
-[01:19:51.054] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:19:51.054] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/finna","route":"/finna"}
-[01:19:51.054] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/finna color: rgb(120, 120, 120) color: inherit {"dp":"/finna","o":"http://localhost:3000/finna","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1780046405553} /_vercel/insights/view
-[01:19:51.158] Browser ERROR   uncaughtError: TypeError: Cannot assign to read only property 'ethereum' of object '#<Window>'
-[01:22:05.027] Server  LOG      ✓ Compiled in 55ms
-[01:22:05.407] Server  LOG      ✓ Compiled in 117ms
-[01:22:05.838] Server  LOG      ✓ Compiled in 34ms
-[01:22:06.242] Server  LOG      ✓ Compiled in 46ms
-[01:22:11.388] Server  LOG      ✓ Compiled in 45ms
+[00:00:00.975] Server  LOG      ✓ Ready in 754ms
+[00:00:05.217] Server  LOG     MongoDB connected successfully (db.ts)
+[00:00:05.465] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:05.578] Server  LOG     Found user by _id!
+[00:00:05.578] Server  LOG     User found via "_id" ":" {}
+[00:00:05.578] Server  LOG     Returning session with role: {}
+[00:00:06.045] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:06.824] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:06.824] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/founder/settings","route":"/founder/settings"}
+[00:00:06.824] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/founder/settings color: rgb(120, 120, 120) color: inherit {"dp":"/founder/settings","o":"http://localhost:3000/founder/settings","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1783251901700} /_vercel/insights/view
+[00:00:07.051] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:07.066] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:07.163] Server  LOG     Found user by _id!
+[00:00:07.163] Server  LOG     User found via "_id" ":" {}
+[00:00:07.163] Server  LOG     Returning session with role: {}
+[00:00:07.179] Server  LOG     Found user by _id!
+[00:00:07.179] Server  LOG     User found via "_id" ":" {}
+[00:00:07.179] Server  LOG     Returning session with role: {}
+[00:00:07.736] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:07.764] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:07.848] Server  LOG     Found user by _id!
+[00:00:07.848] Server  LOG     User found via "_id" ":" {}
+[00:00:07.849] Server  LOG     Returning session with role: {}
+[00:00:07.873] Server  LOG     Found user by _id!
+[00:00:07.874] Server  LOG     User found via "_id" ":" {}
+[00:00:07.874] Server  LOG     Returning session with role: {}
+[00:00:09.427] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:09.431] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:09.537] Server  LOG     Found user by _id!
+[00:00:09.537] Server  LOG     User found via "_id" ":" {}
+[00:00:09.538] Server  LOG     Returning session with role: {}
+[00:00:09.541] Server  LOG     Found user by _id!
+[00:00:09.541] Server  LOG     User found via "_id" ":" {}
+[00:00:09.541] Server  LOG     Returning session with role: {}
+[00:00:09.645] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:09.654] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:09.755] Server  LOG     Found user by _id!
+[00:00:09.755] Server  LOG     User found via "_id" ":" {}
+[00:00:09.755] Server  LOG     Returning session with role: {}
+[00:00:09.764] Server  LOG     Found user by _id!
+[00:00:09.764] Server  LOG     User found via "_id" ":" {}
+[00:00:09.764] Server  LOG     Returning session with role: {}
+[00:00:13.368] Server  LOG        Reload env: .env
+[00:00:13.717] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:13.828] Server  LOG     Found user by _id!
+[00:00:13.829] Server  LOG     User found via "_id" ":" {}
+[00:00:13.829] Server  LOG     Returning session with role: {}
+[00:00:23.023] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/founder/fundraising color: rgb(120, 120, 120) color: inherit {"dp":"/founder/fundraising","o":"http://localhost:3000/founder/fundraising","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1783251918449} /_vercel/insights/view
+[00:00:23.276] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:23.387] Server  LOG     Found user by _id!
+[00:00:23.387] Server  LOG     User found via "_id" ":" {}
+[00:00:23.387] Server  LOG     Returning session with role: {}
+[00:00:23.472] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:23.582] Server  LOG     Found user by _id!
+[00:00:23.582] Server  LOG     User found via "_id" ":" {}
+[00:00:23.583] Server  LOG     Returning session with role: {}
+[00:00:23.834] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:23.945] Server  LOG     Found user by _id!
+[00:00:23.946] Server  LOG     User found via "_id" ":" {}
+[00:00:23.946] Server  LOG     Returning session with role: {}
+[00:00:25.537] Server  LOG     Querying database: "atlas" "for user ID:" "6943b1c951b8302d12f49791" "Email:" "mytrackifyapp@gmail.com"
+[00:00:25.650] Server  LOG     Found user by _id!
+[00:00:25.651] Server  LOG     User found via "_id" ":" {}
+[00:00:25.651] Server  LOG     Returning session with role: {}
+[00:01:08.086] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:08.227] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:01:08.227] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/invest/695e137f07376656f68c1b0e","route":"/invest/[id]"}
+[00:01:08.227] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/invest/695e137f07376656f68c1b0e color: rgb(120, 120, 120) color: inherit {"dp":"/invest/[id]","o":"http://localhost:3000/invest/695e137f07376656f68c1b0e","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.3.1","sv":"0.1.3","ts":1783251963659} /_vercel/insights/view

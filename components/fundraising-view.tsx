@@ -25,7 +25,6 @@ import {
   BarChart3,
   Share2,
   Download,
-  Edit,
   Plus,
   X,
   RefreshCw,
@@ -37,6 +36,12 @@ import { AddInvestorDialog } from "@/components/add-investor-dialog"
 import { UploadButton } from "@uploadthing/react"
 import type { OurFileRouter } from "@/app/api/uploadthing/core"
 import { cn } from "@/lib/utils"
+import { toast } from "sonner"
+import { FundraiseRaisePanel } from "@/components/fundraising/fundraise-raise-panel"
+import { FundraiseDetailsPanel } from "@/components/fundraising/fundraise-details-panel"
+import { EditFundraiseDetailsDialog } from "@/components/fundraising/edit-fundraise-details-dialog"
+import type { PendingSettlementGroup } from "@/lib/fundraising/platform-fees"
+import type { PlatformFee, PlatformFeeSummary } from "@/lib/fundraising/types"
 
 const statusColors: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
   Committed: "default",
@@ -47,6 +52,20 @@ const statusColors: Record<string, "default" | "secondary" | "outline" | "destru
 
 interface Fundraise {
   id: string
+  companyName?: string
+  tagline?: string
+  website?: string
+  headquarters?: string
+  teamSize?: string
+  executiveSummary?: string
+  founderName?: string
+  founderTitle?: string
+  founderBio?: string
+  founderPhoto?: string | null
+  demoVideoUrl?: string
+  dataRoomUrl?: string
+  companyLogo?: string | null
+  coverImage?: string | null
   roundType: string
   targetAmount: number
   committedAmount: number
@@ -67,7 +86,19 @@ interface Fundraise {
   status: string
   daysRemaining: number
   fundraisingData: Array<{ month: string; raised: number }>
+  receivingWalletAddress?: string | null
+  receivingChainLabel?: string | null
   createdAt?: string | Date
+}
+
+interface OnChainPayment {
+  id: string
+  payerAddress: string
+  amountUsd: number
+  stablecoin: string
+  chainId: string
+  txHash: string
+  createdAt: string
 }
 
 interface Investor {
@@ -94,10 +125,16 @@ interface InvestorStats {
 
 export function FundraisingView() {
   const [addInvestorOpen, setAddInvestorOpen] = useState(false)
+  const [editDetailsOpen, setEditDetailsOpen] = useState(false)
   const [activeTab, setActiveTab] = useState("overview")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [fundraise, setFundraise] = useState<Fundraise | null>(null)
+  const [onChainPayments, setOnChainPayments] = useState<OnChainPayment[]>([])
+  const [platformFeeSummary, setPlatformFeeSummary] = useState<PlatformFeeSummary | null>(null)
+  const [platformFees, setPlatformFees] = useState<PlatformFee[]>([])
+  const [settlementGroups, setSettlementGroups] = useState<PendingSettlementGroup[]>([])
+  const [bindingWallet, setBindingWallet] = useState(false)
   const [investors, setInvestors] = useState<Investor[]>([])
   const [investorStats, setInvestorStats] = useState<InvestorStats>({
     total: 0,
@@ -118,6 +155,10 @@ export function FundraisingView() {
 
       if (result.success) {
         setFundraise(result.fundraise)
+        setOnChainPayments(result.payments ?? [])
+        setPlatformFeeSummary(result.platformFees?.summary ?? null)
+        setPlatformFees(result.platformFees?.fees ?? [])
+        setSettlementGroups(result.platformFees?.settlementGroups ?? [])
       }
     } catch (err) {
       console.error("Error fetching fundraise:", err)
@@ -156,8 +197,24 @@ export function FundraisingView() {
 
   const handleInvestorAdded = () => {
     fetchInvestors()
-    fetchFundraise() // Refresh to update committed amount
+    fetchFundraise()
   }
+
+  async function bindReceivingWallet() {
+    setBindingWallet(true)
+    try {
+      const res = await fetch("/api/founder/fundraise/wallet", { method: "POST" })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || "Failed to connect wallet")
+      toast.success("Receiving wallet linked")
+      await fetchFundraise()
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to connect wallet")
+    } finally {
+      setBindingWallet(false)
+    }
+  }
+
 
   const formatDate = (date: string | Date) => {
     if (!date) return "—"
@@ -179,19 +236,24 @@ export function FundraisingView() {
     <div className="space-y-6 p-4 sm:p-6 lg:p-8">
       <PageHeader
         title="Fundraising"
-        description="Manage your fundraising round, investor relationships, and documents"
+        description="Raise your round in USDC and USDT — investors pay on-chain to your wallet"
         actions={
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
-            <Button variant="outline" size="sm" className="w-full sm:w-auto">
-              <Share2 className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Share Data Room</span>
-              <span className="sm:hidden">Share</span>
-            </Button>
-            <Button size="sm" onClick={() => setAddInvestorOpen(true)} className="w-full sm:w-auto">
-              <Plus className="h-4 w-4 mr-2" />
-              Add Investor
-            </Button>
-          </div>
+          fundraise ? (
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+              <Button
+                size="sm"
+                className="w-full sm:w-auto bg-[#c1ff72] text-neutral-950 hover:bg-[#b4f25f]"
+                onClick={() => setActiveTab("raise")}
+              >
+                <TrendingUp className="h-4 w-4 mr-2" />
+                Raise funds
+              </Button>
+              <Button size="sm" onClick={() => setAddInvestorOpen(true)} className="w-full sm:w-auto">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Investor
+              </Button>
+            </div>
+          ) : undefined
         }
       />
 
@@ -199,6 +261,13 @@ export function FundraisingView() {
         open={addInvestorOpen}
         onOpenChange={setAddInvestorOpen}
         onSuccess={handleInvestorAdded}
+      />
+
+      <EditFundraiseDetailsDialog
+        open={editDetailsOpen}
+        onOpenChange={setEditDetailsOpen}
+        fundraise={fundraise}
+        onSuccess={fetchFundraise}
       />
 
       {loading ? (
@@ -218,7 +287,10 @@ export function FundraisingView() {
       ) : !fundraise ? (
         <div className="flex flex-col items-center justify-center py-12 text-center">
           <Target className="h-12 w-12 text-muted-foreground mb-3" />
-          <p className="text-muted-foreground mb-4">No active fundraise found.</p>
+          <p className="text-muted-foreground mb-2">No active fundraise found.</p>
+          <p className="text-sm text-muted-foreground mb-4 max-w-md">
+            Start a round to accept investments in USDC and USDT on Base, Polygon, or Ethereum.
+          </p>
           <Button asChild>
             <a href="/founder">Start a Fundraise</a>
           </Button>
@@ -233,6 +305,21 @@ export function FundraisingView() {
           <TabsTrigger value="milestones" className="text-xs sm:text-sm py-2 sm:py-1.5">Milestones</TabsTrigger>
           <TabsTrigger value="updates" className="text-xs sm:text-sm py-2 sm:py-1.5">Updates</TabsTrigger>
         </TabsList>
+
+        {/* Raise Tab — stablecoin fundraising */}
+        <TabsContent value="raise" className="mt-4 sm:mt-6">
+          <FundraiseRaisePanel
+            fundraise={fundraise}
+            onChainPayments={onChainPayments}
+            platformFeeSummary={platformFeeSummary}
+            platformFees={platformFees}
+            settlementGroups={settlementGroups}
+            bindingWallet={bindingWallet}
+            onBindWallet={() => void bindReceivingWallet()}
+            onFeesSettled={fetchFundraise}
+            formatCurrency={formatCurrency}
+          />
+        </TabsContent>
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-4 sm:space-y-6 mt-4 sm:mt-6">
@@ -412,53 +499,13 @@ export function FundraisingView() {
             </CardContent>
           </Card>
 
-          {/* Fundraising Setup */}
-          <Card>
-            <CardHeader>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                  <CardTitle>Fundraising Round Details</CardTitle>
-                  <CardDescription>Configure your fundraising round settings</CardDescription>
-                </div>
-                <Button variant="outline" size="sm" className="w-full sm:w-auto">
-                  <Edit className="h-4 w-4 mr-2" />
-                  Edit
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-1">Round Type</p>
-                    <p className="text-lg font-semibold">{fundraise.roundType}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-1">Valuation</p>
-                    <p className="text-lg font-semibold">
-                      {fundraise.preMoneyValuation ? `${formatCurrency(fundraise.preMoneyValuation)} Pre-Money` : "—"}
-                    </p>
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-1">Use of Funds</p>
-                    <p className="text-sm">
-                      {fundraise.useOfFunds.length > 0
-                        ? fundraise.useOfFunds.join(", ")
-                        : fundraise.useOfFundsBreakdown || "—"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-1">Timeline</p>
-                    <p className="text-sm">
-                      Started: {formatDate(fundraise.startDate)} | Target Close: {formatDate(fundraise.targetCloseDate)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          {/* Fundraise details */}
+          <FundraiseDetailsPanel
+            fundraise={fundraise}
+            formatCurrency={formatCurrency}
+            formatDate={formatDate}
+            onEdit={() => setEditDetailsOpen(true)}
+          />
         </TabsContent>
 
         {/* Investors Tab */}

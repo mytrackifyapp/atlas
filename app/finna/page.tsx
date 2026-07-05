@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import { FinnaChatFullPage } from "@/components/finna-chat-fullpage"
 import type { Metadata } from "next"
 
@@ -9,7 +10,9 @@ export const metadata: Metadata = {
 export default function FinnaPage() {
   return (
     <main className="min-h-screen bg-background">
-      <FinnaChatFullPage />
+      <Suspense fallback={null}>
+        <FinnaChatFullPage />
+      </Suspense>
     </main>
   )
 }

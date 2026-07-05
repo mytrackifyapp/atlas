@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 
+import { getSessionWithRole } from "@/lib/auth-helpers"
+
 export const dynamic = "force-dynamic"
 
 type ElevenLabsVoicesResponse = {
@@ -11,6 +13,11 @@ type ElevenLabsVoicesResponse = {
 }
 
 export async function GET() {
+  const session = await getSessionWithRole()
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
   const apiKey = process.env.ELEVENLABS_API_KEY
   if (!apiKey) {
     return NextResponse.json(

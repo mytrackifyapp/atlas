@@ -1,17 +1,19 @@
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, BarChart3, Target, Users, TrendingUp, Globe2, Sparkles } from "lucide-react"
+import { ArrowRight, BarChart3, Brain, Briefcase, Flag, FolderLock, Globe2, Network, PieChart, Presentation, Rocket, Sparkles, Target, TrendingUp, Users, Workflow } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { getSessionWithRole } from "@/lib/auth-helpers"
 import { roleConfigs } from "@/lib/role-config"
+import { LandingHero } from "@/components/landing-hero"
+import { LandingProductsShowcase } from "@/components/landing-products-showcase"
 import { LandingAIAssistant } from "@/components/landing-ai-assistant"
 import { InvestmentStageCards } from "@/components/investment-stage-cards"
 import { TrackifyVcTestimonialsMarquee } from "@/components/trackifyvc/testimonials-marquee"
 import { TrackifyVcStats } from "@/components/trackifyvc/stats"
 import { TrackifyVcFaq } from "@/components/trackifyvc/faq"
-import TrackifyVcNavbar from "@/components/trackifyvc/navigation/navbar"
+import TrackifyVcOriginalCta from "@/components/trackifyvc/original-cta"
 
 export const dynamic = "force-dynamic"
 
@@ -35,98 +37,17 @@ export default async function Page() {
       : "/sign-up"
   return (
     <div className="min-h-screen bg-background">
-      <TrackifyVcNavbar />
+      <LandingHero
+        isAuthenticated={isAuthenticated}
+        hasCompletedOnboarding={hasCompletedOnboarding}
+        dashboardUrl={dashboardUrl}
+      />
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden pt-6 pb-6 sm:pt-10 sm:pb-10 lg:pt-12 lg:pb-12">
-        <div className="mx-auto max-w-screen-2xl px-3 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-card shadow-lg sm:rounded-[2rem]">
-            {/* Background image (no overlays / filters) */}
-            <img
-              src="/trackify-hero4.png"
-              alt="Trackify product UI"
-              className="absolute inset-0 h-full w-full object-cover object-[center_85%] sm:object-bottom"
-            />
-            <div
-              className="absolute inset-0 bg-black/30 pointer-events-none sm:bg-black/25"
-              aria-hidden
-            />
+      <LandingProductsShowcase />
 
-            {/* Content — sits in the open top area of the image */}
-            <div className="relative flex min-h-[min(92vh,520px)] items-start justify-center px-4 pt-7 pb-32 sm:min-h-[630px] sm:px-10 sm:pt-14 sm:pb-44 lg:min-h-[720px] lg:px-16 lg:pt-16 lg:pb-52">
-              <div className="mx-auto flex w-full max-w-4xl flex-col items-center text-center">
-                <h1 className="w-full text-[1.375rem] font-bold leading-[1.25] tracking-tight text-white sm:text-4xl sm:leading-tight lg:text-[2.875rem] lg:leading-[1.1]">
-                  <span className="block whitespace-nowrap text-[1.375rem] sm:text-inherit">
-                    The Operating System for
-                  </span>
-                  <span className="block sm:hidden">Startups &amp; Investors</span>
-                  <span className="block sm:hidden">in Africa</span>
-                  <span className="hidden sm:block">Startups &amp; Investors in Africa</span>
-                </h1>
-
-                <p className="mt-4 w-full max-w-[18.5rem] text-pretty text-[0.8125rem] font-bold leading-[1.6] text-white sm:mt-6 sm:max-w-xl sm:text-base sm:leading-relaxed lg:text-lg">
-                  Manage finance, run fundraising, collaborate with investors, organize documents,
-                  track updates, and power operations with AI — all in one place.
-                </p>
-
-                <div className="mt-7 flex w-full justify-center px-2 sm:mt-10 sm:px-0">
-                  {isAuthenticated ? (
-                    <Button
-                      size="lg"
-                      asChild
-                      className="h-11 w-full max-w-[280px] bg-primary text-primary-foreground hover:bg-primary/90 px-8 text-base sm:h-12 sm:w-auto sm:max-w-none sm:px-10"
-                    >
-                      <Link href={dashboardUrl}>
-                        {hasCompletedOnboarding ? "View Dashboard" : "Complete Onboarding"}
-                        <ArrowRight className="ml-2 h-4 w-4 shrink-0" />
-                      </Link>
-                    </Button>
-                  ) : (
-                    <Button
-                      size="lg"
-                      asChild
-                      className="h-11 w-full max-w-[280px] bg-primary text-primary-foreground hover:bg-primary/90 px-8 text-base sm:h-12 sm:w-auto sm:max-w-none sm:px-10"
-                    >
-                      <Link href="/sign-up">
-                        Get Started
-                        <ArrowRight className="ml-2 h-4 w-4 shrink-0" />
-                      </Link>
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section - Commented out */}
-      {/* <section className="py-16 border-y border-border/40 bg-muted/30">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center border-r border-border/40 last:border-r-0">
-              <div className="text-4xl font-bold text-foreground mb-2">$1.4M+</div>
-              <div className="text-sm text-muted-foreground">Total Funding</div>
-            </div>
-            <div className="text-center border-r border-border/40 last:border-r-0">
-              <div className="text-4xl font-bold text-foreground mb-2">10+</div>
-              <div className="text-sm text-muted-foreground">Active Startups</div>
-            </div>
-            <div className="text-center border-r border-border/40 last:border-r-0">
-              <div className="text-4xl font-bold text-foreground mb-2">20+</div>
-              <div className="text-sm text-muted-foreground">Investors</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-foreground mb-2">6+</div>
-              <div className="text-sm text-muted-foreground">Countries</div>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
-      {/* Marquee Section */}
+      {/* Marquee Section — hidden */}
       <section
-        className="hidden py-10 sm:block sm:py-12 border-y border-border/40 bg-muted/30 overflow-hidden"
+        className="hidden"
         aria-label="Startups using Trackify"
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-8 mb-6">
@@ -181,48 +102,61 @@ export default async function Page() {
                 title: "Portfolio Management",
                 description:
                   "Track performance, monitor metrics, and visualize your entire portfolio in real-time with advanced analytics.",
+                icon: Briefcase,
               },
               {
                 title: "Deal Flow Pipeline",
                 description:
                   "Streamline your investment process with intelligent deal scoring and automated workflow management.",
+                icon: Workflow,
               },
               {
                 title: "Fundraising Tools",
                 description:
                   "Manage your fundraising journey with investor tracking, document management, and progress visualization.",
+                icon: Rocket,
               },
               {
                 title: "Network Intelligence",
                 description:
                   "Connect with the right people at the right time through our comprehensive ecosystem mapping.",
+                icon: Network,
               },
               {
                 title: "Market Insights",
                 description:
                   "Access real-time market data, sector trends, and competitive intelligence across Africa.",
+                icon: Globe2,
               },
               {
                 title: "AI-Powered Analysis",
                 description:
                   "Leverage machine learning for deal recommendations, risk assessment, and predictive analytics.",
+                icon: Brain,
               },
-            ].map((feature) => (
+            ].map((feature) => {
+              const Icon = feature.icon
+              return (
               <Card
                 key={feature.title}
                 className="group relative flex min-h-[168px] flex-col justify-between overflow-hidden rounded-3xl border border-white/15 bg-white/[0.07] p-7 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-all duration-300 hover:border-white/25 hover:bg-white/[0.11] hover:shadow-[0_16px_48px_rgba(0,0,0,0.55)] sm:min-h-[176px] sm:p-8 before:pointer-events-none before:absolute before:inset-x-10 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/35 before:to-transparent"
               >
-                <div className="relative z-10 space-y-2">
-                  <h3 className="text-lg font-semibold tracking-tight text-white sm:text-xl">
-                    {feature.title}
-                  </h3>
-                  <div className="h-0.5 w-8 rounded-full bg-primary/80 transition-all duration-300 group-hover:w-12" />
+                <div className="relative z-10 space-y-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 transition-colors duration-300 group-hover:border-primary/35 group-hover:bg-primary/15">
+                    <Icon className="h-5 w-5 text-primary" strokeWidth={1.75} />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-semibold tracking-tight text-white sm:text-xl">
+                      {feature.title}
+                    </h3>
+                    <div className="h-0.5 w-8 rounded-full bg-primary/80 transition-all duration-300 group-hover:w-12" />
+                  </div>
                 </div>
                 <p className="relative z-10 mt-4 text-sm leading-relaxed text-white/60 sm:text-[0.9375rem]">
                   {feature.description}
                 </p>
               </Card>
-            ))}
+            )})}
           </div>
         </div>
       </section>
@@ -373,48 +307,61 @@ export default async function Page() {
                 title: "Investor Pipeline",
                 description:
                   "Track and manage relationships with investors from first contact through commitment. Never lose a lead.",
+                icon: Users,
               },
               {
                 title: "Fundraising Tracker",
                 description:
                   "Visualize progress toward your round target, committed vs. pipeline, and runway at a glance.",
+                icon: TrendingUp,
               },
               {
                 title: "Secure Data Room",
                 description:
                   "Share pitch decks, financials, and legal docs with investors in a controlled, auditable data room.",
+                icon: FolderLock,
               },
               {
                 title: "Pitch & Materials",
                 description:
                   "Organize pitch decks, one-pagers, and updates. Share the right version with the right investor.",
+                icon: Presentation,
               },
               {
                 title: "Cap Table & Equity",
                 description:
                   "Keep your cap table and equity plan clear for investors. Model scenarios for new rounds and exits.",
+                icon: PieChart,
               },
               {
                 title: "Milestones & Metrics",
                 description:
                   "Track KPIs, milestones, and progress that investors care about. Report and update in one place.",
+                icon: Flag,
               },
-            ].map((feature) => (
+            ].map((feature) => {
+              const Icon = feature.icon
+              return (
               <Card
                 key={feature.title}
                 className="group relative flex min-h-[168px] flex-col justify-between overflow-hidden rounded-3xl border border-white/15 bg-white/[0.07] p-7 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-all duration-300 hover:border-white/25 hover:bg-white/[0.11] hover:shadow-[0_16px_48px_rgba(0,0,0,0.55)] sm:min-h-[176px] sm:p-8 before:pointer-events-none before:absolute before:inset-x-10 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/35 before:to-transparent"
               >
-                <div className="relative z-10 space-y-2">
-                  <h3 className="text-lg font-semibold tracking-tight text-white sm:text-xl">
-                    {feature.title}
-                  </h3>
-                  <div className="h-0.5 w-8 rounded-full bg-primary/80 transition-all duration-300 group-hover:w-12" />
+                <div className="relative z-10 space-y-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 transition-colors duration-300 group-hover:border-primary/35 group-hover:bg-primary/15">
+                    <Icon className="h-5 w-5 text-primary" strokeWidth={1.75} />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-semibold tracking-tight text-white sm:text-xl">
+                      {feature.title}
+                    </h3>
+                    <div className="h-0.5 w-8 rounded-full bg-primary/80 transition-all duration-300 group-hover:w-12" />
+                  </div>
                 </div>
                 <p className="relative z-10 mt-4 text-sm leading-relaxed text-white/60 sm:text-[0.9375rem]">
                   {feature.description}
                 </p>
               </Card>
-            ))}
+            )})}
           </div>
 
           <div className="mt-12 text-center">
@@ -538,7 +485,7 @@ export default async function Page() {
                 />
               </div>
               <p className="mt-4 text-left text-base font-semibold leading-snug text-foreground sm:text-lg">
-                AI Employees: Meet Mark - Role : Lawyer
+                AI Employees: Meet Vera — Legal Counsel
               </p>
             </Link>
           </div>
@@ -625,8 +572,18 @@ export default async function Page() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 bg-black py-12">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <footer className="border-t border-white/10 bg-black">
+        <TrackifyVcOriginalCta
+          ctaHref={isAuthenticated ? dashboardUrl : "/sign-up"}
+          ctaLabel={
+            isAuthenticated
+              ? hasCompletedOnboarding
+                ? "View Dashboard"
+                : "Complete Onboarding"
+              : "Get Started"
+          }
+        />
+        <div className="mx-auto max-w-7xl border-t border-white/10 px-6 py-12 lg:px-8">
           <div className="mb-8 grid gap-8 md:grid-cols-4">
             <div>
               <Link href="/" className="mb-4 inline-block">

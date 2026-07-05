@@ -81,7 +81,7 @@ export function FounderDashboard() {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6 lg:space-y-8">
+    <div className="space-y-5 sm:space-y-6 lg:space-y-8">
       <StartFundraiseDialog
         open={startFundraiseOpen}
         onOpenChange={setStartFundraiseOpen}
@@ -192,7 +192,7 @@ export function FounderDashboard() {
                   </div>
                   <div className="flex gap-2 pt-2">
                     <Button variant="outline" size="sm" asChild>
-                      <a href="/founder/fundraising">View Data Room</a>
+                      <a href="/founder/fundraising">Raise with stablecoins</a>
                     </Button>
                     <Button variant="outline" size="sm">
                       Share Raise Page

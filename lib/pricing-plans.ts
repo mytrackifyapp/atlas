@@ -31,6 +31,7 @@ export const PRICING_PLANS: PricingPlan[] = [
       "Document storage (500 MB)",
       "Investor pipeline (up to 25 contacts)",
       "Monthly metrics snapshot",
+      "50 AI credits / month",
       "Community support",
     ],
     notIncluded: ["AI employees", "Advanced analytics", "Team seats"],
@@ -42,7 +43,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     monthlyPrice: 20,
     annualPrice: 16,
     cta: "Start Pro trial",
-    href: "/sign-up?plan=pro",
+    href: "/checkout?plan=pro&interval=annual",
     highlighted: true,
     features: [
       "Everything in Free",
@@ -51,6 +52,7 @@ export const PRICING_PLANS: PricingPlan[] = [
       "Finance dashboard & runway tracking",
       "3 AI employees (CFO, Lawyer, Marketer)",
       "Finna AI assistant",
+      "500 AI credits / month",
       "Document storage (10 GB)",
       "Exportable reports",
       "Email support",
@@ -63,7 +65,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     monthlyPrice: 50,
     annualPrice: 40,
     cta: "Start Team trial",
-    href: "/sign-up?plan=team",
+    href: "/checkout?plan=team&interval=annual",
     features: [
       "Everything in Pro",
       "Up to 10 seats",
@@ -71,6 +73,7 @@ export const PRICING_PLANS: PricingPlan[] = [
       "Deal flow pipeline & scoring",
       "Portfolio analytics",
       "Unlimited AI employees",
+      "2,500 AI credits / month",
       "Shared workspaces & permissions",
       "Priority support",
     ],
@@ -97,6 +100,16 @@ export const PRICING_PLANS: PricingPlan[] = [
 ]
 
 export const PRICING_FAQS = [
+  {
+    question: "How do AI credits work?",
+    answer:
+      "Each AI message uses credits based on complexity — simple Finna replies start at 1 credit, specialist agent chats at 2+, and longer tool-heavy runs use more. Credits reset monthly on your plan allowance (50 on Free, 500 on Pro, 2,500 on Team).",
+  },
+  {
+    question: "How do I pay with USDT or USDC?",
+    answer:
+      "Choose Pro or Team on the checkout page, pick your network (Base, Polygon, or Ethereum), connect your wallet, and send the exact stablecoin amount shown. Your plan activates automatically after on-chain verification.",
+  },
   {
     question: "Can I change plans later?",
     answer:
@@ -135,6 +148,7 @@ export const COMPARISON_FEATURES = [
   { label: "Data room", free: "—", pro: "✓", team: "✓", enterprise: "✓" },
   { label: "Investor pipeline", free: "25 contacts", pro: "Unlimited", team: "Unlimited", enterprise: "Unlimited" },
   { label: "Finance dashboard", free: "—", pro: "✓", team: "✓", enterprise: "✓" },
+  { label: "AI credits / month", free: "50", pro: "500", team: "2,500", enterprise: "Custom" },
   { label: "AI employees", free: "—", pro: "3", team: "Unlimited", enterprise: "Unlimited" },
   { label: "Finna AI", free: "—", pro: "✓", team: "✓", enterprise: "✓" },
   { label: "Deal flow & portfolio", free: "—", pro: "—", team: "✓", enterprise: "✓" },

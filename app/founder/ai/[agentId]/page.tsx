@@ -1,10 +1,11 @@
 import { redirect } from "next/navigation"
 
+import { AgentDetailView } from "@/components/agent-detail-view"
 import { DashboardShell } from "@/components/dashboard-shell"
-import { AgentChatView } from "@/components/agent-chat-view"
+import { isCatalogAgentId, resolveAgentId } from "@/lib/ai-agents-catalog"
 import { getSessionWithRole } from "@/lib/auth-helpers"
 
-export default async function FounderAgentChatPage({
+export default async function FounderAgentPage({
   params,
 }: {
   params: Promise<{ agentId: string }>
@@ -16,10 +17,13 @@ export default async function FounderAgentChatPage({
   const { agentId } = await params
   if (!agentId) redirect("/founder/ai")
 
+  const resolved = resolveAgentId(agentId)
+  if (!isCatalogAgentId(resolved)) redirect("/founder/ai")
+  if (resolved !== agentId) redirect(`/founder/ai/${resolved}`)
+
   return (
     <DashboardShell>
-      <AgentChatView agentId={agentId} />
+      <AgentDetailView agentId={resolved} />
     </DashboardShell>
   )
 }
-

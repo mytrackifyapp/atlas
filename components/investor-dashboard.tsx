@@ -107,7 +107,7 @@ export function InvestorDashboard() {
   // Show loading state
   if (loading && !data) {
     return (
-      <div className="p-4 sm:p-6 lg:p-8 space-y-6">
+      <div className="space-y-5 sm:space-y-6">
         <div className="flex items-center justify-center py-12">
           <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
         </div>
@@ -118,7 +118,7 @@ export function InvestorDashboard() {
   // Show error state
   if (error && !data) {
     return (
-      <div className="p-4 sm:p-6 lg:p-8 space-y-6">
+      <div className="space-y-5 sm:space-y-6">
         <div className="text-center py-12">
           <p className="text-muted-foreground mb-4">{error}</p>
           <Button onClick={fetchDashboardData}>
@@ -164,7 +164,7 @@ export function InvestorDashboard() {
   // Calculate growth percentage for badge
   const growthPercentage = data?.kpis.portfolioValue.change || "0%"
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6">
+    <div className="space-y-5 sm:space-y-6">
       <PageHeader
         title="Dashboard"
         description="Your portfolio at a glance"

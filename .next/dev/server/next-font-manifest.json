@@ -1,44 +1,16 @@
 {
   "app": {
-    "[project]/app/_not-found/page": [
+    "[project]/app/founder/fundraising/page": [
       "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.479bea2b.woff2"
+      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
     ],
-    "[project]/app/ai-agents/page": [
+    "[project]/app/founder/settings/page": [
       "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.479bea2b.woff2"
+      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
     ],
-    "[project]/app/blog/page": [
+    "[project]/app/invest/[id]/page": [
       "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.479bea2b.woff2"
-    ],
-    "[project]/app/contact/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.479bea2b.woff2"
-    ],
-    "[project]/app/finna/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.479bea2b.woff2"
-    ],
-    "[project]/app/integrations/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.479bea2b.woff2"
-    ],
-    "[project]/app/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.479bea2b.woff2"
-    ],
-    "[project]/app/privacy/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.479bea2b.woff2"
-    ],
-    "[project]/app/security/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.479bea2b.woff2"
-    ],
-    "[project]/app/sign-up/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.479bea2b.woff2"
+      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
     ]
   },
   "appUsingSizeAdjust": true,

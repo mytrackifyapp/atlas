@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 
+import { getSessionWithRole } from "@/lib/auth-helpers"
+
 export const dynamic = "force-dynamic"
 
 // Minimal ElevenLabs TTS wrapper for MVP.
@@ -29,6 +31,11 @@ async function pickDefaultVoiceId(apiKey: string): Promise<string | null> {
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await getSessionWithRole()
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const apiKey = process.env.ELEVENLABS_API_KEY
     if (!apiKey) {
       return NextResponse.json(

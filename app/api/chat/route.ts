@@ -1,19 +1,27 @@
 import { NextRequest, NextResponse } from "next/server"
-import { AI_CFO_SYSTEM_PROMPT, FINNA_SYSTEM_PROMPT } from "@/lib/finna-prompts"
 
-const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
+import { generateFinnaReply } from "@/lib/agents/chat"
+import { requireAgentAccess, getOptionalSession, isPublicFinnaAgent } from "@/lib/agents/auth"
+import { createCorrelationId } from "@/lib/agents/correlation"
+import {
+  checkAuthenticatedAgentRateLimit,
+  checkPublicFinnaRateLimit,
+  getClientIp,
+  rateLimitHeaders,
+} from "@/lib/agents/rate-limit"
+import { AI_CREDIT_COSTS } from "@/lib/ai-credits/plans"
+import {
+  checkAiCredits,
+  creditHeaders,
+  insufficientCreditsMessage,
+} from "@/lib/ai-credits/service"
+import type { AgentChatMessage } from "@/lib/agents/types"
 
-export type ChatMessage = { role: "user" | "assistant"; content: string }
-
-function systemPromptForAgent(agentId: unknown) {
-  if (agentId === "ai-cfo") return AI_CFO_SYSTEM_PROMPT
-  return FINNA_SYSTEM_PROMPT
-}
+export type ChatMessage = AgentChatMessage
 
 export async function POST(request: NextRequest) {
   try {
-    const apiKey = process.env.GROQ_API_KEY
-    if (!apiKey) {
+    if (!process.env.GROQ_API_KEY) {
       return NextResponse.json(
         { error: "Finna AI is not configured. Add GROQ_API_KEY to your environment." },
         { status: 503 }
@@ -21,8 +29,10 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const agentId = body.agentId as string | undefined
+    const agentId = (body.agentId as string | undefined) ?? "finna"
     const messages = body.messages as ChatMessage[] | undefined
+    const workspaceId = body.workspaceId as string | undefined
+
     if (!Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json(
         { error: "Request must include a non-empty messages array." },
@@ -30,43 +40,79 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const systemPrompt = systemPromptForAgent(agentId)
-    const groqMessages = [
-      { role: "system" as const, content: systemPrompt },
-      ...messages.map((m) => ({ role: m.role, content: m.content })),
-    ]
+    const session = await getOptionalSession()
+    const correlationId = createCorrelationId()
+    let rateLimitHeadersOut: Record<string, string> = {}
+    let creditHeadersOut: Record<string, string> = {}
 
-    const res = await fetch(GROQ_API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: groqMessages,
-        max_tokens: 1024,
-        temperature: 0.6,
-      }),
+    if (!isPublicFinnaAgent(agentId)) {
+      const access = await requireAgentAccess(agentId)
+      if (!access.ok) {
+        return NextResponse.json({ error: access.error }, { status: access.status })
+      }
+
+      const rateLimit = await checkAuthenticatedAgentRateLimit(access.ctx.userId)
+      rateLimitHeadersOut = rateLimitHeaders(rateLimit)
+      if (!rateLimit.success) {
+        return NextResponse.json(
+          { error: "Rate limit exceeded. Please try again later." },
+          { status: 429, headers: rateLimitHeadersOut },
+        )
+      }
+
+      const creditCheck = await checkAiCredits(access.ctx.userId, AI_CREDIT_COSTS.agentChatMin)
+      creditHeadersOut = creditHeaders(creditCheck)
+      if (!creditCheck.success) {
+        return NextResponse.json(
+          { error: insufficientCreditsMessage(creditCheck) },
+          { status: 402, headers: { ...rateLimitHeadersOut, ...creditHeadersOut } },
+        )
+      }
+    } else if (!session) {
+      const rateLimit = await checkPublicFinnaRateLimit(getClientIp(request))
+      rateLimitHeadersOut = rateLimitHeaders(rateLimit)
+      if (!rateLimit.success) {
+        return NextResponse.json(
+          { error: "Rate limit exceeded. Please sign in or try again later." },
+          { status: 429, headers: rateLimitHeadersOut }
+        )
+      }
+    } else {
+      const rateLimit = await checkAuthenticatedAgentRateLimit(session.user.id)
+      rateLimitHeadersOut = rateLimitHeaders(rateLimit)
+      if (!rateLimit.success) {
+        return NextResponse.json(
+          { error: "Rate limit exceeded. Please try again later." },
+          { status: 429, headers: rateLimitHeadersOut },
+        )
+      }
+
+      const creditCheck = await checkAiCredits(session.user.id, AI_CREDIT_COSTS.finnaChatMin)
+      creditHeadersOut = creditHeaders(creditCheck)
+      if (!creditCheck.success) {
+        return NextResponse.json(
+          { error: insufficientCreditsMessage(creditCheck) },
+          { status: 402, headers: { ...rateLimitHeadersOut, ...creditHeadersOut } },
+        )
+      }
+    }
+
+    const result = await generateFinnaReply({
+      agentId,
+      messages,
+      ownerId: session?.user.id,
+      userRole: session?.user.role,
+      persistAudit: Boolean(session),
+      correlationId,
+      workspaceId,
     })
 
-    if (!res.ok) {
-      const errText = await res.text()
-      console.error("Groq API error:", res.status, errText)
-      return NextResponse.json(
-        { error: "Finna is temporarily unavailable. Please try again." },
-        { status: 502 }
-      )
-    }
+    const content = result.text.trim() || "I couldn't generate a response. Please try again."
 
-    const data = (await res.json()) as {
-      choices?: Array<{ message?: { content?: string } }>
-    }
-    const content =
-      data.choices?.[0]?.message?.content?.trim() ??
-      "I couldn't generate a response. Please try again."
-
-    return NextResponse.json({ content })
+    return NextResponse.json(
+      { content },
+      { headers: { ...rateLimitHeadersOut, ...creditHeadersOut } },
+    )
   } catch (error) {
     console.error("Chat API error:", error)
     return NextResponse.json(

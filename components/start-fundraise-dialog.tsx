@@ -69,6 +69,12 @@ export function StartFundraiseDialog({ open, onOpenChange, onSuccess }: StartFun
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
+    companyName: "",
+    tagline: "",
+    website: "",
+    headquarters: "",
+    teamSize: "",
+    executiveSummary: "",
     roundType: "",
     targetAmount: "",
     preMoneyValuation: "",
@@ -164,6 +170,12 @@ export function StartFundraiseDialog({ open, onOpenChange, onSuccess }: StartFun
 
       // Reset form
       setFormData({
+        companyName: "",
+        tagline: "",
+        website: "",
+        headquarters: "",
+        teamSize: "",
+        executiveSummary: "",
         roundType: "",
         targetAmount: "",
         preMoneyValuation: "",
@@ -207,7 +219,7 @@ export function StartFundraiseDialog({ open, onOpenChange, onSuccess }: StartFun
             Start Your Fundraise
           </DialogTitle>
           <DialogDescription>
-            Set up your fundraising round in just a few steps
+            Set up your round and accept investments in USDC and USDT — paid directly to your wallet on-chain.
           </DialogDescription>
         </DialogHeader>
 
@@ -263,7 +275,7 @@ export function StartFundraiseDialog({ open, onOpenChange, onSuccess }: StartFun
                         required
                       />
                     </div>
-                    <p className="text-xs text-muted-foreground">Total amount you're raising</p>
+                    <p className="text-xs text-muted-foreground">Total amount you&apos;re raising (investors pay in stablecoins)</p>
                   </div>
 
                   <div className="space-y-2">
@@ -291,6 +303,21 @@ export function StartFundraiseDialog({ open, onOpenChange, onSuccess }: StartFun
                         placeholder="50000"
                         value={formData.minInvestment}
                         onChange={(e) => handleInputChange("minInvestment", e.target.value)}
+                        className="pl-9"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="maxInvestment">Maximum Investment</Label>
+                    <div className="relative">
+                      <DollarSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="maxInvestment"
+                        type="number"
+                        placeholder="500000"
+                        value={formData.maxInvestment}
+                        onChange={(e) => handleInputChange("maxInvestment", e.target.value)}
                         className="pl-9"
                       />
                     </div>
@@ -389,6 +416,53 @@ export function StartFundraiseDialog({ open, onOpenChange, onSuccess }: StartFun
                   Company Information
                 </h3>
                 <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div className="space-y-2 sm:col-span-2">
+                      <Label htmlFor="companyName">Company Name</Label>
+                      <Input
+                        id="companyName"
+                        placeholder="Acme Inc."
+                        value={formData.companyName}
+                        onChange={(e) => handleInputChange("companyName", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2 sm:col-span-2">
+                      <Label htmlFor="tagline">One-Line Tagline</Label>
+                      <Input
+                        id="tagline"
+                        placeholder="What you do in one sentence"
+                        value={formData.tagline}
+                        onChange={(e) => handleInputChange("tagline", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="website">Website</Label>
+                      <div className="relative">
+                        <Globe className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          id="website"
+                          placeholder="https://acme.com"
+                          value={formData.website}
+                          onChange={(e) => handleInputChange("website", e.target.value)}
+                          className="pl-9"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="headquarters">Headquarters</Label>
+                      <div className="relative">
+                        <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          id="headquarters"
+                          placeholder="San Francisco, CA"
+                          value={formData.headquarters}
+                          onChange={(e) => handleInputChange("headquarters", e.target.value)}
+                          className="pl-9"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="space-y-2">
                     <Label htmlFor="companyDescription">Company Description *</Label>
                     <Textarea
@@ -410,6 +484,17 @@ export function StartFundraiseDialog({ open, onOpenChange, onSuccess }: StartFun
                       value={formData.traction}
                       onChange={(e) => handleInputChange("traction", e.target.value)}
                       required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="executiveSummary">Executive Summary</Label>
+                    <Textarea
+                      id="executiveSummary"
+                      placeholder="Short investor-facing overview of the opportunity..."
+                      rows={3}
+                      value={formData.executiveSummary}
+                      onChange={(e) => handleInputChange("executiveSummary", e.target.value)}
                     />
                   </div>
 
@@ -475,7 +560,7 @@ export function StartFundraiseDialog({ open, onOpenChange, onSuccess }: StartFun
                         }}
                         onUploadError={(error) => {
                           console.error("Upload error:", error)
-                          alert("Failed to upload pitch deck. Please ensure it's a PDF file under 10MB.")
+                          alert("Failed to upload pitch deck. Use a PDF up to 16MB.")
                         }}
                         className="ut-button:w-full ut-button:bg-primary ut-button:text-primary-foreground ut-button:hover:bg-primary/90 ut-button:rounded-lg ut-button:border ut-button:border-primary ut-button:font-medium ut-button:px-4 ut-button:py-2 ut-button:shadow-sm ut-ready:bg-primary ut-uploading:bg-primary/50"
                         content={{
@@ -485,7 +570,7 @@ export function StartFundraiseDialog({ open, onOpenChange, onSuccess }: StartFun
                               <span>{ready ? "Upload Pitch Deck (PDF)" : "Preparing..."}</span>
                             </div>
                           ),
-                          allowedContent: "PDF files up to 10MB",
+                          allowedContent: "PDF files up to 16MB",
                         }}
                       />
                     )}
@@ -518,7 +603,7 @@ export function StartFundraiseDialog({ open, onOpenChange, onSuccess }: StartFun
                         }}
                         onUploadError={(error) => {
                           console.error("Upload error:", error)
-                          alert("Failed to upload financial model. Please ensure it's a PDF file under 10MB.")
+                          alert("Failed to upload financial model. Use a PDF up to 16MB.")
                         }}
                         className="ut-button:w-full ut-button:bg-primary ut-button:text-primary-foreground ut-button:hover:bg-primary/90 ut-button:rounded-lg ut-button:border ut-button:border-primary ut-button:font-medium ut-button:px-4 ut-button:py-2 ut-button:shadow-sm ut-ready:bg-primary ut-uploading:bg-primary/50"
                         content={{
@@ -528,7 +613,7 @@ export function StartFundraiseDialog({ open, onOpenChange, onSuccess }: StartFun
                               <span>{ready ? "Upload Financial Model (PDF)" : "Preparing..."}</span>
                             </div>
                           ),
-                          allowedContent: "PDF files up to 10MB",
+                          allowedContent: "PDF files up to 16MB",
                         }}
                       />
                     )}
@@ -565,6 +650,17 @@ export function StartFundraiseDialog({ open, onOpenChange, onSuccess }: StartFun
                             {formData.targetCloseDate
                               ? new Date(formData.targetCloseDate).toLocaleDateString()
                               : "—"}
+                          </p>
+                        </div>
+                        <div className="sm:col-span-2">
+                          <p className="text-muted-foreground mb-2">Payment method</p>
+                          <div className="flex flex-wrap gap-2">
+                            <Badge className="bg-[#c1ff72] text-neutral-950 hover:bg-[#c1ff72]">USDC</Badge>
+                            <Badge variant="outline">USDT</Badge>
+                            <Badge variant="secondary">Base · Polygon · Ethereum</Badge>
+                          </div>
+                          <p className="mt-2 text-xs text-muted-foreground">
+                            Connect your wallet in Settings after launch to start receiving investments.
                           </p>
                         </div>
                         <div className="sm:col-span-2">

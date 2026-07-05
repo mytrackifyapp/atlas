@@ -1,18 +1,8 @@
 import type { LucideIcon } from "lucide-react"
 import {
   BadgeDollarSign,
-  Briefcase,
-  FileText,
   Gavel,
-  Globe,
-  Handshake,
-  HeartPulse,
-  Landmark,
   Megaphone,
-  MessageSquareText,
-  ShieldCheck,
-  ShoppingCart,
-  Sparkles,
   Target,
   Users,
   WandSparkles,
@@ -25,8 +15,6 @@ export type AgentCategory =
   | "Marketing"
   | "Operations"
   | "HR"
-  | "Strategy"
-  | "Security"
 
 export type AiAgent = {
   id: string
@@ -51,158 +39,94 @@ export type AiAgent = {
   synthesiaVideoId?: string
 }
 
+/**
+ * Legacy agent IDs merged into main specialists (old URLs still resolve).
+ */
+export const AGENT_ID_ALIASES: Record<string, string> = {
+  "ai-fundraising": "ai-cfo",
+  "ai-gtm": "ai-marketer",
+  "ai-gc-lite": "ai-lawyer",
+  "ai-partnerships": "ai-sales-rep",
+  "ai-procurement": "ai-ops-manager",
+  "ai-investor-updates": "ai-cfo",
+  "ai-strategy": "ai-cfo",
+  "ai-security": "ai-lawyer",
+  "ai-exec-assistant": "ai-ops-manager",
+  "ai-wellness": "ai-hr",
+}
+
+export function resolveAgentId(agentId: string): string {
+  return AGENT_ID_ALIASES[agentId] ?? agentId
+}
+
+export function isCatalogAgentId(agentId: string): boolean {
+  const resolved = resolveAgentId(agentId)
+  return AI_AGENTS_CATALOG.some((agent) => agent.id === resolved)
+}
+
+/** Six core AI employees — each covers a full function area. */
 export const AI_AGENTS_CATALOG: AiAgent[] = [
   {
     id: "ai-lawyer",
-    name: "AI Lawyer",
+    name: "Vera",
     category: "Legal",
-    description: "Review contracts, flag risky clauses, and draft standard terms.",
+    description:
+      "Contracts, compliance, security policies, checklists, and startup legal issue-spotting — in one legal agent.",
     icon: Gavel,
     imageSrc: "/lawyer2.png",
-    tags: ["contracts", "terms", "risk", "drafting"],
-    comingSoon: true,
+    tags: ["contracts", "policies", "compliance", "security"],
   },
   {
     id: "ai-cfo",
-    name: "CFO",
+    name: "Finley",
     category: "Finance",
-    description: "Cashflow insights, burn/runway, and budget recommendations.",
+    description:
+      "Cashflow, runway, fundraising prep, investor updates, positioning research, and data room planning.",
     icon: BadgeDollarSign,
     imageSrc: "/cfo.png",
-    tags: ["runway", "burn", "cashflow", "budget"],
-    comingSoon: true,
+    tags: ["runway", "burn", "fundraising", "investor-updates"],
     useLiveAvatar: true,
     useSynthesia: true,
   },
   {
     id: "ai-sales-rep",
-    name: "Sales Rep",
+    name: "Ace",
     category: "Sales",
-    description: "Generate outreach, objections handling, and follow-up sequences.",
+    description:
+      "B2B outreach, pipeline management, objection handling, and partnership deal structures.",
     icon: Target,
     imageSrc: "/sales.png",
-    tags: ["outreach", "objections", "pipeline", "closing"],
-    comingSoon: true,
+    tags: ["outreach", "pipeline", "partnerships", "deals"],
   },
   {
     id: "ai-marketer",
-    name: "Marketer",
+    name: "Maya",
     category: "Marketing",
-    description: "Campaign ideas, ad angles, landing page copy, and content plans.",
+    description:
+      "Campaigns, copy, GTM plans, channel experiments, social content, and launch strategy.",
     icon: Megaphone,
     imageSrc: "/ops.png",
-    tags: ["campaigns", "copy", "content", "ads"],
-    comingSoon: true,
+    tags: ["campaigns", "gtm", "copy", "social"],
   },
   {
     id: "ai-ops-manager",
-    name: "Ops Manager",
+    name: "Otto",
     category: "Operations",
-    description: "SOP drafts, process checklists, and weekly ops planning.",
+    description:
+      "SOPs, vendor procurement, weekly planning, priorities, and cross-team execution.",
     icon: WandSparkles,
     imageSrc: "/marketer.png",
-    tags: ["sops", "process", "checklists", "planning"],
-    comingSoon: true,
+    tags: ["sops", "procurement", "planning", "priorities"],
   },
   {
     id: "ai-hr",
-    name: "HR Partner",
+    name: "Harper",
     category: "HR",
-    description: "Job descriptions, interview questions, and performance templates.",
+    description:
+      "Hiring, interview kits, performance templates, onboarding, and team wellness support.",
     icon: Users,
-    tags: ["hiring", "interviews", "performance", "templates"],
+    tags: ["hiring", "interviews", "performance", "wellness"],
     imageSrc: "/lawyer.png",
-    comingSoon: true,
-  },
-  {
-    id: "ai-strategy",
-    name: "Strategy Analyst",
-    category: "Strategy",
-    description: "Market research outlines, positioning, and competitive analysis.",
-    icon: Globe,
-    tags: ["positioning", "research", "competition"],
-    comingSoon: true,
-  },
-  {
-    id: "ai-security",
-    name: "Security Advisor",
-    category: "Security",
-    description: "Security checklist, policy drafts, and best-practice guidance.",
-    icon: ShieldCheck,
-    tags: ["policies", "checklist", "best-practices"],
-    comingSoon: true,
-  },
-  {
-    id: "ai-partnerships",
-    name: "Partnerships",
-    category: "Sales",
-    description: "Partner outreach and win-win deal structures.",
-    icon: Handshake,
-    tags: ["partners", "outreach", "deals"],
-    comingSoon: true,
-  },
-  {
-    id: "ai-procurement",
-    name: "Procurement",
-    category: "Operations",
-    description: "Vendor comparisons and negotiation prep.",
-    icon: ShoppingCart,
-    tags: ["vendors", "negotiation", "ops"],
-    comingSoon: true,
-  },
-  {
-    id: "ai-investor-updates",
-    name: "Investor Updates",
-    category: "Strategy",
-    description: "Draft investor updates from highlights, metrics, and asks.",
-    icon: MessageSquareText,
-    tags: ["updates", "story", "metrics"],
-    comingSoon: true,
-  },
-  {
-    id: "ai-fundraising",
-    name: "Fundraising",
-    category: "Finance",
-    description: "Data room checklist, narrative, and round planning.",
-    icon: Landmark,
-    tags: ["deck", "data-room", "round"],
-    comingSoon: true,
-  },
-  {
-    id: "ai-exec-assistant",
-    name: "Executive Assistant",
-    category: "Operations",
-    description: "Summaries, action items, and weekly priorities.",
-    icon: Sparkles,
-    tags: ["priorities", "summaries", "actions"],
-    comingSoon: true,
-  },
-  {
-    id: "ai-gc-lite",
-    name: "General Counsel Lite",
-    category: "Legal",
-    description: "Issue-spotting and policy drafts for common startup scenarios.",
-    icon: FileText,
-    tags: ["policies", "compliance", "startups"],
-    comingSoon: true,
-  },
-  {
-    id: "ai-gtm",
-    name: "GTM Planner",
-    category: "Marketing",
-    description: "Create GTM plans with channels, messaging, and experiments.",
-    icon: Briefcase,
-    tags: ["gtm", "experiments", "messaging"],
-    comingSoon: true,
-  },
-  {
-    id: "ai-wellness",
-    name: "Wellness Coach",
-    category: "HR",
-    description: "Light guidance for routines, burnout prevention, and team wellness.",
-    icon: HeartPulse,
-    tags: ["wellness", "burnout", "habits"],
-    comingSoon: true,
   },
 ]
 
@@ -213,7 +137,4 @@ export const AGENT_CATEGORIES: AgentCategory[] = [
   "Marketing",
   "Operations",
   "HR",
-  "Strategy",
-  "Security",
 ]
-

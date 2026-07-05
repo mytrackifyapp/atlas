@@ -83,7 +83,7 @@ const platformPillars = [
     title: "AI team",
     subtitle: "Specialist AI employees",
     points: [
-      "Deploy AI CFO, Lawyer, Marketer, Sales Rep, and more",
+      "Deploy AI CFO, Vera, Marketer, Sales Rep, and more",
       "Each agent owns a function contracts, runway, outreach, ops",
       "Finna orchestrates across portfolio, pipeline, and documents",
       "Scale execution without scaling headcount overnight",
@@ -155,12 +155,12 @@ const productModules = [
     icon: Users,
     title: "AI employee roster",
     description:
-      "Specialist AI agents across legal, finance, sales, marketing, HR, strategy, and security—your on-demand team.",
+      "Specialist AI agents across legal, finance, sales, marketing, operations, and HR—your on-demand team.",
   },
 ]
 
 const featuredAiAgents = AI_AGENTS_CATALOG.filter((a) =>
-  ["ai-cfo", "ai-lawyer", "ai-sales-rep", "ai-marketer", "ai-fundraising", "ai-investor-updates", "ai-ops-manager", "ai-strategy"].includes(
+  ["ai-cfo", "ai-lawyer", "ai-sales-rep", "ai-marketer", "ai-ops-manager", "ai-hr"].includes(
     a.id,
   ),
 )

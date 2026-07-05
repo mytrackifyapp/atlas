@@ -141,6 +141,18 @@ export const auth = betterAuth({
         defaultValue: false,
         input: false,
       },
+      founderTitle: {
+        type: "string",
+        required: false,
+        defaultValue: "",
+        input: false,
+      },
+      founderBio: {
+        type: "string",
+        required: false,
+        defaultValue: "",
+        input: false,
+      },
     },
   },
   plugins: [nextCookies()],

@@ -1,107 +1,129 @@
 import { NextRequest } from "next/server"
-import { AI_CFO_SYSTEM_PROMPT, FINNA_SYSTEM_PROMPT } from "@/lib/finna-prompts"
 
-const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
-
-type ChatMessage = { role: "user" | "assistant"; content: string }
-
-function systemPromptForAgent(agentId: unknown) {
-  if (agentId === "ai-cfo") return AI_CFO_SYSTEM_PROMPT
-  return FINNA_SYSTEM_PROMPT
-}
+import { streamFinnaReply } from "@/lib/agents/chat"
+import {
+  groqRateLimitResponse,
+  isGroqRateLimitError,
+} from "@/lib/agents/groq-model"
+import { requireAgentAccess, getOptionalSession, isPublicFinnaAgent } from "@/lib/agents/auth"
+import { createCorrelationId } from "@/lib/agents/correlation"
+import {
+  checkAuthenticatedAgentRateLimit,
+  checkPublicFinnaRateLimit,
+  getClientIp,
+  rateLimitHeaders,
+} from "@/lib/agents/rate-limit"
+import { AI_CREDIT_COSTS } from "@/lib/ai-credits/plans"
+import {
+  checkAiCredits,
+  creditHeaders,
+  insufficientCreditsMessage,
+} from "@/lib/ai-credits/service"
+import type { AgentChatMessage } from "@/lib/agents/types"
 
 export const dynamic = "force-dynamic"
 
 export async function POST(request: NextRequest) {
-  const apiKey = process.env.GROQ_API_KEY
-  if (!apiKey) {
+  if (!process.env.GROQ_API_KEY) {
     return new Response("Missing GROQ_API_KEY", { status: 503 })
   }
 
   const body = (await request.json()) as {
     agentId?: string
-    messages?: ChatMessage[]
+    messages?: AgentChatMessage[]
+    workspaceId?: string
+    conversationId?: string
   }
+
+  const agentId = body.agentId ?? "finna"
   const messages = body.messages
+  const workspaceId = body.workspaceId
+  const conversationId = body.conversationId
+
   if (!Array.isArray(messages) || messages.length === 0) {
     return new Response("messages is required", { status: 400 })
   }
 
-  const systemPrompt = systemPromptForAgent(body.agentId)
+  const session = await getOptionalSession()
+  const correlationId = createCorrelationId()
+  let rateLimitHeadersOut: Record<string, string> = {}
+  let creditHeadersOut: Record<string, string> = {}
 
-  const res = await fetch(GROQ_API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: "llama-3.3-70b-versatile",
-      messages: [{ role: "system", content: systemPrompt }, ...messages],
-      max_tokens: 1024,
-      temperature: 0.6,
-      stream: true,
-    }),
-  })
+  if (!isPublicFinnaAgent(agentId)) {
+    const access = await requireAgentAccess(agentId)
+    if (!access.ok) {
+      return new Response(access.error, { status: access.status })
+    }
 
-  if (!res.ok || !res.body) {
-    const errText = await res.text().catch(() => "")
-    console.error("Groq stream error:", res.status, errText)
-    return new Response("Upstream error", { status: 502 })
+    const rateLimit = await checkAuthenticatedAgentRateLimit(access.ctx.userId)
+    rateLimitHeadersOut = rateLimitHeaders(rateLimit)
+    if (!rateLimit.success) {
+      return new Response("Rate limit exceeded. Please try again later.", {
+        status: 429,
+        headers: rateLimitHeadersOut,
+      })
+    }
+
+    const creditCheck = await checkAiCredits(access.ctx.userId, AI_CREDIT_COSTS.agentChatMin)
+    creditHeadersOut = creditHeaders(creditCheck)
+    if (!creditCheck.success) {
+      return new Response(insufficientCreditsMessage(creditCheck), {
+        status: 402,
+        headers: { ...rateLimitHeadersOut, ...creditHeadersOut },
+      })
+    }
+  } else if (!session) {
+    const rateLimit = await checkPublicFinnaRateLimit(getClientIp(request))
+    rateLimitHeadersOut = rateLimitHeaders(rateLimit)
+    if (!rateLimit.success) {
+      return new Response("Rate limit exceeded. Please sign in or try again later.", {
+        status: 429,
+        headers: rateLimitHeadersOut,
+      })
+    }
+  } else {
+    const rateLimit = await checkAuthenticatedAgentRateLimit(session.user.id)
+    rateLimitHeadersOut = rateLimitHeaders(rateLimit)
+    if (!rateLimit.success) {
+      return new Response("Rate limit exceeded. Please try again later.", {
+        status: 429,
+        headers: rateLimitHeadersOut,
+      })
+    }
+
+    const creditCheck = await checkAiCredits(session.user.id, AI_CREDIT_COSTS.finnaChatMin)
+    creditHeadersOut = creditHeaders(creditCheck)
+    if (!creditCheck.success) {
+      return new Response(insufficientCreditsMessage(creditCheck), {
+        status: 402,
+        headers: { ...rateLimitHeadersOut, ...creditHeadersOut },
+      })
+    }
   }
 
-  const decoder = new TextDecoder()
-  const encoder = new TextEncoder()
+  try {
+    const result = await streamFinnaReply({
+      agentId,
+      messages,
+      ownerId: session?.user.id,
+      userRole: session?.user.role,
+      persistAudit: Boolean(session),
+      correlationId,
+      workspaceId,
+      conversationId,
+    })
 
-  let buffer = ""
-
-  const stream = new ReadableStream<Uint8Array>({
-    async start(controller) {
-      const reader = res.body!.getReader()
-      try {
-        while (true) {
-          const { value, done } = await reader.read()
-          if (done) break
-          buffer += decoder.decode(value, { stream: true })
-
-          const lines = buffer.split("\n")
-          buffer = lines.pop() ?? ""
-
-          for (const line of lines) {
-            const trimmed = line.trim()
-            if (!trimmed.startsWith("data:")) continue
-            const data = trimmed.slice(5).trim()
-            if (!data) continue
-            if (data === "[DONE]") {
-              controller.close()
-              return
-            }
-            try {
-              const json = JSON.parse(data) as any
-              const delta = json?.choices?.[0]?.delta?.content
-              if (typeof delta === "string" && delta.length) {
-                controller.enqueue(encoder.encode(delta))
-              }
-            } catch {
-              // ignore parse errors from partial lines
-            }
-          }
-        }
-      } catch (e) {
-        console.error("Groq stream read error:", e)
-        controller.error(e)
-      } finally {
-        reader.releaseLock()
-      }
-      controller.close()
-    },
-  })
-
-  return new Response(stream, {
-    headers: {
-      "Content-Type": "text/plain; charset=utf-8",
-      "Cache-Control": "no-store",
-    },
-  })
+    return result.toTextStreamResponse({
+      headers: {
+        "Cache-Control": "no-store",
+        ...rateLimitHeadersOut,
+        ...creditHeadersOut,
+      },
+    })
+  } catch (error) {
+    if (isGroqRateLimitError(error)) {
+      return groqRateLimitResponse(error, rateLimitHeadersOut)
+    }
+    throw error
+  }
 }
-

@@ -9,6 +9,7 @@ import { ChatMessageText } from "@/components/chat-message-text"
 import { Button } from "@/components/ui/button"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { cn } from "@/lib/utils"
 
 const suggestedActions = [
   "What is Trackify?",
@@ -21,7 +22,7 @@ const suggestedActions = [
 
 type ChatMessage = { role: "user" | "assistant"; content: string }
 
-export function AIAssistant() {
+export function AIAssistant({ compactMobile = false }: { compactMobile?: boolean }) {
   const [isOpen, setIsOpen] = useState(false)
   const [message, setMessage] = useState("")
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -96,12 +97,17 @@ export function AIAssistant() {
       {!isOpen && (
         <Button
           size="lg"
-          className="fixed bottom-6 right-6 h-15 w-15 rounded-full shadow-xl shadow-primary/25 bg-primary text-primary-foreground hover:bg-primary/90 z-50 transition-all duration-200 hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 p-0 flex items-center justify-center"
+          className={cn(
+            "fixed z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary p-0 text-primary-foreground shadow-xl shadow-primary/25 transition-all duration-200 hover:scale-105 hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:scale-95",
+            compactMobile
+              ? "bottom-[calc(5rem+env(safe-area-inset-bottom))] right-4 lg:bottom-6 lg:right-6"
+              : "bottom-6 right-6",
+          )}
           onClick={() => setIsOpen(true)}
           aria-label="Open Finna AI Assistant"
           title="Chat with Finna AI"
         >
-          <img src={FINNA_ICON} alt="" className="h-[3rem] w-[3rem] min-h-[50px] min-w-[50px] object-contain" />
+          <img src={FINNA_ICON} alt="" className="h-12 w-12 min-h-[48px] min-w-[48px] object-contain" />
         </Button>
       )}
 
@@ -111,7 +117,12 @@ export function AIAssistant() {
           ref={panelRef}
           role="dialog"
           aria-label="Finna AI chat"
-          className="fixed bottom-6 right-6 w-[calc(100vw-2rem)] sm:w-[420px] max-w-[calc(100vw-2rem)] h-[min(560px,calc(100vh-6rem))] sm:h-[600px] flex flex-col shadow-2xl rounded-2xl border border-border/60 bg-card/95 backdrop-blur-xl z-50 animate-in slide-in-from-bottom-4 fade-in duration-200"
+          className={cn(
+            "fixed z-50 flex max-w-[calc(100vw-2rem)] flex-col rounded-2xl border border-border/60 bg-card/95 shadow-2xl backdrop-blur-xl animate-in fade-in duration-200 slide-in-from-bottom-4",
+            compactMobile
+              ? "bottom-[calc(5.5rem+env(safe-area-inset-bottom))] right-4 h-[min(520px,calc(100dvh-7rem-env(safe-area-inset-bottom)))] w-[calc(100vw-2rem)] sm:w-[420px] lg:bottom-6 lg:right-6 lg:h-[600px]"
+              : "bottom-6 right-6 h-[min(560px,calc(100vh-6rem))] w-[calc(100vw-2rem)] sm:h-[600px] sm:w-[420px]",
+          )}
         >
           <CardHeader className="shrink-0 border-b border-border/60 bg-muted/30 px-4 py-3 rounded-t-2xl">
             <div className="flex items-center justify-between gap-3">

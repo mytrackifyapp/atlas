@@ -182,6 +182,15 @@
   animation: marquee-vertical var(--duration, 30s) linear infinite;
 }
 
+@keyframes sidebar-shine-sweep {
+  0% {
+    background-position: 220% 0;
+  }
+  100% {
+    background-position: -220% 0;
+  }
+}
+
 /* Pitch & CV: preserve dark theme in print/PDF (match on-screen black + lime) */
 @page {
   size: auto;

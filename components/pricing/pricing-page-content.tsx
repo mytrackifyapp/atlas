@@ -43,6 +43,13 @@ export function PricingPageContent() {
     return formatPrice(amount)
   }
 
+  const checkoutHref = (planId: string) => {
+    if (planId === "pro" || planId === "team") {
+      return `/checkout?plan=${planId}&interval=${billing}`
+    }
+    return PRICING_PLANS.find((p) => p.id === planId)?.href ?? "/checkout"
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <TrackifyVcNavbar />
@@ -68,6 +75,10 @@ export function PricingPageContent() {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-pretty leading-relaxed">
             Start free, upgrade when you need AI employees, data rooms, and investor-grade tooling.
             Built for founders and teams across Africa and beyond.
+          </p>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Pro and Team plans accept <span className="font-medium text-foreground">USDC</span> and{" "}
+            <span className="font-medium text-foreground">USDT</span> on Base, Polygon, and Ethereum.
           </p>
 
           {/* Billing toggle */}
@@ -154,7 +165,7 @@ export function PricingPageContent() {
                     plan.highlighted ? "default" : plan.id === "enterprise" ? "outline" : "secondary"
                   }
                 >
-                  <Link href={plan.href}>
+                  <Link href={checkoutHref(plan.id)}>
                     {plan.cta}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
