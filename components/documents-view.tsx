@@ -40,7 +40,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import { formatFileSize } from "@/lib/documents/service"
+import { formatFileSize } from "@/lib/documents/utils"
 import {
   DOCUMENT_CATEGORIES,
   type DocumentCategory,
