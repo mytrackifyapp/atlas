@@ -90,7 +90,7 @@ export function CompaniesPageContent() {
         </div>
       </main>
 
-      <TrackifyVcOriginalCta />
+      <TrackifyVcOriginalCta variant="light" />
     </div>
   )
 }

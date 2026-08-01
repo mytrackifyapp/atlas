@@ -1,15 +1,14 @@
 {
-  "/api/admin/check/route": "app/api/admin/check/route.js",
-  "/api/ai/credits/route": "app/api/ai/credits/route.js",
-  "/api/ai/installed/route": "app/api/ai/installed/route.js",
+  "/about/page": "app/about/page.js",
+  "/ai-agents/page": "app/ai-agents/page.js",
   "/api/auth/[...all]/route": "app/api/auth/[...all]/route.js",
-  "/api/founder/fundraise/route": "app/api/founder/fundraise/route.js",
-  "/api/founder/investors/route": "app/api/founder/investors/route.js",
-  "/api/uploadthing/route": "app/api/uploadthing/route.js",
-  "/api/user/profile/route": "app/api/user/profile/route.js",
-  "/api/user/verification/route": "app/api/user/verification/route.js",
-  "/api/user/wallet/route": "app/api/user/wallet/route.js",
-  "/founder/fundraising/page": "app/founder/fundraising/page.js",
-  "/founder/settings/page": "app/founder/settings/page.js",
-  "/invest/[id]/page": "app/invest/[id]/page.js"
+  "/companies/page": "app/companies/page.js",
+  "/page": "app/page.js",
+  "/pitch/page": "app/pitch/page.js",
+  "/pricing/page": "app/pricing/page.js",
+  "/sign-in/page": "app/sign-in/page.js",
+  "/solutions/[slug]/page": "app/solutions/[slug]/page.js",
+  "/stages/growth/page": "app/stages/growth/page.js",
+  "/stages/series-a/page": "app/stages/series-a/page.js",
+  "/whitepaper/page": "app/whitepaper/page.js"
 }

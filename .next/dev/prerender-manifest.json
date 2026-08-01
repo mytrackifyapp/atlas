@@ -1,11 +1,1 @@
-{
-  "version": 4,
-  "routes": {},
-  "dynamicRoutes": {},
-  "notFoundRoutes": [],
-  "preview": {
-    "previewModeId": "08b38e515ae6e6c1cda0dcfa60ce74e0",
-    "previewModeSigningKey": "5ae11d25f936e0e006249e1a8d2b77246663d73292bf8411655e0eeb9c2a5881",
-    "previewModeEncryptionKey": "2ff861ee6bc625a8842e20ba04a3acadd6b642b75b0f434d85644df228278e01"
-  }
-}
+{"version":4,"routes":{"/solutions/investors":{},"/solutions/founders":{},"/solutions/startups":{},"/solutions/accelerators":{}},"dynamicRoutes":{"/solutions/[slug]":{"dataRoute":null,"dataRouteRegex":null,"fallback":null,"fallbackRevalidate":false,"fallbackSourceRoute":"/solutions/[slug]","routeRegex":"^\\/solutions\\/([^/]+?)(?:\\/)?$","allowHeader":[]}},"notFoundRoutes":[],"preview":{"previewModeId":"2f5374d11d78dd16e046c66cd89c86cc","previewModeSigningKey":"541267b098c7b0076ccc83dc6031594c6b76c47cdb4fefa94f3e968192ad8748","previewModeEncryptionKey":"5a878712adbfa2a23b23940764da1ff674e5acb1b914b7c42122b65c4613f18e"}}

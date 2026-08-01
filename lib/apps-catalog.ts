@@ -93,7 +93,7 @@ export const APPS_CATALOG: StoreApp[] = [
     id: "meeting-notes",
     name: "Meeting Notes",
     category: "Productivity",
-    description: "Structured notes with decisions, actions, and follow-ups.",
+    description: "Structured notes with decisions, actions, and follow ups.",
     icon: NotebookPen,
     tags: ["notes", "actions", "templates"],
     comingSoon: true,

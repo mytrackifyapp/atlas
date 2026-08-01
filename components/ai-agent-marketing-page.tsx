@@ -18,8 +18,8 @@ import {
   type LucideIcon,
 } from "lucide-react"
 
-import { AiAgentMarketingNav } from "@/components/ai-agent-marketing-nav"
 import { Button } from "@/components/ui/button"
+import TrackifyVcNavbar from "@/components/trackifyvc/navigation/navbar"
 import { cn } from "@/lib/utils"
 import type {
   AgentIconName,
@@ -119,10 +119,10 @@ export function AiAgentMarketingPage({
 
   return (
     <div className="min-h-screen bg-[#f7f8fa] text-neutral-900">
-      <AiAgentMarketingNav ctaHref={ctaHref} ctaLabel="Get Started" />
+      <TrackifyVcNavbar />
 
       {/* Hero */}
-      <section className="px-4 pb-8 pt-6 sm:px-6 lg:px-8">
+      <section className="px-4 pb-8 pt-2 sm:px-6 lg:px-8">
         <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem]">
           <img
             src="/trackify-ui-hero.jpg"

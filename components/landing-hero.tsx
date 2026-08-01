@@ -51,7 +51,7 @@ export function LandingHero({
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-white/80 sm:mt-5 sm:text-lg">
               We are venture operators creating an optimistic tomorrow for founders
-              and investors — finance, fundraising, and AI in one place.
+              and investors finance, fundraising, and AI in one place.
             </p>
 
             <div className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-center">
@@ -66,7 +66,7 @@ export function LandingHero({
                 variant="ghost"
                 className="h-12 rounded-full px-8 text-base font-medium text-white hover:bg-white/10 hover:text-white"
               >
-                <Link href="#features">Learn more</Link>
+                <Link href="/solutions/investors">Learn more</Link>
               </Button>
             </div>
           </div>

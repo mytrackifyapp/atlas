@@ -88,7 +88,10 @@ export function SolutionPageContent({ solution }: { solution: SolutionContent })
           </div>
         </section>
 
-        <section className="w-full border-t border-neutral-200 px-6 py-10 sm:px-10 lg:px-14 xl:px-20">
+      </main>
+
+      <footer className="w-full border-t border-neutral-200 bg-white">
+        <section className="px-6 py-10 sm:px-10 lg:px-14 xl:px-20">
           <p className="text-sm font-medium uppercase tracking-[0.14em] text-neutral-400">
             Explore solutions
           </p>
@@ -109,9 +112,14 @@ export function SolutionPageContent({ solution }: { solution: SolutionContent })
             ))}
           </div>
         </section>
-      </main>
 
-      <TrackifyVcOriginalCta ctaHref={solution.ctaHref} ctaLabel={solution.ctaLabel} />
+        <TrackifyVcOriginalCta
+          ctaHref={solution.ctaHref}
+          ctaLabel={solution.ctaLabel}
+          variant="light"
+          className="border-t-0"
+        />
+      </footer>
     </div>
   )
 }

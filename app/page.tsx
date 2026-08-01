@@ -80,8 +80,8 @@ export default async function Page() {
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section id="features" className="relative scroll-mt-20 overflow-hidden bg-black py-20 sm:py-24 lg:py-32">
+      {/* Features Grid — reserved for /solutions/investors */}
+      <section id="features" className="hidden" aria-hidden="true">
         <div
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(255,255,255,0.08),transparent)]"
           aria-hidden
@@ -279,8 +279,8 @@ export default async function Page() {
         </div>
       </section>
 
-      {/* Features for Founders & Startups */}
-      <section id="features-founders" className="relative scroll-mt-20 overflow-hidden bg-black py-20 sm:py-24 lg:py-32">
+      {/* Features for Founders & Startups — reserved for /solutions/founders */}
+      <section id="features-founders" className="hidden" aria-hidden="true">
         <div
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(255,255,255,0.08),transparent)]"
           aria-hidden
@@ -455,8 +455,8 @@ export default async function Page() {
         </div>
       </section>
 
-      {/* Discover sections (Finna AI + AI Employees) */}
-      <section className="scroll-mt-20 bg-background py-14 sm:py-16 lg:py-20">
+      {/* Discover sections (Finna AI + AI Employees) — hidden */}
+      <section className="hidden" aria-hidden="true">
         <div className="mx-auto max-w-5xl px-6 lg:px-8">
           <h2 className="text-center text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
             Discover more ways to use Trackify

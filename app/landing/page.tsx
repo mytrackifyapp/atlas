@@ -84,7 +84,7 @@ export default function LandingPage() {
 
                 <p className="text-base sm:text-lg text-muted-foreground mb-10 text-pretty max-w-2xl mx-auto leading-relaxed">
                   A subscription workspace for founders and investors to run fundraising, manage documents, track
-                  updates, and stay investor-ready — all in one place.
+                  updates, and stay investor ready all in one place.
                 </p>
 
                 <div className="flex items-center justify-center">

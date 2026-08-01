@@ -1,8 +1,8 @@
 import Link from "next/link"
 
 import { AiAgentsHero } from "@/components/ai-agents-hero"
-import { AiAgentsMarketingNav } from "@/components/ai-agents-marketing-nav"
 import { AiAgentsShowcase } from "@/components/ai-agents-showcase"
+import TrackifyVcNavbar from "@/components/trackifyvc/navigation/navbar"
 import { AI_AGENTS_CATALOG } from "@/lib/ai-agents-catalog"
 import { getAgentPagePath } from "@/lib/ai-agents-marketing"
 import { getSessionWithRole } from "@/lib/auth-helpers"
@@ -28,7 +28,9 @@ export default async function AiAgentsMarketingPage() {
   return (
     <div className="min-h-screen bg-neutral-950 text-white">
       <div className="relative">
-        <AiAgentsMarketingNav isAuthenticated={isAuthenticated} ctaHref={aiDashboardHref} />
+        <div className="absolute inset-x-0 top-0 z-30">
+          <TrackifyVcNavbar />
+        </div>
         <AiAgentsHero variant="marketing" ctaHref={aiDashboardHref} ctaLabel="Get Trackify" />
       </div>
 

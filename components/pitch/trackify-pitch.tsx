@@ -2,15 +2,11 @@ import { DeckImage } from "@/components/deck/deck-image"
 import {
   ArrowRight,
   BarChart3,
-  Briefcase,
-  Building2,
   Check,
   CreditCard,
   Globe2,
   Layers,
   LineChart,
-  Rocket,
-  Sparkles,
   Target,
   TrendingUp,
   Users,
@@ -33,53 +29,49 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
   )
 }
 
-/** Body copy — consistent readable size across sections */
+/** Body copy: consistent readable size across sections */
 const bodyText = "text-lg sm:text-xl leading-relaxed"
 
 const problems = [
   "Investors and founders rely on spreadsheets, email threads, and disconnected tools to run deal flow and portfolio work.",
   "Financial reporting and fundraising data live in silos, slowing diligence, LP updates, and founder transparency.",
-  "Cross-border capital and payments are fragmented, founders struggle to receive funds globally while investors lack unified rails.",
-  "Small teams cannot afford full-time legal, finance, and GTM hires yet still need that execution speed to compete.",
+  "Cross border capital and payments are fragmented, founders struggle to receive funds globally while investors lack unified rails.",
+  "Small teams cannot afford full time legal, finance, and GTM hires yet still need that execution speed to compete.",
   "Africa's venture ecosystem is growing fast, but lacks a unified operating system built for how capital actually moves on the continent.",
 ]
 
 const platformPillars = [
   {
-    icon: Briefcase,
     title: "For investors",
-    subtitle: "Atlas investor dashboard",
+    subtitle: "Investor dashboard",
     points: [
-      "Real-time portfolio performance and analytics",
+      "Real time portfolio performance and analytics",
       "Deal flow pipeline with scoring and workflow",
       "Reports, sector views, and market intelligence",
       "Collaborative workspace for investment teams",
     ],
   },
   {
-    icon: Rocket,
     title: "For founders",
     subtitle: "Founder workspace",
     points: [
-      "Run fundraising rounds end-to-end not just track them",
+      "Run fundraising rounds end to end not just track them",
       "Receive investment capital through Trackify payment rails",
       "Investor pipeline, data room, and milestone tracking",
       "Metrics, updates, structure, and finance in one workspace",
     ],
   },
   {
-    icon: CreditCard,
-    title: "Cross-border payments",
+    title: "Cross border payments",
     subtitle: "Global money movement",
     points: [
-      "Seamless crypto-to-fiat and multi-currency flows",
+      "Seamless crypto to fiat and multi currency flows",
       "Virtual cards (Visa / Mastercard) for global spend",
       "Mobile money and local rails (e.g. MTN MoMo)",
       "Apple Pay, Google Pay, and Plaid-connected funding",
     ],
   },
   {
-    icon: Users,
     title: "AI team",
     subtitle: "Specialist AI employees",
     points: [
@@ -90,7 +82,6 @@ const platformPillars = [
     ],
   },
   {
-    icon: Sparkles,
     title: "Finna AI",
     subtitle: "Intelligent assistant",
     points: [
@@ -101,11 +92,10 @@ const platformPillars = [
     ],
   },
   {
-    icon: Building2,
     title: "Accelerator",
     subtitle: "Trackify Finance 2026",
     points: [
-      "12-week program for finance-focused builders",
+      "12-week program for finance focused builders",
       "Cohort launching November 2026",
       "Mentorship, GTM, product, and fundraising support",
       "Pipeline into the Trackify platform ecosystem",
@@ -128,18 +118,18 @@ const productModules = [
     icon: Wallet,
     title: "Fundraising & capital intake",
     description:
-      "Launch rounds, manage investors and documents, and receive funds—not just track commitments—on platform payment rails.",
+      "Launch rounds, manage investors and documents, and receive funds (not just track commitments) on platform payment rails.",
   },
   {
     icon: CreditCard,
     title: "Cross-border payments",
     description:
-      "Move money across borders with virtual cards, crypto-to-fiat, mobile money, and bank integrations built for African operators.",
+      "Move money across borders with virtual cards, crypto to fiat, mobile money, and bank integrations built for African operators.",
   },
   {
     icon: LineChart,
     title: "Finance & reporting",
-    description: "Accounts, budgets, transactions, and reporting—fund-grade clarity for operators and LPs.",
+    description: "Accounts, budgets, transactions, and reporting: fund grade clarity for operators and LPs.",
   },
   {
     icon: Globe2,
@@ -155,7 +145,7 @@ const productModules = [
     icon: Users,
     title: "AI employee roster",
     description:
-      "Specialist AI agents across legal, finance, sales, marketing, operations, and HR—your on-demand team.",
+      "Specialist AI agents across legal, finance, sales, marketing, operations, and HR: your on-demand team.",
   },
 ]
 
@@ -176,7 +166,7 @@ const paymentRails = [
 const traction = [
   { value: "100+", label: "Startups tracked" },
   { value: "$2.4M+", label: "Funding monitored" },
-  { value: "2", label: "Core personas — investors & founders" },
+  { value: "2", label: "Core personas: investors & founders" },
   { value: "1", label: "Unified venture OS" },
 ]
 
@@ -226,7 +216,7 @@ const gtmStrategy = [
     phase: "Acquire",
     items: [
       "Founder led product led growth via Atlas sign-up and onboarding",
-      "Trackify Finance 2026 accelerator (November)—cohort as pipeline and case studies",
+      "Trackify Finance 2026 accelerator (November): cohort as pipeline and case studies",
       "Ecosystem presence: pitch competitions, partner networks, and founder communities",
     ],
   },
@@ -414,21 +404,14 @@ export function TrackifyPitch() {
             <SectionLabel>What we&apos;re building</SectionLabel>
             <SectionHeading>Six pillars. One ecosystem.</SectionHeading>
             <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {platformPillars.map((pillar) => {
-                const Icon = pillar.icon
-                return (
+              {platformPillars.map((pillar) => (
                   <li
                     key={pillar.title}
                     className="border border-white/10 rounded-lg p-5 print:break-inside-avoid"
                   >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/25 text-primary">
-                        <Icon className="h-5 w-5" aria-hidden />
-                      </div>
-                      <div>
-                        <h3 className="text-lg sm:text-xl font-semibold text-white">{pillar.title}</h3>
-                        <p className="text-sm sm:text-base text-primary font-medium">{pillar.subtitle}</p>
-                      </div>
+                    <div className="mb-3">
+                      <h3 className="text-lg sm:text-xl font-semibold text-white">{pillar.title}</h3>
+                      <p className="text-sm sm:text-base text-primary font-medium">{pillar.subtitle}</p>
                     </div>
                     <ul className="space-y-2">
                       {pillar.points.map((point) => (
@@ -439,8 +422,7 @@ export function TrackifyPitch() {
                       ))}
                     </ul>
                   </li>
-                )
-              })}
+              ))}
             </ul>
           </section>
 
@@ -449,7 +431,7 @@ export function TrackifyPitch() {
             <SectionLabel>AI employees</SectionLabel>
             <SectionHeading>Your on-demand AI team</SectionHeading>
             <p className={`${bodyText} text-white max-w-3xl mb-6`}>
-              Trackify ships a roster of specialist <strong className="text-white">AI employees</strong>—not just
+              Trackify ships a roster of specialist <strong className="text-white">AI employees</strong>, not just
               one chatbot. Founders and investors deploy agents for finance, legal, sales, marketing, fundraising, and
               operations. <strong className="text-white">Finna</strong> sits on top as the orchestrator across Atlas.
             </p>
@@ -492,7 +474,7 @@ export function TrackifyPitch() {
             <SectionLabel>Payments</SectionLabel>
             <SectionHeading>Cross-border payments built in</SectionHeading>
             <p className={`${bodyText} text-white max-w-3xl mb-6`}>
-              Trackify Finance connects venture workflows to real money movement—so founders can{" "}
+              Trackify Finance connects venture workflows to real money movement, so founders can{" "}
               <strong className="text-white">receive funds</strong>, pay globally, and operate across African and
               international rails without juggling five different apps.
             </p>
@@ -512,10 +494,10 @@ export function TrackifyPitch() {
           {/* Fundraising deep-dive */}
           {/* <section className="print:break-inside-avoid">
             <SectionLabel>Fundraising</SectionLabel>
-            <SectionHeading>More than a tracker—receive capital on-platform</SectionHeading>
+            <SectionHeading>More than a tracker: receive capital on-platform</SectionHeading>
             <p className={`${bodyText} text-white max-w-3xl mb-4`}>
-              Most tools only log who committed what. Trackify lets founders run the full round—pipeline, data room,
-              milestones, documents—and <strong className="text-white">receive investment funds</strong> through the
+              Most tools only log who committed what. Trackify lets founders run the full round (pipeline, data room,
+              milestones, documents) and <strong className="text-white">receive investment funds</strong> through the
               same financial layer used for cross-border payments and treasury.
             </p>
             <ul className="grid sm:grid-cols-2 gap-3">
@@ -523,7 +505,7 @@ export function TrackifyPitch() {
                 "Launch and configure rounds (target, valuation, use of funds)",
                 "Track investor pipeline from intro to committed",
                 "Share pitch deck, model, and data room securely",
-                "Receive funds—not just record commitments",
+                "Receive funds, not just record commitments",
                 "Visualize progress and milestones for your team and backers",
               ].map((item) => (
                 <li key={item} className={`${bodyText} text-white flex gap-2`}>
@@ -562,7 +544,7 @@ export function TrackifyPitch() {
               <SectionHeading>Navigate Africa&apos;s venture landscape with precision</SectionHeading>
               <p className={`${bodyText} text-white`}>
                 We believe the next generation of African unicorns will be built on transparent capital, disciplined
-                finance, and software that connects every stakeholder—from first pitch to portfolio exit. Trackify is
+                finance, and software that connects every stakeholder, from first pitch to portfolio exit. Trackify is
                 that infrastructure layer.
               </p>
             </div>
@@ -641,7 +623,7 @@ export function TrackifyPitch() {
               Partner with Trackify Finance
             </h2>
             <p className={`${bodyText} text-white max-w-xl mx-auto mb-8`}>
-              Investors, founders, LPs, and ecosystem partners—let&apos;s build the future of venture in Africa together.
+              Investors, founders, LPs, and ecosystem partners: let&apos;s build the future of venture in Africa together.
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-base sm:text-lg">
               <a
