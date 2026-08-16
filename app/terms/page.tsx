@@ -2,6 +2,7 @@ import Link from "next/link"
 import { ArrowLeft, FileText, Scale, AlertCircle, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { MarketingFooter } from "@/components/marketing-footer"
 
 export default function TermsPage() {
   return (
@@ -214,6 +215,7 @@ export default function TermsPage() {
           </div>
         </div>
       </section>
+      <MarketingFooter />
     </div>
   )
 }

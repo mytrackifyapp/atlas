@@ -1,16 +1,19 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Building2, Rocket, ArrowRight, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { authClient } from "@/lib/auth-client"
+import { safeInternalPath } from "@/lib/safe-redirect"
 
 type UserRole = "investor" | "founder"
 
 export function OnboardingClient() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const continuePath = safeInternalPath(searchParams.get("redirect"), "")
   const { data: session } = authClient.useSession()
   const [selectedRole, setSelectedRole] = useState<UserRole | null>(null)
   const [loading, setLoading] = useState(false)
@@ -38,7 +41,10 @@ export function OnboardingClient() {
         const data = await response.json()
         
         if (data.onboardingCompleted) {
-          // Redirect based on role using hard redirect
+          if (continuePath) {
+            window.location.href = continuePath
+            return
+          }
           if (data.role === "founder") {
             window.location.href = "/founder"
             return
@@ -56,7 +62,7 @@ export function OnboardingClient() {
     }
 
     checkOnboardingStatus()
-  }, [session, router])
+  }, [session, router, continuePath])
 
   // Show loading state while checking onboarding status or if no session
   if (checkingStatus || !session?.user) {
@@ -138,8 +144,8 @@ export function OnboardingClient() {
 
       // Use hard redirect to ensure server-side checks get fresh data
       // This forces a full page reload and fresh server-side session check
-      const redirectPath = selectedRole === "investor" ? "/portfolio" : "/founder"
-      console.log("Redirecting to:", redirectPath)
+      const redirectPath =
+        continuePath || (selectedRole === "investor" ? "/portfolio" : "/founder")
       window.location.href = redirectPath
     } catch (err) {
       console.error("Error in handleSubmit:", err)

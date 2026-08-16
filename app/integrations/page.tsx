@@ -4,6 +4,7 @@ import TrackifyVcIntegrationsSection from "@/components/trackifyvc/integrations/
 import { TrackifyVcStats } from "@/components/trackifyvc/stats"
 import TrackifyVcOriginalBlogs from "@/components/trackifyvc/original-blogs"
 import TrackifyVcOriginalCta from "@/components/trackifyvc/original-cta"
+import { MarketingFooter } from "@/components/marketing-footer"
 
 export default function IntegrationsPage() {
   return (
@@ -15,6 +16,7 @@ export default function IntegrationsPage() {
         <TrackifyVcStats />
         <TrackifyVcOriginalBlogs />
         <TrackifyVcOriginalCta />
+        <MarketingFooter />
       </div>
     </div>
   )

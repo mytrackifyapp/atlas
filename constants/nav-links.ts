@@ -3,6 +3,7 @@ import {
   Building2,
   CreditCard,
   DatabaseZap,
+  Info,
   Mail,
   NewspaperIcon,
   Package,
@@ -96,23 +97,12 @@ export const NAV_LINKS = [
         icon: Rocket,
       },
       {
-        title: "For Startups",
-        tagline: "Stay investor-ready with finance and execution tools.",
-        href: "/solutions/startups",
-        icon: Users,
-      },
-      {
         title: "Accelerators",
         tagline: "Support cohorts with structure, reporting, and playbooks.",
         href: "/solutions/accelerators",
         icon: Rocket,
       },
     ],
-  },
-  {
-    title: "Companies",
-    href: "/companies",
-    icon: Building2,
   },
   {
     title: "AI Agents",
@@ -129,6 +119,18 @@ export const NAV_LINKS = [
     href: "/resources",
     icon: NewspaperIcon,
     menu: [
+      {
+        title: "About",
+        tagline: "Meet the team behind Trackify Finance.",
+        href: "/about",
+        icon: Info,
+      },
+      {
+        title: "Companies",
+        tagline: "Startups building on Trackify.",
+        href: "/companies",
+        icon: Building2,
+      },
       {
         title: "Blog",
         tagline: "Read articles on the latest trends in tech.",

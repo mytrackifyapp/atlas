@@ -4,6 +4,7 @@ import OurStart from "@/components/trackifyvc/about/our-start"
 import OurStory from "@/components/trackifyvc/about/our-story"
 import TrackifyVcNavbar from "@/components/trackifyvc/navigation/navbar"
 import TrackifyVcOriginalCta from "@/components/trackifyvc/original-cta"
+import { MarketingFooter } from "@/components/marketing-footer"
 import TrackifyVcOriginalFaq from "@/components/trackifyvc/original-faq"
 
 export default function AboutPage() {
@@ -16,6 +17,7 @@ export default function AboutPage() {
       <OurMission />
       <TrackifyVcOriginalFaq />
       <TrackifyVcOriginalCta />
+      <MarketingFooter />
     </div>
   )
 }

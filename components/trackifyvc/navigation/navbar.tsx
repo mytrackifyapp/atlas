@@ -12,6 +12,7 @@ export default function TrackifyVcNavbar() {
       className="sticky top-0 bg-transparent pb-4"
       primaryHref={isLoggedIn ? "/dashboard" : "/sign-up"}
       primaryLabel={isLoggedIn ? "Dashboard" : "Sign up"}
+      variant="light"
     />
   )
 }

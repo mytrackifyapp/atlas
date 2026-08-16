@@ -4,6 +4,7 @@ import { useMemo, useState } from "react"
 
 import TrackifyVcNavbar from "@/components/trackifyvc/navigation/navbar"
 import TrackifyVcOriginalCta from "@/components/trackifyvc/original-cta"
+import { MarketingFooter } from "@/components/marketing-footer"
 import {
   COMPANIES_DIRECTORY,
   COMPANY_FOCUSES,
@@ -91,6 +92,7 @@ export function CompaniesPageContent() {
       </main>
 
       <TrackifyVcOriginalCta variant="light" />
+      <MarketingFooter />
     </div>
   )
 }

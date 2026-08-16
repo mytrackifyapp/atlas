@@ -5,6 +5,7 @@ import { useState } from "react"
 import { ArrowRight, Check, Minus, Sparkles, X } from "lucide-react"
 
 import TrackifyVcNavbar from "@/components/trackifyvc/navigation/navbar"
+import { MarketingFooter } from "@/components/marketing-footer"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -313,6 +314,7 @@ export function PricingPageContent() {
           </Card>
         </div>
       </section>
+      <MarketingFooter />
     </div>
   )
 }

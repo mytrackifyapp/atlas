@@ -1,12 +1,7 @@
-import Link from "next/link"
-
 import { AiAgentsHero } from "@/components/ai-agents-hero"
-import { AiAgentsShowcase } from "@/components/ai-agents-showcase"
 import TrackifyVcNavbar from "@/components/trackifyvc/navigation/navbar"
-import { AI_AGENTS_CATALOG } from "@/lib/ai-agents-catalog"
-import { getAgentPagePath } from "@/lib/ai-agents-marketing"
+import { MarketingFooter } from "@/components/marketing-footer"
 import { getSessionWithRole } from "@/lib/auth-helpers"
-import { Button } from "@/components/ui/button"
 
 export const dynamic = "force-dynamic"
 
@@ -27,71 +22,13 @@ export default async function AiAgentsMarketingPage() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white">
-      <div className="relative">
-        <div className="absolute inset-x-0 top-0 z-30">
+      <div className="pointer-events-none fixed inset-x-0 top-0 z-50">
+        <div className="pointer-events-auto">
           <TrackifyVcNavbar />
         </div>
-        <AiAgentsHero variant="marketing" ctaHref={aiDashboardHref} ctaLabel="Get Trackify" />
       </div>
-
-      <AiAgentsShowcase />
-
-      <section id="agents" className="border-t border-white/10 py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Meet your AI agents</h2>
-            <p className="mt-4 text-base text-white/65 sm:text-lg">
-              Enable specialist roles like CFO, Vera, and Marketer to speed up execution
-              across your team.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <Button
-                asChild
-                className="rounded-full bg-[#4483f2] px-8 text-white hover:bg-[#3a75e0]"
-              >
-                <Link href={aiDashboardHref}>Open AI Agents</Link>
-              </Button>
-              {!isAuthenticated ? (
-                <Button
-                  asChild
-                  variant="outline"
-                  className="rounded-full border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white"
-                >
-                  <Link href="/sign-in">Sign in</Link>
-                </Button>
-              ) : null}
-            </div>
-          </div>
-
-          <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {AI_AGENTS_CATALOG.map((a) => (
-              <Link
-                key={a.id}
-                href={getAgentPagePath(a.id)}
-                className="group rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition-colors hover:border-white/20 hover:bg-white/[0.07]"
-              >
-                <div className="text-xs font-medium uppercase tracking-wider text-white/45">
-                  {a.category}
-                </div>
-                <div className="mt-2 text-lg font-semibold text-white group-hover:text-[#4483f2] transition-colors">
-                  {a.name}
-                </div>
-                <p className="mt-2 text-sm leading-relaxed text-white/60">{a.description}</p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {a.tags.slice(0, 4).map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[11px] text-white/55"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      <AiAgentsHero variant="marketing" ctaHref={aiDashboardHref} ctaLabel="Get Trackify" />
+      <MarketingFooter />
     </div>
   )
 }

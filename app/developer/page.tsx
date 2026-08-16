@@ -3,6 +3,7 @@ import DevApi from "@/components/trackifyvc/developer/dev-api"
 import ApiQuestions from "@/components/trackifyvc/developer/api-question"
 import TrackifyVcOriginalFaq from "@/components/trackifyvc/original-faq"
 import TrackifyVcOriginalCta from "@/components/trackifyvc/original-cta"
+import { MarketingFooter } from "@/components/marketing-footer"
 
 export default function DeveloperPage() {
   return (
@@ -13,6 +14,7 @@ export default function DeveloperPage() {
         <ApiQuestions />
         <TrackifyVcOriginalFaq />
         <TrackifyVcOriginalCta />
+        <MarketingFooter />
       </div>
     </div>
   )

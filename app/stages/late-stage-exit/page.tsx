@@ -1,5 +1,6 @@
 import Link from "next/link"
 import TrackifyVcNavbar from "@/components/trackifyvc/navigation/navbar"
+import { MarketingFooter } from "@/components/marketing-footer"
 import { ArrowLeft, TrendingUp, Users, Target, BarChart3, Sparkles, Globe2, Building2, BookOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -314,6 +315,7 @@ export default function LateStageExitPage() {
           </div>
         </div>
       </section>
+      <MarketingFooter />
     </div>
   )
 }

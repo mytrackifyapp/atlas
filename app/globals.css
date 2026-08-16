@@ -191,6 +191,22 @@
   }
 }
 
+/* Masterclass PDF pages — 16:9 document, not a slide viewer */
+.masterclass-page {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  box-shadow: 0 24px 60px rgb(0 0 0 / 0.45);
+}
+
+.masterclass-spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: var(--primary);
+}
+
 /* Pitch & CV: preserve dark theme in print/PDF (match on-screen black + lime) */
 @page {
   size: auto;
@@ -205,8 +221,10 @@
 
   html.pitch-print-root,
   html.cv-print-root,
+  html.masterclass-print-root,
   html:has(.pitch-deck),
-  html:has(.cv-deck) {
+  html:has(.cv-deck),
+  html:has(.masterclass-deck) {
     background: #000000 !important;
     background-color: #000000 !important;
     color-scheme: dark;
@@ -216,10 +234,13 @@
 
   html.pitch-print-root body,
   html.cv-print-root body,
+  html.masterclass-print-root body,
   body.pitch-print-root,
   body.cv-print-root,
+  body.masterclass-print-root,
   body:has(.pitch-deck),
-  body:has(.cv-deck) {
+  body:has(.cv-deck),
+  body:has(.masterclass-deck) {
     background: #000000 !important;
     background-color: #000000 !important;
     -webkit-print-color-adjust: exact !important;
@@ -228,15 +249,18 @@
 
   .pitch-deck,
   .cv-deck,
+  .masterclass-deck,
   .pitch-deck > *,
-  .cv-deck > * {
+  .cv-deck > *,
+  .masterclass-deck > * {
     background-color: #000000 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
   .pitch-deck *,
-  .cv-deck * {
+  .cv-deck *,
+  .masterclass-deck * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
@@ -252,6 +276,22 @@
     print-color-adjust: exact !important;
     break-inside: avoid;
     page-break-inside: avoid;
+  }
+
+  .masterclass-deck img.deck-image {
+    display: block !important;
+    visibility: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .masterclass-page img.deck-image-banner {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+    object-fit: cover !important;
   }
 
   .pitch-deck .deck-image-banner,
@@ -284,5 +324,31 @@
     min-height: 6rem !important;
     overflow: hidden !important;
     flex-shrink: 0 !important;
+  }
+
+  html.masterclass-print-root .masterclass-page-stack {
+    max-width: none !important;
+    gap: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  html.masterclass-print-root .masterclass-page {
+    width: 13.333in !important;
+    height: 7.5in !important;
+    max-width: none !important;
+    aspect-ratio: auto !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    break-after: page;
+    page-break-after: always;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    overflow: hidden !important;
+  }
+
+  html.masterclass-print-root .masterclass-page:last-child {
+    break-after: auto;
+    page-break-after: auto;
   }
 }

@@ -1,11 +1,12 @@
-"use client"
+import Link from "next/link"
+import { ArrowUpRight, Clock, Mail, MapPin, Phone } from "lucide-react"
 
-import { Mail, MapPin, Phone } from "lucide-react"
-
-import Container from "@/components/trackifyvc/global/container"
-import Icons from "@/components/trackifyvc/global/icons"
-import Wrapper from "@/components/trackifyvc/global/wrapper"
 import { TRACKIFYVC_CONTACT_CARDS } from "@/lib/trackifyvc-constants"
+
+const CONTACT_LINKS = {
+  Phone: "tel:+233532818725",
+  Mail: "mailto:hey@mytrackify.com",
+} as const
 
 const ICONS = {
   Phone,
@@ -15,57 +16,60 @@ const ICONS = {
 
 export default function TrackifyVcContactHero() {
   return (
-    <div className="relative z-0 w-full h-full">
-      <div className="absolute -top-16 inset-x-0 -z-10 mx-auto w-3/4 h-32 lg:h-60 rounded-full blur-[5rem] bg-[radial-gradient(86.02%_172.05%_at_50%_-40%,rgba(18,139,135,1)_0%,rgba(5,5,5,0)_80%)]" />
+    <div className="lg:sticky lg:top-28">
+      <p className="text-sm font-medium text-neutral-500">Contact</p>
+      <h1 className="mt-3 text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
+        Talk to our team
+      </h1>
+      <p className="mt-4 max-w-md text-pretty text-base leading-relaxed text-neutral-500 sm:text-lg">
+        Sales, partnerships, or a question about your account — send a note and we&apos;ll get back to you.
+      </p>
 
-      <Wrapper className="py-20">
-        <div className="flex flex-col items-center justify-center w-full z-10">
-          <Container>
-            <div className="flex items-center justify-center gap-x-1 px-2 py-1.5 relative w-max mx-auto rounded-full before:absolute before:inset-0 before:-z-10 before:p-[1px] before:rounded-3xl before:bg-gradient-to-b before:from-neutral-700 before:to-neutral-900 before:content-[''] after:absolute after:inset-[1px] after:-z-10 after:rounded-[22px] after:bg-[#181818]/60">
-              <Icons.stars className="size-5" />
-              <span className="text-sm text-white">Contact Us</span>
-            </div>
-          </Container>
+      <p className="mt-6 inline-flex items-center gap-2 text-sm text-neutral-600">
+        <Clock className="h-4 w-4 text-neutral-400" />
+        Typically replies within 1 business day
+      </p>
 
-          <Container delay={0.1}>
-            <h2 className="text-balance !leading-[1.25] text-center text-4xl md:text-6xl font-semibold tracking-tight mt-6 w-full">
-              Let&apos;s Start a Conversation
-            </h2>
-          </Container>
+      <ul className="mt-8 space-y-3">
+        {TRACKIFYVC_CONTACT_CARDS.map((card) => {
+          const Icon = ICONS[card.icon] ?? Phone
+          const href = CONTACT_LINKS[card.icon as keyof typeof CONTACT_LINKS]
+          const inner = (
+            <>
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-neutral-700">
+                <Icon className="h-4 w-4" />
+              </span>
+              <span className="min-w-0 flex-1 text-left">
+                <span className="block text-xs font-medium text-neutral-400">{card.title}</span>
+                <span className="mt-0.5 block text-sm font-medium text-neutral-950">{card.value}</span>
+              </span>
+              {href ? <ArrowUpRight className="h-4 w-4 shrink-0 text-neutral-300" /> : null}
+            </>
+          )
 
-          <Container delay={0.2}>
-            <p className="text-base md:text-lg font-normal text-center text-balance text-muted-foreground max-w-3xl mx-auto mt-4">
-              Have questions or want to learn more? We&apos;re here to help. Reach
-              out to our team and let&apos;s discuss how we can support your needs
-            </p>
-          </Container>
+          const className =
+            "flex w-full items-center gap-3 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3.5 transition-colors"
 
-          <Container delay={0.3} className="w-full">
-            <div className="flex flex-col md:flex-row justify-center gap-6 w-full mt-10">
-              {TRACKIFYVC_CONTACT_CARDS.map((card) => {
-                const Icon =
-                  ICONS[card.icon as keyof typeof ICONS] ?? Phone
+          return (
+            <li key={card.title}>
+              {href ? (
+                <a href={href} className={`${className} hover:border-neutral-300 hover:bg-white`}>
+                  {inner}
+                </a>
+              ) : (
+                <div className={className}>{inner}</div>
+              )}
+            </li>
+          )
+        })}
+      </ul>
 
-                return (
-                  <div
-                    key={card.title}
-                    className="flex flex-col items-center justify-center p-6 rounded-2xl bg-[#0A0A0A] border border-border/50"
-                  >
-                    <div className="size-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <Icon className="size-6 text-primary" />
-                    </div>
-                    <h3 className="text-lg font-semibold mt-4">{card.title}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {card.value}
-                    </p>
-                  </div>
-                )
-              })}
-            </div>
-          </Container>
-        </div>
-      </Wrapper>
+      <p className="mt-8 text-sm text-neutral-500">
+        Prefer to look around first?{" "}
+        <Link href="/sign-up" className="font-medium text-neutral-950 underline-offset-4 hover:underline">
+          Get started free
+        </Link>
+      </p>
     </div>
   )
 }
-

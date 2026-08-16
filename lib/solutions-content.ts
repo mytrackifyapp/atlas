@@ -51,9 +51,9 @@ export const SOLUTIONS: SolutionContent[] = [
     slug: "founders",
     label: "For Founders",
     title: "For Founders | Trackify Finance",
-    headline: "Manage your fundraising journey with confidence",
+    headline: "Supercharge your startup with tools to launch, raise funds, and scale",
     description:
-      "Track investor relationships, organize documents, and monitor business metrics all in one place — from first outreach to close.",
+      "Join Trackify, the all-in-one platform for founders. Raise from investors, run finance, share a data room, and keep your company investor-ready.",
     features: [
       "Investor pipeline and relationship management",
       "Secure document sharing and data room",

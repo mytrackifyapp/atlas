@@ -14,7 +14,7 @@ Platform-wide products and pages:
 - Accelerator (/accelerator) — cohort reporting, playbooks, and founder support for programs.
 - Virtual Cards and Integrations (/integrations) — payments and third-party connections.
 - Pricing (/pricing) — Free, Pro ($20/mo), Team ($50/mo), Enterprise (custom). Pro includes Finna, finance dashboard, data room, 3 AI employees. Team adds investor dashboard access, deal flow, portfolio analytics, up to 10 seats, unlimited AI employees.
-- Blog, White Paper, Developer API — resources under /blog, /whitepaper, /developer.
+- Blog, White Paper, Masterclass, Developer API — resources under /blog, /whitepaper, /masterclass, /developer.
 - Investment stages — educational pages for pre-seed/seed, Series A, growth, and late-stage/exit (/stages/...).
 
 How to help users:

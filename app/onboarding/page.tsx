@@ -1,51 +1,52 @@
+import { Suspense } from "react"
 import { redirect } from "next/navigation"
 import { getSessionWithRole } from "@/lib/auth-helpers"
 import { roleConfigs } from "@/lib/role-config"
+import { safeInternalPath } from "@/lib/safe-redirect"
 import { OnboardingClient } from "./onboarding-client"
 
 export const dynamic = "force-dynamic"
 
-export default async function OnboardingPage() {
+export default async function OnboardingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ redirect?: string }>
+}) {
   try {
-    // Server-side check: redirect to sign-in if not authenticated
     const session = await getSessionWithRole()
+    const params = await searchParams
+    const next = safeInternalPath(params.redirect, "")
+    const onboardingPath = next ? `/onboarding?redirect=${encodeURIComponent(next)}` : "/onboarding"
 
     if (!session) {
-      console.log("OnboardingPage: No session, redirecting to sign-in")
-      redirect("/sign-in?redirect=/onboarding")
+      redirect(`/sign-in?redirect=${encodeURIComponent(onboardingPath)}`)
     }
 
-    console.log("OnboardingPage: Session check:", {
-      userId: session.user.id,
-      email: session.user.email,
-      role: session.user.role,
-      onboardingCompleted: session.user.onboardingCompleted
-    })
-
-    // If onboarding already completed, redirect to appropriate dashboard
     if (session.user.onboardingCompleted) {
-      // Use roleConfigs to get the correct default route, or fallback to /dashboard
+      if (next) {
+        redirect(next)
+      }
+
       let redirectPath = "/dashboard"
       const userRole = session.user.role as "investor" | "founder" | null
-      
+
       if (userRole === "founder" || userRole === "investor") {
         redirectPath = roleConfigs[userRole].defaultRoute
       }
-      
-      console.log("OnboardingPage: Onboarding completed, redirecting to:", redirectPath)
+
       redirect(redirectPath)
     }
 
-    // Render the client component for authenticated users who haven't completed onboarding
-    console.log("OnboardingPage: Rendering onboarding client")
-    return <OnboardingClient />
+    return (
+      <Suspense fallback={null}>
+        <OnboardingClient />
+      </Suspense>
+    )
   } catch (error) {
-    // If there's an error getting session, redirect to sign-in
-    console.error("Error in onboarding page:", error)
-    // Don't redirect on NEXT_REDIRECT errors (those are expected)
     if (error instanceof Error && error.message.includes("NEXT_REDIRECT")) {
-      throw error // Re-throw redirect errors
+      throw error
     }
     redirect("/sign-in?redirect=/onboarding")
   }
 }
+

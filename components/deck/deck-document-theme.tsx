@@ -4,7 +4,7 @@ import { useEffect } from "react"
 
 type DeckDocumentThemeProps = {
   /** Applied to <html> for scoped print CSS */
-  rootClass: "pitch-print-root" | "cv-print-root"
+  rootClass: "pitch-print-root" | "cv-print-root" | "masterclass-print-root"
 }
 
 /**
@@ -18,6 +18,14 @@ export function DeckDocumentTheme({ rootClass }: DeckDocumentThemeProps) {
 
     html.classList.add("dark", rootClass)
     body.classList.add(rootClass)
+
+    let printPageStyle: HTMLStyleElement | null = null
+    if (rootClass === "masterclass-print-root") {
+      printPageStyle = document.createElement("style")
+      printPageStyle.setAttribute("data-masterclass-print", "")
+      printPageStyle.textContent = `@media print { @page { size: 13.333in 7.5in; margin: 0; } }`
+      document.head.appendChild(printPageStyle)
+    }
 
     const forceBlackBackground = () => {
       html.style.setProperty("background-color", "#000000", "important")
@@ -55,6 +63,7 @@ export function DeckDocumentTheme({ rootClass }: DeckDocumentThemeProps) {
       body.style.removeProperty("background-color")
       body.style.removeProperty("-webkit-print-color-adjust")
       body.style.removeProperty("print-color-adjust")
+      printPageStyle?.remove()
       window.removeEventListener("beforeprint", onBeforePrint)
     }
   }, [rootClass])

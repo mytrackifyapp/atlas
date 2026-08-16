@@ -1,7 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 
 import {
@@ -15,8 +16,19 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { authClient } from "@/lib/auth-client"
+import { safeInternalPath } from "@/lib/safe-redirect"
 
-export default function SignUpPage() {
+function SignUpForm() {
+  const searchParams = useSearchParams()
+  const redirectTo = safeInternalPath(
+    searchParams.get("redirect") || searchParams.get("next"),
+    "/onboarding",
+  )
+  const afterSignUp =
+    redirectTo === "/onboarding"
+      ? "/onboarding"
+      : `/onboarding?redirect=${encodeURIComponent(redirectTo)}`
+
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -39,7 +51,7 @@ export default function SignUpPage() {
       if (result.error) {
         setError(result.error.message || "Failed to sign up")
       } else {
-        window.location.href = "/onboarding"
+        window.location.href = afterSignUp
       }
     } catch {
       setError("An unexpected error occurred")
@@ -48,6 +60,11 @@ export default function SignUpPage() {
     }
   }
 
+  const signInHref =
+    redirectTo === "/onboarding"
+      ? "/sign-in"
+      : `/sign-in?redirect=${encodeURIComponent(redirectTo)}`
+
   return (
     <AuthLayout
       title="Create Account"
@@ -55,7 +72,7 @@ export default function SignUpPage() {
       footer={
         <>
           Already have an account?{" "}
-          <Link href="/sign-in" className="font-medium text-[#c1ff72] hover:underline">
+          <Link href={signInHref} className="font-medium text-[#c1ff72] hover:underline">
             Log in
           </Link>
         </>
@@ -137,3 +154,18 @@ export default function SignUpPage() {
     </AuthLayout>
   )
 }
+
+export default function SignUpPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-black text-neutral-500">
+          Loading...
+        </div>
+      }
+    >
+      <SignUpForm />
+    </Suspense>
+  )
+}
+

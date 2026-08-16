@@ -68,7 +68,14 @@ function SignInForm() {
       footer={
         <>
           Don&apos;t have an account?{" "}
-          <Link href="/sign-up" className="font-medium text-[#c1ff72] hover:underline">
+          <Link
+            href={
+              redirectTo === "/dashboard"
+                ? "/sign-up"
+                : `/sign-up?redirect=${encodeURIComponent(redirectTo)}`
+            }
+            className="font-medium text-[#c1ff72] hover:underline"
+          >
             Sign up
           </Link>
         </>

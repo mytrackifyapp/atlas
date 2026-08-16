@@ -5,6 +5,7 @@ import OurStart from "@/components/trackifyvc/about/our-start"
 import OurStory from "@/components/trackifyvc/about/our-story"
 import TrackifyVcOriginalFaq from "@/components/trackifyvc/original-faq"
 import TrackifyVcOriginalCta from "@/components/trackifyvc/original-cta"
+import { MarketingFooter } from "@/components/marketing-footer"
 
 export default function WhitePaperPage() {
   return (
@@ -17,6 +18,7 @@ export default function WhitePaperPage() {
         <OurMission />
         <TrackifyVcOriginalFaq />
         <TrackifyVcOriginalCta />
+        <MarketingFooter />
       </div>
     </div>
   )

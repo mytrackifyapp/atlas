@@ -20,6 +20,7 @@ import {
 
 import { Button } from "@/components/ui/button"
 import TrackifyVcNavbar from "@/components/trackifyvc/navigation/navbar"
+import { MarketingFooter } from "@/components/marketing-footer"
 import { cn } from "@/lib/utils"
 import type {
   AgentIconName,
@@ -287,6 +288,7 @@ export function AiAgentMarketingPage({
           </div>
         </div>
       </section>
+      <MarketingFooter />
     </div>
   )
 }

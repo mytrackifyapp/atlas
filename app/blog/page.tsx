@@ -3,6 +3,7 @@ import BlogHero from "@/components/trackifyvc/blog/blog-hero"
 import BlogSection from "@/components/trackifyvc/blog/blog-section"
 import TrackifyVcOriginalFaq from "@/components/trackifyvc/original-faq"
 import TrackifyVcOriginalCta from "@/components/trackifyvc/original-cta"
+import { MarketingFooter } from "@/components/marketing-footer"
 
 export default function BlogPage() {
   return (
@@ -13,6 +14,7 @@ export default function BlogPage() {
         <BlogSection />
         <TrackifyVcOriginalFaq />
         <TrackifyVcOriginalCta />
+        <MarketingFooter />
       </div>
     </div>
   )

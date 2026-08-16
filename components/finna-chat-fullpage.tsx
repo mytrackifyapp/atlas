@@ -27,27 +27,30 @@ export function FinnaChatFullPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesRef = useRef<ChatMessage[]>([])
   const initialQueryHandled = useRef(false)
+
+  useEffect(() => {
+    messagesRef.current = messages
+  }, [messages])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages, isLoading])
 
   const sendToFinna = useCallback(async (userContent: string) => {
+    const userMessage: ChatMessage = { role: "user", content: userContent }
+    const payload = [...messagesRef.current, userMessage]
+    messagesRef.current = payload
     setMessage("")
     setIsLoading(true)
-
-    let newMessages: ChatMessage[] = []
-    setMessages((prev) => {
-      newMessages = [...prev, { role: "user", content: userContent }]
-      return newMessages
-    })
+    setMessages(payload)
 
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newMessages }),
+        body: JSON.stringify({ messages: payload }),
       })
       const data = await res.json()
 

@@ -2,6 +2,7 @@ import Link from "next/link"
 import { ArrowLeft, Shield, Lock, Eye, FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { MarketingFooter } from "@/components/marketing-footer"
 
 export default function PrivacyPage() {
   return (
@@ -199,6 +200,7 @@ export default function PrivacyPage() {
           </div>
         </div>
       </section>
+      <MarketingFooter />
     </div>
   )
 }

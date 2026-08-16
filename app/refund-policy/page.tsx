@@ -12,6 +12,7 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { MarketingFooter } from "@/components/marketing-footer"
 
 export const metadata: Metadata = {
   title: "Refund Policy | Trackify Atlas",
@@ -234,6 +235,7 @@ export default function RefundPolicyPage() {
           </div>
         </div>
       </section>
+      <MarketingFooter />
     </div>
   )
 }
