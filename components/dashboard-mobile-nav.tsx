@@ -1,130 +1,98 @@
 "use client"
 
-import Link from "next/link"
+import { useEffect, useMemo, useState } from "react"
 import { usePathname } from "next/navigation"
-
 import {
-  getMobileNavLayout,
-  isMobileTabActive,
-  type MobileTab,
-} from "@/lib/dashboard-sidebar-config"
-import type { UserRole } from "@/lib/role-config"
-import { cn } from "@/lib/utils"
+  BarChart3,
+  Briefcase,
+  Building2,
+  FileText,
+  Home,
+  ImagePlay,
+  LayoutPanelTop,
+  LogOut,
+  MessagesCircle,
+  Rocket,
+  Settings,
+  Shield,
+  Sparkles,
+  Target,
+  Users,
+  Wallet,
+} from "lucide-react"
 
-function PillTab({
-  tab,
-  active,
-  onMenuOpen,
-}: {
-  tab: MobileTab
-  active: boolean
-  onMenuOpen: () => void
-}) {
-  const Icon = tab.icon
+import { CircularNavDome, CircularNavOverlay, type CircularNavItem, type CircularNavMoreItem } from "@/components/circular-nav"
+import { getSettingsHref, type UserRole } from "@/lib/role-config"
 
-  const inner = (
-    <>
-      <span
-        className={cn(
-          "flex h-8 w-8 items-center justify-center rounded-full transition-colors",
-          active && "bg-white/12",
-        )}
-      >
-        <Icon
-          className={cn("h-[18px] w-[18px]", active ? "text-white" : "text-white/55")}
-          strokeWidth={active ? 2 : 1.75}
-        />
-      </span>
-      <span
-        className={cn(
-          "max-w-full truncate text-[10px] font-medium leading-none",
-          active ? "text-white" : "text-white/50",
-        )}
-      >
-        {tab.name}
-      </span>
-    </>
-  )
+function founderItems(): CircularNavItem[] {
+  return [
+    { label: "Home", href: "/founder", icon: Home },
+    { label: "Finance", href: "/founder/finance", icon: Wallet },
+    { label: "Finna", href: "/finna", icon: Sparkles },
+    { label: "Sales", href: "/founder/sales", icon: Target },
+    { label: "Raise", href: "/founder/fundraising", icon: Rocket },
+    { label: "Lounge", href: "/founder/updates", icon: MessagesCircle },
+  ]
+}
 
-  const className =
-    "flex min-w-0 flex-1 flex-col items-center justify-center gap-1 py-0.5 transition-opacity active:opacity-70"
-
-  if (tab.kind === "menu") {
-    return (
-      <button type="button" onClick={onMenuOpen} className={className} aria-label={tab.name}>
-        {inner}
-      </button>
-    )
-  }
-
-  return (
-    <Link href={tab.href} className={className} aria-current={active ? "page" : undefined}>
-      {inner}
-    </Link>
-  )
+function investorItems(): CircularNavItem[] {
+  return [
+    { label: "Home", href: "/dashboard", icon: Home },
+    { label: "Portfolio", href: "/portfolio", icon: Briefcase },
+    { label: "Finna", href: "/finna", icon: Sparkles },
+    { label: "Deals", href: "/deal-flow", icon: Target },
+    { label: "Finance", href: "/dashboard/finance", icon: Wallet },
+    { label: "Lounge", href: "/dashboard/updates", icon: MessagesCircle },
+  ]
 }
 
 export function DashboardMobileNav({
   userRole,
-  onMenuOpen,
-  isMenuOpen,
+  isAdmin,
+  onSignOut,
 }: {
   userRole: UserRole
-  onMenuOpen: () => void
-  isMenuOpen: boolean
+  isAdmin?: boolean
+  onSignOut: () => void
 }) {
   const pathname = usePathname()
-  const { left, center, right } = getMobileNavLayout(userRole)
-  const pillTabs = [...left, ...right].filter((tab) => tab.kind !== "menu")
-  const action = center.kind === "menu" ? center : right.find((tab) => tab.kind === "menu") ?? center
-  const ActionIcon = action.icon
-  const actionActive = action.kind === "menu" && isMenuOpen
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    setOpen(false)
+  }, [pathname])
+
+  const items = useMemo(
+    () => (userRole === "founder" ? founderItems() : investorItems()),
+    [userRole],
+  )
+
+  const moreItems = useMemo<CircularNavMoreItem[]>(() => {
+    const links: CircularNavMoreItem[] =
+      userRole === "founder"
+        ? [
+            { label: "Workspace", href: "/founder/workspace", icon: LayoutPanelTop },
+            { label: "Social", href: "/founder/social", icon: ImagePlay },
+            { label: "Documents", href: "/founder/documents", icon: FileText },
+            { label: "Analytics", href: "/founder/analytics", icon: BarChart3 },
+            { label: "U.S. company", href: "/founder/incorporate", icon: Building2 },
+            { label: "Accelerator", href: "/accelerator", icon: Users },
+          ]
+        : [
+            { label: "Reports", href: "/reports", icon: BarChart3 },
+            { label: "Workspace", href: "/workspace", icon: LayoutPanelTop },
+            { label: "Accelerator", href: "/accelerator", icon: Users },
+          ]
+    if (isAdmin) links.push({ label: "Admin", href: "/admin", icon: Shield })
+    links.push({ label: "Settings", href: getSettingsHref(userRole), icon: Settings })
+    links.push({ label: "Sign out", icon: LogOut, onClick: onSignOut })
+    return links
+  }, [userRole, isAdmin, onSignOut])
 
   return (
-    <nav
-      className="fixed inset-x-0 bottom-0 z-40 px-4 lg:hidden"
-      style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
-      aria-label="Primary navigation"
-    >
-      <div className="mx-auto flex max-w-md items-end gap-2.5">
-        <div className="flex h-[4.25rem] min-w-0 flex-1 items-stretch rounded-full border border-white/10 bg-[#0a0a0a]/78 px-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
-          {pillTabs.map((tab) => (
-            <PillTab
-              key={tab.name}
-              tab={tab}
-              active={tab.kind === "menu" ? isMenuOpen : isMobileTabActive(pathname, tab)}
-              onMenuOpen={onMenuOpen}
-            />
-          ))}
-        </div>
-
-        <button
-          type="button"
-          onClick={onMenuOpen}
-          aria-label={action.name}
-          aria-expanded={actionActive}
-          className="flex shrink-0 flex-col items-center gap-1"
-        >
-          <span
-            className={cn(
-              "flex h-[3.35rem] w-[3.35rem] items-center justify-center rounded-full border shadow-[0_10px_28px_rgba(0,0,0,0.4)] backdrop-blur-2xl transition-colors",
-              actionActive
-                ? "border-[#c1ff72]/45 bg-[#0a0a0a]/90 text-[#c1ff72]"
-                : "border-white/10 bg-[#0a0a0a]/78 text-white",
-            )}
-          >
-            <ActionIcon className="h-5 w-5" strokeWidth={1.85} />
-          </span>
-          <span
-            className={cn(
-              "text-[10px] font-medium leading-none",
-              actionActive ? "text-[#c1ff72]" : "text-white/55",
-            )}
-          >
-            {action.name}
-          </span>
-        </button>
-      </div>
-    </nav>
+    <div className="lg:hidden">
+      <CircularNavDome onClick={() => setOpen(true)} />
+      <CircularNavOverlay open={open} onClose={() => setOpen(false)} items={items} moreItems={moreItems} />
+    </div>
   )
 }

@@ -1,9 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { ChevronDown, Menu, User } from "lucide-react"
+import { BadgeDollarSign, ChevronDown, Info, Menu, Sparkles, User } from "lucide-react"
 import { useRef, useState } from "react"
 
+import { CircularNavOverlay, type CircularNavItem, type CircularNavMoreItem } from "@/components/circular-nav"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -11,7 +12,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import {
   MARKETING_NAV_LINKS,
   MARKETING_RESOURCES_LINKS,
@@ -19,6 +19,21 @@ import {
   type MarketingMenuLink,
 } from "@/lib/marketing-nav"
 import { cn } from "@/lib/utils"
+
+const MARKETING_MORE: CircularNavMoreItem[] = [
+  ...MARKETING_SOLUTIONS_LINKS.filter(
+    (item) => item.href !== "/solutions/founders" && item.href !== "/solutions/investors",
+  ),
+  ...MARKETING_RESOURCES_LINKS.filter((item) => item.href !== "/about"),
+]
+
+const MARKETING_WHEEL: CircularNavItem[] = [
+  { label: "Finna", href: "/ai-agents", icon: Sparkles },
+  { label: "Pricing", href: "/pricing", icon: BadgeDollarSign },
+  { label: "Founders", href: "/solutions/founders", icon: MARKETING_SOLUTIONS_LINKS[1].icon },
+  { label: "Investors", href: "/solutions/investors", icon: MARKETING_SOLUTIONS_LINKS[0].icon },
+  { label: "About", href: "/about", icon: Info },
+]
 
 function NavDropdown({
   label,
@@ -194,140 +209,38 @@ export function MarketingGlassNavbar({
               </Link>
             )}
 
-            <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-              <SheetTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className={cn(
-                    "h-9 w-9 lg:hidden",
-                    light
-                      ? "text-neutral-900 hover:bg-neutral-100"
-                      : "text-white hover:bg-white/10",
-                  )}
-                  aria-label="Open menu"
-                >
-                  <Menu className="h-5 w-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent
-                side="right"
-                className={cn(
-                  "w-[min(100vw,320px)] backdrop-blur-xl",
-                  light
-                    ? "border-neutral-200 bg-white text-neutral-950"
-                    : "border-white/10 bg-neutral-950/95 text-white",
-                )}
-              >
-                <div className="mt-8 flex flex-col gap-1">
-                  <p
-                    className={cn(
-                      "px-3 text-xs font-medium uppercase tracking-[0.12em]",
-                      light ? "text-neutral-400" : "text-white/45",
-                    )}
-                  >
-                    Solutions
-                  </p>
-                  {MARKETING_SOLUTIONS_LINKS.map((item) => {
-                    const Icon = item.icon
-                    return (
-                      <Link
-                        key={item.href + item.label}
-                        href={item.href}
-                        onClick={() => setMenuOpen(false)}
-                        className={cn(
-                          "flex items-center gap-3 rounded-lg px-3 py-2.5 pl-5 text-base font-medium transition-colors",
-                          light
-                            ? "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-950"
-                            : "text-white/75 hover:bg-white/10 hover:text-white",
-                        )}
-                      >
-                        <Icon
-                          className={cn("h-4 w-4 shrink-0", light ? "text-neutral-500" : "text-[#c1ff72]")}
-                          strokeWidth={2}
-                        />
-                        {item.label}
-                      </Link>
-                    )
-                  })}
-
-                  {MARKETING_NAV_LINKS.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setMenuOpen(false)}
-                      className={cn(
-                        "rounded-lg px-3 py-3 text-base font-medium transition-colors",
-                        light
-                          ? "text-neutral-800 hover:bg-neutral-100 hover:text-neutral-950"
-                          : "text-white/85 hover:bg-white/10 hover:text-white",
-                      )}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-
-                  <p
-                    className={cn(
-                      "mt-4 px-3 text-xs font-medium uppercase tracking-[0.12em]",
-                      light ? "text-neutral-400" : "text-white/45",
-                    )}
-                  >
-                    Resources
-                  </p>
-                  {MARKETING_RESOURCES_LINKS.map((item) => {
-                    const Icon = item.icon
-                    return (
-                      <Link
-                        key={item.href + item.label}
-                        href={item.href}
-                        onClick={() => setMenuOpen(false)}
-                        className={cn(
-                          "flex items-center gap-3 rounded-lg px-3 py-2.5 pl-5 text-base font-medium transition-colors",
-                          light
-                            ? "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-950"
-                            : "text-white/75 hover:bg-white/10 hover:text-white",
-                        )}
-                      >
-                        <Icon
-                          className={cn("h-4 w-4 shrink-0", light ? "text-neutral-500" : "text-[#c1ff72]")}
-                          strokeWidth={2}
-                        />
-                        {item.label}
-                      </Link>
-                    )
-                  })}
-
-                  {light && loggedOut ? (
-                    <Link
-                      href={loginHref}
-                      onClick={() => setMenuOpen(false)}
-                      className="mt-4 inline-flex h-11 items-center justify-center rounded-full border border-neutral-200 px-5 text-sm font-medium text-neutral-900"
-                    >
+            <Button
+              variant="ghost"
+              size="icon"
+              className={cn(
+                "h-9 w-9 lg:hidden",
+                light
+                  ? "text-neutral-900 hover:bg-neutral-100"
+                  : "text-white hover:bg-white/10",
+              )}
+              aria-label="Open menu"
+              onClick={() => setMenuOpen(true)}
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+            <CircularNavOverlay
+              open={menuOpen}
+              onClose={() => setMenuOpen(false)}
+              items={MARKETING_WHEEL}
+              moreItems={MARKETING_MORE}
+              headerEnd={
+                <>
+                  {loggedOut ? (
+                    <Link href={loginHref} onClick={() => setMenuOpen(false)} className="font-mono text-[11px] uppercase tracking-wide text-neutral-950">
                       Log in
                     </Link>
                   ) : null}
-
-                  <Link
-                    href={primaryHref}
-                    onClick={() => setMenuOpen(false)}
-                    className={cn(
-                      "inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-medium",
-                      light
-                        ? "mt-2 bg-neutral-950 text-white"
-                        : "mt-4 border border-white/20 text-white",
-                    )}
-                  >
-                    {light ? (loggedOut ? "Sign up for free" : primaryLabel) : (
-                      <>
-                        <User className="h-4 w-4" />
-                        {primaryLabel}
-                      </>
-                    )}
+                  <Link href={primaryHref} onClick={() => setMenuOpen(false)} className="font-mono text-[11px] uppercase tracking-wide text-neutral-950">
+                    {loggedOut ? "Sign up" : primaryLabel}
                   </Link>
-                </div>
-              </SheetContent>
-            </Sheet>
+                </>
+              }
+            />
           </div>
         </div>
       </div>

@@ -1,0 +1,85 @@
+.circular-nav-bg {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(48px);
+}
+
+.circular-nav-dome {
+  position: fixed;
+  bottom: -6rem;
+  left: 50%;
+  z-index: 40;
+  display: flex;
+  width: 25rem;
+  height: 10rem;
+  transform: translateX(-50%);
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.25rem;
+  border-radius: 50% 50% 0 0 / 90% 90% 0 0;
+  background: #fff;
+  padding-top: 2rem;
+  margin-bottom: env(safe-area-inset-bottom);
+}
+
+.circular-nav-dome-bar {
+  width: 2rem;
+  height: 0.125rem;
+  background: #000;
+}
+
+.circular-nav-segment {
+  position: absolute;
+  inset: 0;
+  color: #fff;
+  background: rgba(23, 23, 23, 0.92);
+  backdrop-filter: blur(20px);
+  cursor: pointer;
+}
+
+.circular-nav-segment:hover,
+.circular-nav-segment.is-hot {
+  animation: circular-flicker 350ms ease-in-out forwards;
+  z-index: 10;
+}
+
+.circular-nav-segment:hover .circular-nav-copy,
+.circular-nav-segment.is-hot .circular-nav-copy {
+  animation: circular-flicker-text 350ms ease-in-out forwards;
+}
+
+@keyframes circular-flicker {
+  0% { background: rgba(23, 23, 23, 0.92); }
+  12% { background: rgba(255, 255, 255, 0.7); }
+  24% { background: rgba(255, 255, 255, 0.15); }
+  36% { background: rgba(255, 255, 255, 0.85); }
+  48% { background: rgba(255, 255, 255, 0.25); }
+  60% { background: rgba(255, 255, 255, 0.9); }
+  72% { background: rgba(255, 255, 255, 0.3); }
+  84% { background: rgba(255, 255, 255, 0.95); }
+  100% { background: #fff; }
+}
+
+@keyframes circular-flicker-text {
+  0% { color: #fff; opacity: 1; }
+  12% { color: #333; opacity: 0.4; }
+  24% { color: #fff; opacity: 0.9; }
+  36% { color: #333; opacity: 0.3; }
+  48% { color: #fff; opacity: 0.8; }
+  60% { color: #333; opacity: 0.2; }
+  72% { color: #fff; opacity: 0.7; }
+  84% { color: #333; opacity: 0.1; }
+  100% { color: #000; opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .circular-nav-segment.is-hot,
+  .circular-nav-segment:hover,
+  .circular-nav-segment.is-hot .circular-nav-copy,
+  .circular-nav-segment:hover .circular-nav-copy {
+    animation: none;
+    background: #fff;
+    color: #000;
+  }
+}

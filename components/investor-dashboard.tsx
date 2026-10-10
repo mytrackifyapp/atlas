@@ -4,8 +4,6 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { PageHeader } from "@/components/page-header"
 import { KPIStrip } from "@/components/kpi-card"
 import {
   TrendingUp,
@@ -14,10 +12,6 @@ import {
   Zap,
   ArrowUpRight,
   ArrowDownRight,
-  Sparkles,
-  Building2,
-  Calendar,
-  Eye,
   Plus,
   Activity,
   Target,
@@ -27,9 +21,9 @@ import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "rec
 import Link from "next/link"
 
 const quickActions = [
-  { label: "View Portfolio", href: "/portfolio", icon: Briefcase },
-  { label: "Deal Flow", href: "/deal-flow", icon: Zap },
-  { label: "Analytics", href: "/reports", icon: Target },
+  { label: "Portfolio", href: "/portfolio", icon: Briefcase },
+  { label: "Deal flow", href: "/deal-flow", icon: Zap },
+  { label: "Reports", href: "/reports", icon: Target },
 ]
 
 interface DashboardData {
@@ -72,6 +66,20 @@ const iconMap: Record<string, typeof DollarSign> = {
   DollarSign,
   Activity,
   Zap,
+}
+
+function formatAxisMillions(value: number) {
+  if (!Number.isFinite(value)) return ""
+  if (Math.abs(value) >= 1) {
+    const digits = Math.abs(value) >= 10 ? 0 : 1
+    return `$${value.toFixed(digits)}M`
+  }
+  const thousands = value * 1000
+  if (Math.abs(thousands) >= 1) {
+    const digits = Number.isInteger(thousands) ? 0 : 1
+    return `$${thousands.toFixed(digits)}K`
+  }
+  return `$${value.toFixed(2)}M`
 }
 
 export function InvestorDashboard() {
@@ -160,50 +168,71 @@ export function InvestorDashboard() {
   const topPerformers = data?.topPerformers || []
   const recentActivity = data?.recentActivity || []
 
-  // Calculate growth percentage for badge
   const growthPercentage = data?.kpis.portfolioValue.change || "0%"
+
   return (
-    <div className="space-y-5 sm:space-y-6">
-      <PageHeader
-        title="Dashboard"
-        description="Your portfolio at a glance"
-        actions={
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-            <Button size="sm" variant="outline" onClick={fetchDashboardData} disabled={loading}>
-              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
-              Refresh
-            </Button>
-            <Button size="sm" asChild>
-              <Link href="/deal-flow">
-                <Plus className="h-4 w-4 mr-2" />
-                New Deal
-              </Link>
-            </Button>
-          </div>
-        }
-      />
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 space-y-1">
+          <h1 className="text-xl font-semibold tracking-tight sm:text-3xl">Dashboard</h1>
+          <p className="text-sm text-muted-foreground">Your portfolio at a glance</p>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            className="size-10 rounded-full"
+            onClick={fetchDashboardData}
+            disabled={loading}
+            aria-label="Refresh"
+          >
+            <RefreshCw className={loading ? "animate-spin" : undefined} />
+          </Button>
+          <Button asChild className="h-10 rounded-full px-4">
+            <Link href="/deal-flow">
+              <Plus className="h-4 w-4" />
+              New Deal
+            </Link>
+          </Button>
+        </div>
+      </div>
 
       {kpiData.length > 0 ? <KPIStrip items={kpiData} /> : null}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Portfolio Value Chart */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
+      <div className="grid grid-cols-3 gap-2 lg:hidden">
+        {quickActions.map((action) => (
+          <Button
+            key={action.label}
+            variant="outline"
+            className="h-auto flex-col gap-1.5 whitespace-normal rounded-2xl px-2 py-3 text-center text-xs leading-tight"
+            asChild
+          >
+            <Link href={action.href}>
+              <action.icon className="h-4 w-4" />
+              {action.label}
+            </Link>
+          </Button>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6">
+        <Card className="gap-3 py-4 lg:col-span-2 lg:gap-6 lg:py-6">
+          <CardHeader className="px-4 lg:px-6">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
                 <CardTitle>Portfolio Value</CardTitle>
                 <CardDescription>6-month performance trend</CardDescription>
               </div>
-              <Badge variant="outline" className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800">
-                <TrendingUp className="h-3 w-3 mr-1" />
+              <Badge variant="outline" className="shrink-0 border-emerald-200 bg-emerald-500/10 text-emerald-700 dark:border-emerald-800 dark:text-emerald-400">
+                <TrendingUp className="mr-1 h-3 w-3" />
                 {growthPercentage}
               </Badge>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-2 sm:px-4 lg:px-6">
             {portfolioValueData.length > 0 ? (
-              <ResponsiveContainer width="100%" height={250}>
-                <AreaChart data={portfolioValueData}>
+              <ResponsiveContainer width="100%" height={220}>
+                <AreaChart data={portfolioValueData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#c1ff72" stopOpacity={0.3} />
@@ -213,16 +242,18 @@ export function InvestorDashboard() {
                 <XAxis
                   dataKey="month"
                   stroke="hsl(var(--muted-foreground))"
-                  fontSize={12}
+                  fontSize={11}
                   tickLine={false}
                   axisLine={false}
+                  interval="preserveStartEnd"
                 />
                 <YAxis
                   stroke="hsl(var(--muted-foreground))"
-                  fontSize={12}
+                  fontSize={11}
                   tickLine={false}
                   axisLine={false}
-                  tickFormatter={(value) => `$${value}M`}
+                  width={44}
+                  tickFormatter={formatAxisMillions}
                 />
                 <Tooltip
                   contentStyle={{
@@ -230,7 +261,7 @@ export function InvestorDashboard() {
                     border: "1px solid hsl(var(--border))",
                     borderRadius: "8px",
                   }}
-                  formatter={(value: number) => [`$${value}M`, "Value"]}
+                  formatter={(value: number) => [formatAxisMillions(value), "Value"]}
                 />
                 <Area
                   type="monotone"
@@ -250,12 +281,12 @@ export function InvestorDashboard() {
         </Card>
 
         {/* Recent Activity */}
-        <Card>
-          <CardHeader>
+        <Card className="gap-3 py-4 lg:gap-6 lg:py-6">
+          <CardHeader className="px-4 lg:px-6">
             <CardTitle>Recent Activity</CardTitle>
             <CardDescription>Latest updates and notifications</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3 px-4 lg:px-6">
             {recentActivity.length > 0 ? (
               recentActivity.map((activity) => {
                 const IconComponent = iconMap[activity.icon] || Activity
@@ -289,30 +320,29 @@ export function InvestorDashboard() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Top Performers */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
+        <Card className="gap-3 py-4 lg:gap-6 lg:py-6">
+          <CardHeader className="px-4 lg:px-6">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
                 <CardTitle>Top Performers</CardTitle>
                 <CardDescription>Your best performing investments</CardDescription>
               </div>
-              <Button variant="ghost" size="sm" asChild>
+              <Button variant="ghost" size="sm" className="shrink-0" asChild>
                 <Link href="/portfolio">
-                  <Eye className="h-4 w-4 mr-2" />
-                  View All
+                  View all
+                  <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-4 lg:px-6">
             <div className="space-y-4">
               {topPerformers.length > 0 ? (
                 topPerformers.map((company, index) => (
                 <div
                   key={company.id}
-                  className="flex items-center justify-between p-4 rounded-lg border border-border hover:bg-accent/50 transition-colors"
+                  className="flex items-center justify-between gap-3 rounded-xl border border-border p-3 transition-colors hover:bg-accent/50 sm:p-4"
                 >
                   <div className="flex items-center gap-4 flex-1 min-w-0">
                     <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -359,8 +389,8 @@ export function InvestorDashboard() {
         </Card>
 
         {/* Quick Actions */}
-        <Card>
-          <CardHeader>
+        <Card className="hidden gap-3 py-4 lg:flex lg:gap-6 lg:py-6">
+          <CardHeader className="px-4 lg:px-6">
             <CardTitle>Quick Actions</CardTitle>
             <CardDescription>Navigate to key sections</CardDescription>
           </CardHeader>

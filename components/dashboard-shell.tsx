@@ -5,7 +5,6 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 
-import { AIAssistant } from "@/components/ai-assistant"
 import { DashboardMobileNav } from "@/components/dashboard-mobile-nav"
 import { DashboardSidebar } from "@/components/dashboard-sidebar"
 import { DashboardSidebarShell } from "@/components/dashboard-sidebar-shell"
@@ -38,7 +37,6 @@ export function DashboardShell({
   const pathRole = getRoleFromPath(pathname)
   const [userRole, setUserRole] = useState<UserRole>(viewerRole ?? pathRole)
   const [theme, setTheme] = useState<"light" | "dark">("light")
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
@@ -80,10 +78,6 @@ export function DashboardShell({
   }, [pathname, userRole, viewerRole])
 
   useEffect(() => {
-    setIsMobileMenuOpen(false)
-  }, [pathname])
-
-  useEffect(() => {
     const checkAdminStatus = async () => {
       try {
         const response = await fetch("/api/admin/check")
@@ -117,12 +111,6 @@ export function DashboardShell({
     onSignOut: handleSignOut,
   }
 
-  const isOnAiRoute = pathname.includes("/ai") || pathname.startsWith("/finna")
-  const hideFinnaBubble =
-    isOnAiRoute ||
-    pathname.startsWith("/founder/sales") ||
-    pathname === "/founder/social"
-
   return (
     <div className="flex h-[100dvh] bg-[#f4f4f5] dark:bg-neutral-950">
       {/* Desktop sidebar */}
@@ -136,18 +124,6 @@ export function DashboardShell({
           <DashboardSidebar {...sidebarProps} />
         </DashboardSidebarShell>
       </aside>
-
-      {/* Mobile drawer */}
-      {isMobileMenuOpen ? (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="fixed inset-0 bg-black/60" onClick={() => setIsMobileMenuOpen(false)} />
-          <aside className="fixed inset-y-0 left-0 w-[min(300px,88vw)] animate-in slide-in-from-left duration-300">
-            <DashboardSidebarShell className="h-full rounded-r-2xl rounded-l-none border-l-0">
-              <DashboardSidebar {...sidebarProps} collapsed={false} mobileDrawer />
-            </DashboardSidebarShell>
-          </aside>
-        </div>
-      ) : null}
 
       {/* Main content */}
       <main className="min-w-0 flex-1 overflow-y-auto">
@@ -198,18 +174,12 @@ export function DashboardShell({
           </div>
         </div>
 
-        <div className="px-3 py-3 pb-[calc(6.25rem+env(safe-area-inset-bottom))] lg:p-6 lg:pb-6">
+        <div className="px-3 py-3 pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:p-6 lg:pb-6">
           {children}
         </div>
       </main>
 
-      <DashboardMobileNav
-        userRole={userRole}
-        isMenuOpen={isMobileMenuOpen}
-        onMenuOpen={() => setIsMobileMenuOpen((open) => !open)}
-      />
-
-      {hideFinnaBubble ? null : <AIAssistant compactMobile viewerRole={userRole} />}
+      <DashboardMobileNav userRole={userRole} isAdmin={isAdmin} onSignOut={handleSignOut} />
     </div>
   )
 }

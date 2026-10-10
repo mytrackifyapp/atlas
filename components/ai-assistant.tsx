@@ -121,7 +121,7 @@ export function AIAssistant({
           className={cn(
             "fixed z-50 flex h-16 w-16 items-center justify-center rounded-full bg-primary p-0 text-primary-foreground shadow-xl shadow-primary/25 transition-all duration-200 hover:scale-105 hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:scale-95",
             compactMobile
-              ? "bottom-[calc(6.5rem+env(safe-area-inset-bottom))] right-4 lg:bottom-6 lg:right-6"
+              ? "bottom-[calc(5.25rem+env(safe-area-inset-bottom))] right-4 lg:bottom-6 lg:right-6"
               : "bottom-6 right-6",
           )}
           onClick={() => setIsOpen(true)}
@@ -141,7 +141,7 @@ export function AIAssistant({
           className={cn(
             "fixed z-50 flex max-w-[calc(100vw-2rem)] flex-col overflow-visible rounded-2xl border border-border/60 bg-card/95 shadow-2xl backdrop-blur-xl animate-in fade-in duration-200 slide-in-from-bottom-4",
             compactMobile
-              ? "bottom-[calc(7rem+env(safe-area-inset-bottom))] right-4 h-[min(520px,calc(100dvh-8.5rem-env(safe-area-inset-bottom)))] w-[min(340px,calc(100vw-2rem))] lg:bottom-6 lg:right-6 lg:h-[560px]"
+              ? "bottom-[calc(5.75rem+env(safe-area-inset-bottom))] right-4 h-[min(520px,calc(100dvh-8rem-env(safe-area-inset-bottom)))] w-[min(340px,calc(100vw-2rem))] lg:bottom-6 lg:right-6 lg:h-[560px]"
               : "bottom-6 right-6 h-[min(540px,calc(100vh-6rem))] w-[min(340px,calc(100vw-2rem))] sm:h-[560px]",
           )}
         >

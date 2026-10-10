@@ -67,13 +67,6 @@ export function LandingHero({
               >
                 <Link href="/contact">Talk to sales</Link>
               </Button>
-              <Button
-                asChild
-                variant="ghost"
-                className="h-12 w-full rounded-full px-8 text-base font-medium text-white hover:bg-white/10 hover:text-white sm:w-auto"
-              >
-                <Link href="/capital">Trackify Capital</Link>
-              </Button>
             </div>
           </div>
 

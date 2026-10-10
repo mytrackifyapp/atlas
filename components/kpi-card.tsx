@@ -35,8 +35,8 @@ export function KPIStrip({
   return (
     <div
       className={cn(
-        "mx-auto flex max-w-full items-stretch justify-center rounded-2xl border border-black/[0.06] bg-white px-2 py-3.5 dark:border-white/[0.08] dark:bg-[#171717]",
-        fullWidth ? "w-full flex-wrap lg:flex-nowrap" : "w-fit flex-wrap",
+        "mx-auto flex w-full max-w-full flex-col overflow-hidden rounded-2xl border border-black/[0.06] bg-white dark:border-white/[0.08] dark:bg-[#171717] sm:w-fit sm:flex-row sm:flex-wrap sm:items-stretch sm:justify-center sm:px-2 sm:py-3.5",
+        fullWidth && "sm:w-full lg:flex-nowrap",
         className,
       )}
     >
@@ -44,11 +44,11 @@ export function KPIStrip({
         const Icon = item.icon
         const content = (
           <>
-            <p className="flex items-center gap-1.5 whitespace-nowrap text-xs text-neutral-400 dark:text-neutral-500">
+            <p className="flex min-w-0 items-center gap-1.5 text-xs text-neutral-400 dark:text-neutral-500 sm:whitespace-nowrap">
               {Icon ? <Icon className="h-3.5 w-3.5 shrink-0" strokeWidth={2} /> : null}
-              <span>{item.title}</span>
+              <span className="truncate">{item.title}</span>
             </p>
-            <div className="mt-1 flex items-baseline gap-1.5 whitespace-nowrap">
+            <div className="flex shrink-0 items-baseline gap-1.5 sm:mt-1">
               <span className="text-base font-semibold tracking-tight text-neutral-950 dark:text-white">
                 {item.value}
               </span>
@@ -70,14 +70,14 @@ export function KPIStrip({
           </>
         )
         const itemClass = cn(
-          "flex flex-col justify-center py-0.5 text-left",
+          "flex flex-row items-center justify-between gap-3 px-4 py-3.5 text-left sm:flex-col sm:items-start sm:justify-center sm:py-0.5",
           fullWidth
-            ? "min-w-[6.25rem] flex-1 px-3"
-            : cn("w-max max-w-full shrink-0", compact ? "px-4" : "px-6"),
-          index > 0 && "border-l border-black/10 dark:border-white/10",
-          item.active && "rounded-lg bg-neutral-50 dark:bg-white/[0.04]",
+            ? "sm:min-w-[6.25rem] sm:flex-1 sm:px-3"
+            : cn("sm:w-max sm:max-w-full sm:shrink-0", compact ? "sm:px-4" : "sm:px-6"),
+          index > 0 && "border-t border-black/10 dark:border-white/10 sm:border-t-0 sm:border-l",
+          item.active && "bg-neutral-50 dark:bg-white/[0.04] sm:rounded-lg",
           item.onClick &&
-            "cursor-pointer rounded-lg transition-colors hover:bg-neutral-50 dark:hover:bg-white/[0.04]",
+            "cursor-pointer transition-colors hover:bg-neutral-50 dark:hover:bg-white/[0.04] sm:rounded-lg",
         )
 
         if (item.onClick) {
