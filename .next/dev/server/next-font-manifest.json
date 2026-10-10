@@ -1,62 +1,6 @@
 {
   "app": {
-    "[project]/app/accelerator/page": [
-      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
-      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
-    ],
-    "[project]/app/admin/page": [
-      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
-      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
-    ],
-    "[project]/app/ai-agents/page": [
-      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
-      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
-    ],
-    "[project]/app/dashboard/finance/us-account/page": [
-      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
-      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
-    ],
-    "[project]/app/dashboard/page": [
-      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
-      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
-    ],
-    "[project]/app/deal-flow/page": [
-      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
-      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
-    ],
-    "[project]/app/finna-site/page": [
-      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
-      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
-    ],
-    "[project]/app/founder/finance/us-account/page": [
-      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
-      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
-    ],
-    "[project]/app/founder/page": [
-      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
-      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
-    ],
-    "[project]/app/founder/settings/page": [
-      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
-      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
-    ],
-    "[project]/app/onboarding/page": [
-      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
-      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
-    ],
-    "[project]/app/page": [
-      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
-      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
-    ],
-    "[project]/app/sign-in/page": [
-      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
-      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
-    ],
-    "[project]/app/sign-up/page": [
-      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
-      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
-    ],
-    "[project]/app/workspace/page": [
+    "[project]/app/finna/page": [
       "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
       "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
     ]

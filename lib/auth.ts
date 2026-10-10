@@ -3,6 +3,8 @@ import { MongoClient } from "mongodb"
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
 import { nextCookies } from "better-auth/next-js"
 
+import { configuredPublicOrigin } from "@/lib/public-origin"
+
 // MongoDB connection
 const connectionString = process.env.DATABASE_URL || "mongodb://localhost:27017/trackify-ventures"
 
@@ -57,14 +59,7 @@ function alternatePublicOrigins(): string[] {
     process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",")
       .map((s) => s.trim().replace(/\/$/, ""))
       .filter(Boolean) ?? []
-  const primary = (
-    process.env.BETTER_AUTH_URL ||
-    process.env.NEXT_PUBLIC_BETTER_AUTH_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "") ||
-    ""
-  )
-    .trim()
-    .replace(/\/$/, "")
+  const primary = configuredPublicOrigin()
 
   const extra = new Set<string>()
   for (const e of fromEnv) {
@@ -90,6 +85,7 @@ function alternatePublicOrigins(): string[] {
     const bare = u.hostname.replace(/^www\./, "")
     if (bare && !bare.startsWith("finna.")) {
       extra.add(`${u.protocol}//finna.${bare}`)
+      extra.add(`${u.protocol}//finnai.${bare}`)
     }
   } catch {
     /* ignore */
@@ -99,6 +95,7 @@ function alternatePublicOrigins(): string[] {
 }
 
 export const auth = betterAuth({
+  baseURL: configuredPublicOrigin(),
   ...(alternatePublicOrigins().length
     ? { trustedOrigins: alternatePublicOrigins() }
     : {}),

@@ -1,15 +1,7 @@
-export function getAppUrl() {
-  const fromEnv = (
-    process.env.NEXT_PUBLIC_APP_URL ||
-    process.env.BETTER_AUTH_URL ||
-    process.env.NEXT_PUBLIC_BETTER_AUTH_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "") ||
-    "http://localhost:3000"
-  )
-    .trim()
-    .replace(/\/$/, "")
+import { configuredPublicOrigin } from "@/lib/public-origin"
 
-  return fromEnv || "http://localhost:3000"
+export function getAppUrl() {
+  return configuredPublicOrigin()
 }
 
 export function getStripePublishableKey() {

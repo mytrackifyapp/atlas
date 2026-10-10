@@ -1,9 +1,11 @@
 import { Suspense } from "react"
+import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
 import { DashboardShell } from "@/components/dashboard-shell"
 import { FinnaWorkspace } from "@/components/finna-workspace"
 import { getSessionWithRole } from "@/lib/auth-helpers"
+import { isFinnaHost, requestHost } from "@/lib/finna-host"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -21,18 +23,19 @@ export default async function FinnaPage({
 }) {
   const session = await getSessionWithRole()
   const params = await searchParams
+  const host = requestHost(await headers())
   const q = params.q?.trim()
   const next = q ? `/finna?q=${encodeURIComponent(q)}` : "/finna"
 
-  if (!session) {
+  if (!session && !isFinnaHost(host)) {
     redirect(`/sign-up?redirect=${encodeURIComponent(next)}`)
   }
 
-  if (!session.user.onboardingCompleted) {
+  if (session && !session.user.onboardingCompleted) {
     redirect(`/onboarding?redirect=${encodeURIComponent(next)}`)
   }
 
-  const viewerRole = session.user.role === "investor" ? "investor" : "founder"
+  const viewerRole = session?.user.role === "investor" ? "investor" : "founder"
 
   return (
     <DashboardShell viewerRole={viewerRole}>

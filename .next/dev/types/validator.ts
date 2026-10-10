@@ -308,15 +308,6 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
-// Validate ../../../app/finna-site/page.tsx
-{
-  type __IsExpected<Specific extends AppPageConfig<"/finna-site">> = Specific
-  const handler = {} as typeof import("../../../app/finna-site/page.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-
 // Validate ../../../app/finna/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/finna">> = Specific
