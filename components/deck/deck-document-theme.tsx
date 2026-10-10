@@ -4,7 +4,7 @@ import { useEffect } from "react"
 
 type DeckDocumentThemeProps = {
   /** Applied to <html> for scoped print CSS */
-  rootClass: "pitch-print-root" | "cv-print-root" | "masterclass-print-root"
+  rootClass: "pitch-print-root" | "cv-print-root" | "masterclass-print-root" | "gap-print-root"
 }
 
 /**
@@ -20,9 +20,9 @@ export function DeckDocumentTheme({ rootClass }: DeckDocumentThemeProps) {
     body.classList.add(rootClass)
 
     let printPageStyle: HTMLStyleElement | null = null
-    if (rootClass === "masterclass-print-root") {
+    if (rootClass === "masterclass-print-root" || rootClass === "gap-print-root") {
       printPageStyle = document.createElement("style")
-      printPageStyle.setAttribute("data-masterclass-print", "")
+      printPageStyle.setAttribute("data-deck-print", "")
       printPageStyle.textContent = `@media print { @page { size: 13.333in 7.5in; margin: 0; } }`
       document.head.appendChild(printPageStyle)
     }

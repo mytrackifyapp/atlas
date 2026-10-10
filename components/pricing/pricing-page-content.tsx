@@ -74,7 +74,8 @@ export function PricingPageContent() {
             Built for founders and teams across Africa and beyond.
           </p>
           <p className="mt-3 text-sm text-neutral-500">
-            Pro and Team plans accept <span className="font-medium text-neutral-950">USDC</span> and{" "}
+            Pro and Team plans accept cards through Stripe, or{" "}
+            <span className="font-medium text-neutral-950">USDC</span> and{" "}
             <span className="font-medium text-neutral-950">USDT</span> on Base, Polygon, and Ethereum.
           </p>
 

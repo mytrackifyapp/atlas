@@ -6,10 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { PageHeader } from "@/components/page-header"
-import { KPICard } from "@/components/kpi-card"
+import { KPIStrip } from "@/components/kpi-card"
 import {
   TrendingUp,
-  TrendingDown,
   DollarSign,
   Briefcase,
   Zap,
@@ -184,38 +183,7 @@ export function InvestorDashboard() {
         }
       />
 
-      {/* Key Metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {kpiData.map((kpi) => (
-          <Card key={kpi.title} className="border-border hover:border-primary/50 transition-colors">
-            <CardContent className="pt-6">
-              <div className="flex items-start justify-between">
-                <div className="space-y-2 flex-1">
-                  <div className="flex items-center gap-2">
-                    <kpi.icon className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-sm font-medium text-muted-foreground">{kpi.title}</p>
-                  </div>
-                  <p className="text-3xl font-bold">{kpi.value}</p>
-                  <div className="flex items-center gap-1.5">
-                    {kpi.trend === "up" ? (
-                      <TrendingUp className="h-4 w-4 text-emerald-600" />
-                    ) : (
-                      <TrendingDown className="h-4 w-4 text-red-600" />
-                    )}
-                    <span
-                      className={`text-sm font-medium ${
-                        kpi.trend === "up" ? "text-emerald-600" : "text-red-600"
-                      }`}
-                    >
-                      {kpi.change}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      {kpiData.length > 0 ? <KPIStrip items={kpiData} /> : null}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Portfolio Value Chart */}

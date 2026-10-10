@@ -3,16 +3,18 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
+  Check,
   ChevronRight,
+  ChevronsUpDown,
   LogOut,
   Moon,
   PanelLeftClose,
   PanelLeftOpen,
   Settings,
   Sun,
-  User,
 } from "lucide-react"
 
+import { FinnaOrb } from "@/components/finna-orb"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
@@ -23,13 +25,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
   adminSidebarItem,
-  allAgentsAction,
+  finnaSidebarAction,
   getMobileDrawerItems,
   getSidebarConfig,
   isNavActive,
+  skillsSidebarAction,
   type SidebarAction,
 } from "@/lib/dashboard-sidebar-config"
 import { getSettingsHref } from "@/lib/role-config"
@@ -63,29 +65,10 @@ function NavRow({
   item: SidebarAction
   pathname: string
   collapsed?: boolean
-  variant?: "default" | "featured" | "agents-hub"
+  variant?: "default" | "agents-hub"
 }) {
   const active = isNavActive(pathname, item.href)
   const Icon = item.icon
-
-  if (variant === "featured") {
-    return (
-      <Link
-        href={item.href}
-        className={cn(
-          "flex w-full items-center gap-2.5 rounded-xl border px-3 py-3 text-sm font-semibold transition-colors",
-          active
-            ? "border-black bg-black text-white dark:border-[#333] dark:bg-[#262626] dark:text-white"
-            : "border-black/15 bg-neutral-50 text-black hover:bg-neutral-100 dark:border-[#2a2a2a] dark:bg-[#1c1c1c] dark:text-neutral-200 dark:hover:bg-[#222]",
-          collapsed && "justify-center px-2",
-        )}
-        title={collapsed ? item.name : undefined}
-      >
-        <Icon className="h-4 w-4 shrink-0" />
-        {!collapsed ? <span>{item.name}</span> : null}
-      </Link>
-    )
-  }
 
   if (variant === "agents-hub") {
     return (
@@ -111,56 +94,167 @@ function NavRow({
     )
   }
 
+  const parentActive = active || (item.children?.some((child) => pathname === child.href || pathname.startsWith(`${child.href}/`)) ?? false)
+
+  return (
+    <div className="space-y-0.5">
+      <Link
+        href={item.href}
+        className={cn(navLinkClass(parentActive), collapsed && "justify-center px-2")}
+        title={collapsed ? item.name : undefined}
+      >
+        <Icon className="h-4 w-4 shrink-0" />
+        {!collapsed ? <span>{item.name}</span> : null}
+      </Link>
+      {!collapsed && item.children?.length ? (
+        <div className="space-y-0.5 pl-4">
+          {item.children.map((child) => {
+            const childActive = pathname === child.href
+            const ChildIcon = child.icon
+            return (
+              <Link
+                key={child.href}
+                href={child.href}
+                className={cn(navLinkClass(childActive), "py-1.5 text-[13px]")}
+              >
+                <ChildIcon className="h-3.5 w-3.5 shrink-0" />
+                <span>{child.name}</span>
+              </Link>
+            )
+          })}
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+function FinnaNavRow({
+  item,
+  pathname,
+  collapsed,
+}: {
+  item: SidebarAction
+  pathname: string
+  collapsed?: boolean
+}) {
+  const active = isNavActive(pathname, item.href)
+
   return (
     <Link
       href={item.href}
-      className={cn(navLinkClass(active), collapsed && "justify-center px-2")}
+      className={cn(
+        "group flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+        active
+          ? "bg-black text-white dark:bg-[#262626] dark:text-white"
+          : "text-black/70 hover:bg-black/[0.04] hover:text-black dark:text-neutral-300 dark:hover:bg-[#1f1f1f] dark:hover:text-white",
+        collapsed && "justify-center px-2",
+      )}
       title={collapsed ? item.name : undefined}
     >
-      <Icon className="h-4 w-4 shrink-0" />
-      {!collapsed ? <span>{item.name}</span> : null}
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center">
+        <FinnaOrb size={20} />
+      </span>
+      {!collapsed ? (
+        <>
+          <span className="flex-1">{item.name}</span>
+          <ChevronRight className="h-3.5 w-3.5 opacity-40 group-hover:opacity-70" />
+        </>
+      ) : null}
     </Link>
   )
 }
 
-function QuickActionGrid({
-  items,
-  pathname,
-}: {
-  items: SidebarAction[]
-  pathname: string
-}) {
-  return (
-    <div className="overflow-hidden rounded-xl border border-black/15 dark:border-[#2a2a2a]">
-      <div className="grid grid-cols-2">
-        {items.map((item, index) => {
-          const active = isNavActive(pathname, item.href)
-          const Icon = item.icon
-          const isLeft = index % 2 === 0
-          const isTop = index < 2
+function getDisplayName(session: {
+  user?: { name?: string | null; email?: string | null }
+} | null) {
+  const name = session?.user?.name?.trim()
+  if (name) return name
+  const email = session?.user?.email?.trim()
+  if (email) return email.split("@")[0] ?? email
+  return "Account"
+}
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex flex-col items-center justify-center gap-1.5 px-2 py-3.5 text-center text-[11px] font-medium transition-colors",
-                "border-black/10 dark:border-[#2a2a2a]",
-                isLeft && "border-r",
-                isTop && "border-b",
-                active
-                  ? "bg-black text-white dark:bg-[#262626] dark:text-white"
-                  : "bg-neutral-50 text-black/70 hover:bg-neutral-100 dark:bg-[#1a1a1a] dark:text-neutral-400 dark:hover:bg-[#222] dark:hover:text-neutral-200",
-              )}
-              title={item.name}
-            >
-              <Icon className="h-4 w-4 shrink-0" />
-              <span className="leading-tight">{item.name}</span>
-            </Link>
-          )
-        })}
-      </div>
-    </div>
+function getInitials(name: string) {
+  const parts = name.split(/\s+/).filter(Boolean)
+  if (parts.length >= 2) {
+    return `${parts[0]![0] ?? ""}${parts[1]![0] ?? ""}`.toUpperCase()
+  }
+  return name.slice(0, 1).toUpperCase() || "T"
+}
+
+function WorkspaceIdentity({
+  userRole,
+  onRoleChange,
+  collapsed,
+  session,
+}: {
+  userRole: UserRole
+  onRoleChange: (role: UserRole) => void
+  collapsed: boolean
+  session: { user?: { name?: string | null; email?: string | null; image?: string | null } } | null
+}) {
+  const name = getDisplayName(session)
+  const initials = getInitials(name)
+  const roleLabel = userRole === "investor" ? "Investor" : "Founder"
+
+  const tile = (
+    <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[10px] bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.06)] dark:bg-[#262626] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.08)]">
+      {session?.user?.image ? (
+        <Avatar className="h-8 w-8 rounded-[10px]">
+          <AvatarImage src={session.user.image} alt="" />
+          <AvatarFallback className="rounded-[10px] bg-transparent text-[12px] font-semibold text-neutral-800 dark:text-neutral-100">
+            {initials}
+          </AvatarFallback>
+        </Avatar>
+      ) : (
+        <span className="text-[12px] font-semibold tracking-tight text-neutral-800 dark:text-neutral-100">
+          {initials}
+        </span>
+      )}
+    </span>
+  )
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          className={cn(
+            "flex items-center text-left transition-colors",
+            collapsed
+              ? "h-10 w-10 justify-center rounded-xl hover:bg-black/[0.04] dark:hover:bg-[#1f1f1f]"
+              : "w-full gap-2.5 rounded-xl border border-black/[0.06] bg-[#f6f6f7] px-2 py-1.5 hover:bg-[#efeff1] dark:border-white/[0.06] dark:bg-[#1c1c1c] dark:hover:bg-[#222]",
+          )}
+          aria-label={`${roleLabel} workspace, ${name}`}
+        >
+          {tile}
+          {!collapsed ? (
+            <>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-[11px] leading-tight text-neutral-500 dark:text-neutral-400">
+                  {roleLabel}
+                </span>
+                <span className="block truncate text-sm font-medium leading-tight text-neutral-900 dark:text-white">
+                  {name}
+                </span>
+              </span>
+              <ChevronsUpDown className="h-3.5 w-3.5 shrink-0 text-neutral-400 dark:text-neutral-500" />
+            </>
+          ) : null}
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-56">
+        <DropdownMenuLabel>Switch view</DropdownMenuLabel>
+        <DropdownMenuItem onClick={() => onRoleChange("founder")}>
+          <span className="flex-1">Founder</span>
+          {userRole === "founder" ? <Check className="h-4 w-4" /> : null}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => onRoleChange("investor")}>
+          <span className="flex-1">Investor</span>
+          {userRole === "investor" ? <Check className="h-4 w-4" /> : null}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 
@@ -190,52 +284,37 @@ export function DashboardSidebar({
   const pathname = usePathname()
   const config = getSidebarConfig(userRole)
   const drawerItems = mobileDrawer ? getMobileDrawerItems(userRole) : null
-  const agentsHub = allAgentsAction(config.agentsHubHref)
+  const finna = finnaSidebarAction(config.finnaHref)
+  const skills = skillsSidebarAction("/finna#skills")
 
   const footerBtn =
     "h-9 w-full justify-start font-medium text-black/70 hover:bg-black/[0.04] hover:text-black dark:text-neutral-400 dark:hover:bg-[#1f1f1f] dark:hover:text-neutral-200"
 
   return (
     <div className="flex h-full flex-col">
-      {/* Header */}
       <div
         className={cn(
-          "flex border-b border-black/10 px-2 py-3 dark:border-[#2a2a2a]",
-          collapsed ? "flex-col items-center gap-2" : "items-center justify-between px-3 py-4",
+          "flex border-b border-black/10 dark:border-[#2a2a2a]",
+          collapsed ? "flex-col items-center gap-2 px-2 py-3" : "items-center gap-1.5 px-3 py-3",
         )}
       >
-        <Link href="/" className={cn("flex items-center gap-2.5", collapsed && "justify-center")}>
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-black text-sm font-bold text-white dark:bg-white dark:text-black">
-            T
-          </div>
-          {!collapsed ? (
-            <span className="truncate text-sm font-semibold text-black dark:text-white">Trackify</span>
-          ) : null}
-        </Link>
+        <div className={cn("min-w-0", !collapsed && "flex-1")}>
+          <WorkspaceIdentity
+            userRole={userRole}
+            onRoleChange={onRoleChange}
+            collapsed={collapsed}
+            session={session}
+          />
+        </div>
         <button
           type="button"
           onClick={onToggleCollapsed}
-          className="hidden rounded-lg p-1.5 text-black/50 transition-colors hover:bg-black/[0.04] hover:text-black dark:text-neutral-500 dark:hover:bg-[#1f1f1f] dark:hover:text-neutral-200 lg:block"
+          className="hidden shrink-0 rounded-lg p-1.5 text-black/50 transition-colors hover:bg-black/[0.04] hover:text-black dark:text-neutral-500 dark:hover:bg-[#1f1f1f] dark:hover:text-neutral-200 lg:block"
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
         </button>
       </div>
-
-      {/* Role switcher */}
-      {!collapsed ? (
-        <div className="border-b border-black/10 px-3 py-3 dark:border-[#2a2a2a]">
-          <Select value={userRole} onValueChange={(v: UserRole) => onRoleChange(v)}>
-            <SelectTrigger className="h-9 border-black/15 bg-neutral-50 font-medium text-black shadow-none dark:border-[#2a2a2a] dark:bg-[#1c1c1c] dark:text-neutral-200 dark:focus:ring-0">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="investor">Investor view</SelectItem>
-              <SelectItem value="founder">Founder view</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      ) : null}
 
       <nav className="flex-1 overflow-y-auto px-2.5 py-3">
         {!mobileDrawer ? (
@@ -278,22 +357,17 @@ export function DashboardSidebar({
             ) : null}
 
             <SectionLabel collapsed={false}>AI</SectionLabel>
-            <NavRow item={agentsHub} pathname={pathname} collapsed={false} variant="agents-hub" />
+            <FinnaNavRow item={finna} pathname={pathname} collapsed={false} />
+            <NavRow item={skills} pathname={pathname} collapsed={false} />
           </>
         ) : (
           <>
             <SectionLabel collapsed={collapsed}>Workspace</SectionLabel>
-            <div className="space-y-2">
-              <NavRow item={config.featured} pathname={pathname} collapsed={collapsed} variant="featured" />
-              {!collapsed ? (
-                <QuickActionGrid items={config.quickActions} pathname={pathname} />
-              ) : (
-                <div className="space-y-0.5">
-                  {config.quickActions.map((item) => (
-                    <NavRow key={item.href} item={item} pathname={pathname} collapsed />
-                  ))}
-                </div>
-              )}
+            <div className="space-y-0.5">
+              <NavRow item={config.featured} pathname={pathname} collapsed={collapsed} />
+              {config.quickActions.map((item) => (
+                <NavRow key={item.href} item={item} pathname={pathname} collapsed={collapsed} />
+              ))}
             </div>
 
             {config.manage.length > 0 ? (
@@ -318,32 +392,10 @@ export function DashboardSidebar({
               </>
             ) : null}
 
-            <SectionLabel collapsed={collapsed}>Pinned Tools</SectionLabel>
+            <SectionLabel collapsed={collapsed}>AI</SectionLabel>
             <div className="space-y-0.5">
-              <NavRow item={agentsHub} pathname={pathname} collapsed={collapsed} variant="agents-hub" />
-              {!collapsed
-                ? config.pinnedAgents.map((agent) => {
-                    const active = isNavActive(pathname, agent.href)
-                    return (
-                      <Link
-                        key={agent.id}
-                        href={agent.href}
-                        className={cn(navLinkClass(active), "rounded-lg px-3 py-2")}
-                      >
-                        {agent.imageSrc ? (
-                          <img
-                            src={agent.imageSrc}
-                            alt=""
-                            className="h-7 w-7 shrink-0 rounded-md object-cover"
-                          />
-                        ) : (
-                          <div className="h-7 w-7 shrink-0 rounded-md bg-neutral-200 dark:bg-[#262626]" />
-                        )}
-                        <span>{agent.name}</span>
-                      </Link>
-                    )
-                  })
-                : null}
+              <FinnaNavRow item={finna} pathname={pathname} collapsed={collapsed} />
+              <NavRow item={skills} pathname={pathname} collapsed={collapsed} />
             </div>
           </>
         )}
@@ -386,19 +438,15 @@ export function DashboardSidebar({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className={cn(footerBtn, collapsed ? "justify-center px-0" : "")}>
-                {collapsed ? (
-                  <Avatar className="h-6 w-6">
-                    <AvatarImage src={session.user.image || undefined} />
-                    <AvatarFallback className="text-[10px]">
-                      {session.user.name?.charAt(0) || "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                ) : (
-                  <>
-                    <User className="h-4 w-4" />
-                    <span className="ml-2.5 truncate">{session.user.name || session.user.email}</span>
-                  </>
-                )}
+                <Avatar className="h-6 w-6">
+                  <AvatarImage src={session.user.image || undefined} />
+                  <AvatarFallback className="text-[10px]">
+                    {session.user.name?.charAt(0) || "U"}
+                  </AvatarFallback>
+                </Avatar>
+                {!collapsed ? (
+                  <span className="ml-2.5 truncate">{session.user.name || session.user.email}</span>
+                ) : null}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">

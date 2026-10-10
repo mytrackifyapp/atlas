@@ -7,6 +7,7 @@ import {
   ArrowLeft,
   Check,
   Copy,
+  CreditCard,
   ExternalLink,
   Loader2,
   Shield,
@@ -18,6 +19,7 @@ import type { Address } from "viem"
 
 import { PageHeader } from "@/components/page-header"
 import { PaymentQrCode } from "@/components/checkout/payment-qr-code"
+import { StripeCardForm } from "@/components/checkout/stripe-card-form"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -60,13 +62,15 @@ type IntentPayload = {
 }
 
 type Step = "configure" | "pay" | "confirming" | "success"
+type PaymentMethod = "card" | "crypto"
 
 type Props = {
   settingsHref: string
   agentsHubHref: string
+  stripePublishableKey?: string
 }
 
-export function StablecoinCheckout({ settingsHref, agentsHubHref }: Props) {
+export function StablecoinCheckout({ settingsHref, agentsHubHref, stripePublishableKey = "" }: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -76,6 +80,7 @@ export function StablecoinCheckout({ settingsHref, agentsHubHref }: Props) {
   const checkoutMode: CheckoutKind =
     searchParams.get("mode") === "credits" ? "credits" : "subscription"
 
+  const initialPay = searchParams.get("pay")
   const [planId, setPlanId] = useState<CheckoutPlanId>(
     isCheckoutPlanId(initialPlan) ? initialPlan : "pro",
   )
@@ -85,13 +90,19 @@ export function StablecoinCheckout({ settingsHref, agentsHubHref }: Props) {
   const [billingInterval, setBillingInterval] = useState<BillingInterval>(
     initialInterval === "monthly" ? "monthly" : "annual",
   )
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
+    initialPay === "crypto" ? "crypto" : "card",
+  )
   const [stablecoin, setStablecoin] = useState<CheckoutStablecoin>("USDC")
   const [chainId, setChainId] = useState<CheckoutChainId>("base")
   const [configured, setConfigured] = useState(true)
+  const [stripeConfigured, setStripeConfigured] = useState(true)
   const [walletAddress, setWalletAddress] = useState<Address | null>(null)
   const [hasSavedWallet, setHasSavedWallet] = useState(false)
   const [intent, setIntent] = useState<IntentPayload | null>(null)
   const [txHash, setTxHash] = useState("")
+  const [stripeClientSecret, setStripeClientSecret] = useState("")
+  const [stripeSessionId, setStripeSessionId] = useState("")
   const [step, setStep] = useState<Step>("configure")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -108,9 +119,20 @@ export function StablecoinCheckout({ settingsHref, agentsHubHref }: Props) {
   useEffect(() => {
     fetch("/api/checkout/intent")
       .then((res) => res.json())
-      .then((data: { configured?: boolean }) => setConfigured(Boolean(data.configured)))
-      .catch(() => setConfigured(false))
-  }, [])
+      .then((data: { configured?: boolean; stripeConfigured?: boolean }) => {
+        const cryptoOk = Boolean(data.configured)
+        const stripeOk = Boolean(data.stripeConfigured)
+        setConfigured(cryptoOk)
+        setStripeConfigured(stripeOk)
+        if (initialPay === "crypto" && cryptoOk) setPaymentMethod("crypto")
+        else if (stripeOk) setPaymentMethod("card")
+        else if (cryptoOk) setPaymentMethod("crypto")
+      })
+      .catch(() => {
+        setConfigured(false)
+        setStripeConfigured(false)
+      })
+  }, [initialPay])
 
   useEffect(() => {
     fetch("/api/user/wallet", { cache: "no-store" })
@@ -201,6 +223,35 @@ export function StablecoinCheckout({ settingsHref, agentsHubHref }: Props) {
     }
   }, [checkoutMode, planId, billingInterval, creditPackId, stablecoin, chainId])
 
+  const startCardCheckout = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const body =
+        checkoutMode === "credits"
+          ? { kind: "credits" as const, creditPackId }
+          : {
+              kind: "subscription" as const,
+              planId,
+              billingInterval,
+            }
+      const res = await fetch("/api/checkout/stripe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.clientSecret) throw new Error(data.error || "Failed to start card checkout")
+      setStripeClientSecret(data.clientSecret as string)
+      setStripeSessionId((data.id as string) ?? "")
+      setStep("pay")
+      setLoading(false)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to start card checkout")
+      setLoading(false)
+    }
+  }, [checkoutMode, creditPackId, planId, billingInterval])
+
   async function connectWallet() {
     setLoading(true)
     setError(null)
@@ -278,13 +329,13 @@ export function StablecoinCheckout({ settingsHref, agentsHubHref }: Props) {
     toast.success(`${label} copied`)
   }
 
-  if (!configured) {
+  if (!configured && !stripeConfigured) {
     return (
       <div className="mx-auto max-w-lg space-y-4 py-16 text-center">
         <Shield className="mx-auto h-10 w-10 text-neutral-400" />
-        <h1 className="text-xl font-semibold">Stablecoin checkout unavailable</h1>
+        <h1 className="text-xl font-semibold">Checkout unavailable</h1>
         <p className="text-sm text-neutral-500">
-          Treasury addresses are not configured yet. Contact support to complete payment.
+          Card and stablecoin checkout are not configured yet. Contact support to complete payment.
         </p>
         <Button asChild variant="outline" className="rounded-full">
           <Link href="/pricing">Back to pricing</Link>
@@ -338,8 +389,8 @@ export function StablecoinCheckout({ settingsHref, agentsHubHref }: Props) {
         title={checkoutMode === "credits" ? "Buy AI credits" : "Checkout"}
         description={
           checkoutMode === "credits"
-            ? "Top up your balance with a one-time USDT or USDC purchase on Base, Polygon, or Ethereum."
-            : "Pay with USDT or USDC on Base, Polygon, or Ethereum. Your plan activates after on-chain verification."
+            ? "Top up with a card, or pay once in USDT or USDC on Base, Polygon, or Ethereum."
+            : "Subscribe with a card, or pay in USDT or USDC on Base, Polygon, or Ethereum."
         }
         actions={
           <Button asChild variant="outline" size="sm" className="rounded-full">
@@ -446,6 +497,54 @@ export function StablecoinCheckout({ settingsHref, agentsHubHref }: Props) {
                 </>
               )}
 
+              {(stripeConfigured || configured) && (
+                <div>
+                  <Label className="text-xs uppercase tracking-wide text-neutral-400">
+                    Payment method
+                  </Label>
+                  <div className="mt-2 grid grid-cols-2 gap-2">
+                    {stripeConfigured ? (
+                      <button
+                        type="button"
+                        onClick={() => setPaymentMethod("card")}
+                        className={cn(
+                          "rounded-xl border px-3 py-3 text-left transition-colors",
+                          paymentMethod === "card"
+                            ? "border-[#c1ff72]/50 bg-[#c1ff72]/10"
+                            : "border-neutral-200 hover:border-neutral-300 dark:border-neutral-800",
+                        )}
+                      >
+                        <p className="flex items-center gap-2 text-sm font-semibold">
+                          <CreditCard className="h-4 w-4" />
+                          Card
+                        </p>
+                        <p className="mt-1 text-xs text-neutral-500">Visa, Mastercard, and more</p>
+                      </button>
+                    ) : null}
+                    {configured ? (
+                      <button
+                        type="button"
+                        onClick={() => setPaymentMethod("crypto")}
+                        className={cn(
+                          "rounded-xl border px-3 py-3 text-left transition-colors",
+                          paymentMethod === "crypto"
+                            ? "border-[#c1ff72]/50 bg-[#c1ff72]/10"
+                            : "border-neutral-200 hover:border-neutral-300 dark:border-neutral-800",
+                        )}
+                      >
+                        <p className="flex items-center gap-2 text-sm font-semibold">
+                          <Wallet className="h-4 w-4" />
+                          Crypto
+                        </p>
+                        <p className="mt-1 text-xs text-neutral-500">USDC or USDT on-chain</p>
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+              )}
+
+              {paymentMethod === "crypto" ? (
+                <>
               <div>
                 <Label className="text-xs uppercase tracking-wide text-neutral-400">Stablecoin</Label>
                 <div className="mt-2 flex gap-2">
@@ -487,15 +586,46 @@ export function StablecoinCheckout({ settingsHref, agentsHubHref }: Props) {
                   ))}
                 </div>
               </div>
+                </>
+              ) : null}
 
               <Button
                 className="h-11 w-full rounded-full bg-[#c1ff72] font-semibold text-neutral-950 hover:bg-[#b4f25f]"
-                disabled={loading}
-                onClick={() => void createIntent()}
+                disabled={loading || (paymentMethod === "crypto" && !configured) || (paymentMethod === "card" && !stripeConfigured)}
+                onClick={() =>
+                  void (paymentMethod === "card" ? startCardCheckout() : createIntent())
+                }
               >
-                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Continue to payment"}
+                {loading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : paymentMethod === "card" ? (
+                  "Continue to card payment"
+                ) : (
+                  "Continue to payment"
+                )}
               </Button>
             </div>
+          ) : paymentMethod === "card" && stripeClientSecret && stripePublishableKey ? (
+            <StripeCardForm
+              publishableKey={stripePublishableKey}
+              clientSecret={stripeClientSecret}
+              sessionId={stripeSessionId}
+              amountLabel={summary.amountLabel}
+              returnKind={checkoutMode === "credits" ? "credits" : "subscription"}
+              onBack={() => {
+                setStep("configure")
+                setStripeClientSecret("")
+                setStripeSessionId("")
+              }}
+              onSuccess={() => {
+                toast.success(paymentSuccessMessage)
+                if (stripeSessionId) {
+                  window.location.href = `/checkout/success?session_id=${encodeURIComponent(stripeSessionId)}&kind=${checkoutMode === "credits" ? "credits" : "subscription"}`
+                  return
+                }
+                setStep("success")
+              }}
+            />
           ) : (
             <div className="space-y-5">
               <div className="rounded-xl border border-neutral-200/80 bg-neutral-50/80 p-4 dark:border-neutral-800 dark:bg-neutral-950">
@@ -692,10 +822,21 @@ export function StablecoinCheckout({ settingsHref, agentsHubHref }: Props) {
           </div>
 
           <ul className="mt-5 space-y-2 text-xs text-neutral-500">
-            <li>· Open your wallet and scan the QR code to get the address</li>
-            <li>· Send the exact {stablecoin} amount on the selected network</li>
-            <li>· Credits or plan activate automatically once payment is detected</li>
-            <li>· Checkout sessions expire in 30 minutes</li>
+            {paymentMethod === "card" ? (
+              <>
+                <li>· Enter your card on this page — we never store the number</li>
+                <li>· Apple Pay, Google Pay, and Link appear when Stripe supports them</li>
+                <li>· Your plan or credits activate as soon as payment succeeds</li>
+                <li>· Manage or cancel later from Settings → Billing</li>
+              </>
+            ) : (
+              <>
+                <li>· Open your wallet and scan the QR code to get the address</li>
+                <li>· Send the exact {stablecoin} amount on the selected network</li>
+                <li>· Credits or plan activate automatically once payment is detected</li>
+                <li>· Checkout sessions expire in 30 minutes</li>
+              </>
+            )}
           </ul>
 
           {intent?.expiresAt ? (

@@ -1,32 +1,68 @@
-import { generateText, stepCountIs } from "ai"
+import { stepCountIs, type ToolSet } from "ai"
 
 import { getAgentConfig } from "@/lib/agents/registry"
 import {
   generateTextWithGroqFallback,
   streamTextWithGroqFallback,
 } from "@/lib/agents/groq-model"
-import { FINNA_SUPERVISOR_ADDENDUM } from "@/lib/agents/prompts/finna"
+import {
+  buildOperatingContextPack,
+  formatContextPackForPrompt,
+} from "@/lib/agents/context-pack"
+import { formatPlatformContextForAudience } from "@/lib/agents/prompts/shared"
+import { FINNA_SUPERVISOR_ADDENDUM, FINNA_SYSTEM_PROMPT } from "@/lib/agents/prompts/finna"
 import { writeAuditLog } from "@/lib/agents/services/audit"
 import { getToolsForAgent } from "@/lib/agents/tools/registry"
 import { AI_CREDIT_COSTS } from "@/lib/ai-credits/plans"
 import { recordAiUsage } from "@/lib/ai-credits/service"
 import type { AgentChatMessage } from "@/lib/agents/types"
+import { formatFinnaIdentityPrompt, type FinnaAudienceRole } from "@/lib/finna-role"
 
 export type FinnaChatOptions = {
   agentId?: string
   messages: AgentChatMessage[]
   ownerId?: string
   userRole?: string | null
+  userName?: string | null
+  audienceRole?: FinnaAudienceRole | null
   persistAudit?: boolean
   correlationId?: string
   workspaceId?: string
   conversationId?: string
 }
 
-function buildSystemPrompt(agentId: string, supervisorMode: boolean): string {
-  const config = getAgentConfig(agentId)
-  if (!supervisorMode) return config.systemPrompt
-  return `${config.systemPrompt}\n${FINNA_SUPERVISOR_ADDENDUM}`
+async function buildSystemPrompt(options: FinnaChatOptions): Promise<string> {
+  const agentId = options.agentId ?? "finna"
+  const supervisorMode = agentId === "finna" && Boolean(options.ownerId)
+  const identity = formatFinnaIdentityPrompt({
+    name: options.userName,
+    audienceRole: options.audienceRole ?? null,
+  })
+  const workspace = formatPlatformContextForAudience(options.audienceRole ?? null)
+
+  if (agentId !== "finna") {
+    return getAgentConfig(agentId).systemPrompt
+  }
+
+  if (!supervisorMode) {
+    return `${FINNA_SYSTEM_PROMPT}\n${workspace}\n${identity}`
+  }
+
+  const config = getAgentConfig("finna", { userRole: options.userRole })
+  let prompt = `${config.systemPrompt}\n${workspace}\n${identity}\n${FINNA_SUPERVISOR_ADDENDUM}`
+
+  try {
+    const pack = await buildOperatingContextPack({
+      ownerId: options.ownerId!,
+      userRole: options.userRole,
+      workspaceId: options.workspaceId,
+    })
+    prompt += formatContextPackForPrompt(pack)
+  } catch (error) {
+    console.error("Finna context pack failed:", error)
+  }
+
+  return prompt
 }
 
 function buildSupervisorTools(options: FinnaChatOptions) {
@@ -45,7 +81,7 @@ function buildSupervisorTools(options: FinnaChatOptions) {
     }
   )
 
-  return Object.keys(tools).length > 0 ? tools : undefined
+  return Object.keys(tools).length > 0 ? (tools as ToolSet) : undefined
 }
 
 export async function generateFinnaReply({
@@ -53,6 +89,8 @@ export async function generateFinnaReply({
   messages,
   ownerId,
   userRole,
+  userName,
+  audienceRole,
   persistAudit = false,
   correlationId,
   workspaceId,
@@ -62,21 +100,28 @@ export async function generateFinnaReply({
     throw new Error("Missing GROQ_API_KEY")
   }
 
-  const config = getAgentConfig(agentId)
-  const supervisorMode = agentId === "finna" && Boolean(ownerId)
-  const tools = buildSupervisorTools({
+  const chatOptions: FinnaChatOptions = {
     agentId,
     messages,
     ownerId,
     userRole,
+    userName,
+    audienceRole,
+    persistAudit,
     correlationId,
     workspaceId,
     conversationId,
-  })
+  }
+  const config = getAgentConfig(agentId, { userRole })
+  const supervisorMode = agentId === "finna" && Boolean(ownerId)
+  const [system, tools] = await Promise.all([
+    buildSystemPrompt(chatOptions),
+    Promise.resolve(buildSupervisorTools(chatOptions)),
+  ])
 
   const result = await generateTextWithGroqFallback({
     preferredModel: config.model,
-    system: buildSystemPrompt(agentId, supervisorMode),
+    system,
     messages,
     maxOutputTokens: config.maxTokens,
     temperature: config.temperature,
@@ -131,6 +176,8 @@ export async function streamFinnaReply({
   messages,
   ownerId,
   userRole,
+  userName,
+  audienceRole,
   persistAudit = false,
   correlationId,
   workspaceId,
@@ -140,21 +187,28 @@ export async function streamFinnaReply({
     throw new Error("Missing GROQ_API_KEY")
   }
 
-  const config = getAgentConfig(agentId)
-  const supervisorMode = agentId === "finna" && Boolean(ownerId)
-  const tools = buildSupervisorTools({
+  const chatOptions: FinnaChatOptions = {
     agentId,
     messages,
     ownerId,
     userRole,
+    userName,
+    audienceRole,
+    persistAudit,
     correlationId,
     workspaceId,
     conversationId,
-  })
+  }
+  const config = getAgentConfig(agentId, { userRole })
+  const supervisorMode = agentId === "finna" && Boolean(ownerId)
+  const [system, tools] = await Promise.all([
+    buildSystemPrompt(chatOptions),
+    Promise.resolve(buildSupervisorTools(chatOptions)),
+  ])
 
   const { result, modelId } = await streamTextWithGroqFallback({
     preferredModel: config.model,
-    system: buildSystemPrompt(agentId, supervisorMode),
+    system,
     messages,
     maxOutputTokens: config.maxTokens,
     temperature: config.temperature,

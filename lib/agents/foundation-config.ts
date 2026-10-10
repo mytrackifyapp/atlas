@@ -24,6 +24,10 @@ export type AgentFoundationConfig = {
   integrationsHint?: string
   allowCustomIntegrations?: boolean
   fileUpload?: FoundationFileUpload
+  tabLabel?: string
+  toolsTabLabel?: string
+  progressNoun?: string
+  sectionLabel?: string
 }
 
 const FOUNDATION_CONFIG: Record<string, AgentFoundationConfig> = {
@@ -71,9 +75,13 @@ const FOUNDATION_CONFIG: Record<string, AgentFoundationConfig> = {
     },
   },
   "ai-marketer": {
-    title: "Tell your team about your brand",
+    title: "Your brand kit",
     description:
       "Share your voice, audience, and goals so campaigns and content feel on-brand from day one.",
+    tabLabel: "Brand kits",
+    toolsTabLabel: "Platforms",
+    progressNoun: "Brand kit",
+    sectionLabel: "Brand kit",
     fields: [
       {
         key: "brandName",

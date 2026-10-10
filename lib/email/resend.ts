@@ -52,32 +52,18 @@ function baseEmailTemplate(opts: {
   cta?: { label: string; href: string }
   footerHtml?: string
 }) {
-  const brand = {
-    bg: "#0B0B0B",
-    card: "#121212",
-    border: "rgba(255,255,255,0.08)",
-    text: "#F5F5F5",
-    muted: "rgba(245,245,245,0.72)",
-    // Matches app `--primary: oklch(0.92 0.19 128)` used by the Contact page submit button.
-    accent: "#c0fc64",
-  }
-
+  const ctaHref = opts.cta ? escapeHtml(opts.cta.href) : "https://mytrackify.com"
+  const ctaLabel = opts.cta?.label ?? "Visit Trackify"
+  const button = opts.cta
+    ? `<a href="${ctaHref}" style="display:inline-block;background:#c0fc64;color:#111111;text-decoration:none;font-weight:700;font-size:15px;padding:12px 18px;border-radius:999px;">
+        ${escapeHtml(opts.cta.label)} →
+      </a>`
+    : ""
   const footer =
     opts.footerHtml ??
-    `<p style="margin:0;line-height:1.6;color:${brand.muted};">
-      Trackify • ${escapeHtml("mytrackify.com")}
-    </p>`
+    `<div style="font-size:15px;font-weight:700;color:#111111;">Trackify Finance</div>
+     <div style="margin-top:2px;font-size:14px;line-height:1.5;color:#71717a;">mytrackify.com</div>`
 
-  const cta = opts.cta
-    ? `<div style="margin-top:18px;">
-        <a href="${escapeHtml(opts.cta.href)}"
-           style="display:inline-block;background:${brand.accent};color:#0B0B0B;text-decoration:none;font-weight:800;padding:12px 16px;border-radius:10px;">
-          ${escapeHtml(opts.cta.label)}
-        </a>
-      </div>`
-    : ""
-
-  // Note: keep styles inline for maximal email client compatibility.
   return `<!doctype html>
 <html>
   <head>
@@ -85,43 +71,144 @@ function baseEmailTemplate(opts: {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>${escapeHtml(opts.title)}</title>
   </head>
-  <body style="margin:0;background:${brand.bg};color:${brand.text};font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;">
+  <body style="margin:0;background:#ffffff;color:#111111;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;">
     <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">
       ${escapeHtml(opts.preheader)}
     </div>
-
-    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:${brand.bg};padding:24px 12px;">
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#ffffff;padding:28px 16px 40px;">
       <tr>
         <td align="center">
-          <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;width:100%;">
+          <table role="presentation" cellpadding="0" cellspacing="0" width="560" style="max-width:560px;width:100%;">
             <tr>
-              <td style="padding:0 6px 14px;">
-                <div style="font-weight:800;letter-spacing:0.2px;color:${brand.text};font-size:18px;">
-                  Trackify Finances
-                </div>
+              <td style="padding:0 0 28px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                  <tr>
+                    <td style="font-size:18px;font-weight:800;letter-spacing:-0.02em;color:#111111;">Trackify</td>
+                    <td align="right">
+                      <a href="${ctaHref}" style="color:#3f6212;font-size:14px;font-weight:600;text-decoration:none;">${escapeHtml(ctaLabel)} →</a>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
-
             <tr>
-              <td style="background:${brand.card};border:1px solid ${brand.border};border-radius:16px;padding:22px;">
-                <h1 style="margin:0 0 10px;font-size:20px;line-height:1.3;color:${brand.text};">
+              <td>
+                <h1 style="margin:0 0 16px;font-size:32px;line-height:1.15;font-weight:800;letter-spacing:-0.03em;color:#111111;">
                   ${escapeHtml(opts.title)}
                 </h1>
-                <div style="color:${brand.muted};font-size:14px;margin-bottom:14px;">
+                <div style="margin:0 0 14px;font-size:16px;line-height:1.65;color:#3f3f46;">
                   ${opts.introHtml}
                 </div>
-
-                <div style="font-size:14px;color:${brand.text};">
+                <div style="font-size:16px;line-height:1.65;color:#3f3f46;">
                   ${opts.bodyHtml}
                 </div>
-
-                ${cta}
+                <div style="margin-top:22px;">${button}</div>
               </td>
             </tr>
-
             <tr>
-              <td style="padding:14px 8px 0;color:${brand.muted};font-size:12px;">
+              <td style="padding:28px 0 0;">
                 ${footer}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`
+}
+
+function welcomeSteps(items: string[]) {
+  return items
+    .map(
+      (item, index) => `
+      <tr>
+        <td valign="top" width="28" style="padding:0 0 12px;font-size:15px;font-weight:700;line-height:1.5;color:#111111;">
+          ${index + 1}
+        </td>
+        <td valign="top" style="padding:0 0 12px;font-size:15px;line-height:1.5;color:#3f3f46;">
+          ${item}
+        </td>
+      </tr>`,
+    )
+    .join("")
+}
+
+function welcomeEmailHtml(opts: {
+  firstName: string
+  workspace: string
+  steps: string[]
+  reply: string
+  href: string
+}) {
+  const name = escapeHtml(opts.firstName)
+  const href = escapeHtml(opts.href)
+  return `<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Welcome to Trackify</title>
+  </head>
+  <body style="margin:0;background:#ffffff;color:#111111;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;">
+    <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">
+      ${escapeHtml(opts.workspace)} is ready.
+    </div>
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#ffffff;padding:28px 16px 40px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" cellpadding="0" cellspacing="0" width="560" style="max-width:560px;width:100%;">
+            <tr>
+              <td style="padding:0 0 28px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                  <tr>
+                    <td style="font-size:18px;font-weight:800;letter-spacing:-0.02em;color:#111111;">Trackify</td>
+                    <td align="right">
+                      <a href="${href}" style="color:#3f6212;font-size:14px;font-weight:600;text-decoration:none;">Open Trackify →</a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <h1 style="margin:0 0 16px;font-size:32px;line-height:1.15;font-weight:800;letter-spacing:-0.03em;color:#111111;">
+                  Welcome, ${name}.
+                </h1>
+                <p style="margin:0 0 14px;font-size:16px;line-height:1.65;color:#3f3f46;">
+                  I’m Divine Gabriel, CEO at Trackify Finance. ${escapeHtml(opts.workspace)} is ready.
+                </p>
+                <p style="margin:0 0 22px;font-size:16px;line-height:1.65;color:#3f3f46;">
+                  ${escapeHtml(opts.reply)}
+                </p>
+                <a href="${href}" style="display:inline-block;background:#c0fc64;color:#111111;text-decoration:none;font-weight:700;font-size:15px;padding:12px 18px;border-radius:999px;">
+                  Open Trackify →
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding-top:28px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#f4f4f5;border-radius:16px;">
+                  <tr>
+                    <td style="padding:22px 22px 8px;font-size:18px;font-weight:800;color:#111111;">
+                      Start here
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:8px 22px 10px;">
+                      <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                        ${welcomeSteps(opts.steps)}
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:28px 0 0;">
+                <div style="font-size:15px;line-height:1.6;color:#111111;">Thank you, and welcome to Trackify.</div>
+                <div style="margin-top:10px;font-size:15px;font-weight:700;color:#111111;">Divine Gabriel</div>
+                <div style="font-size:14px;line-height:1.5;color:#71717a;">CEO, Trackify Finance</div>
               </td>
             </tr>
           </table>
@@ -143,62 +230,31 @@ export async function sendWelcomeEmail(payload: {
   const firstName =
     (payload.toName ?? "").trim().split(/\s+/)[0]?.trim() || "there"
 
-  const subject =
-    payload.role === "founder"
-      ? "Welcome to Trackify — founder setup"
-      : "Welcome to Trackify — investor setup"
+  const founder = payload.role === "founder"
+  const href = founder ? "https://mytrackify.com/founder" : "https://mytrackify.com/portfolio"
+  const subject = founder
+    ? "Your founder workspace is ready"
+    : "Your investor workspace is ready"
 
-  const intro =
-    payload.role === "founder"
-      ? `Welcome, <strong style="color:#F5F5F5;">${escapeHtml(firstName)}</strong>. You’re set up as a <strong>Founder</strong>.`
-      : `Welcome, <strong style="color:#F5F5F5;">${escapeHtml(firstName)}</strong>. You’re set up as an <strong>Investor</strong>.`
-
-  const bodyFounder = `
-    <p style="margin:0 0 12px;line-height:1.6;">
-      I’m Divine Gabriel, CEO at Trackify Finance — welcome to Trackify.
-    </p>
-    <p style="margin:0 0 12px;line-height:1.6;">
-      Your founder workspace is ready. Here are the fastest next steps:
-    </p>
-    <ul style="margin:0 0 12px 18px;line-height:1.7;color:rgba(245,245,245,0.85);">
-      <li>Add your fundraising details and targets</li>
-      <li>Upload key documents (deck, model, diligence)</li>
-      <li>Track investors, updates, and momentum weekly</li>
-    </ul>
-    <p style="margin:0;line-height:1.6;color:rgba(245,245,245,0.72);">
-      Reply to this email if you want help setting up your pipeline.
-    </p>
-  `
-
-  const bodyInvestor = `
-    <p style="margin:0 0 12px;line-height:1.6;">
-      I’m Divine Gabriel, CEO at Trackify Finance — welcome to Trackify.
-    </p>
-    <p style="margin:0 0 12px;line-height:1.6;">
-      Your investor dashboard is ready. Here are the fastest next steps:
-    </p>
-    <ul style="margin:0 0 12px 18px;line-height:1.7;color:rgba(245,245,245,0.85);">
-      <li>Add your portfolio companies (or import them)</li>
-      <li>Start a deal flow pipeline and score opportunities</li>
-      <li>Generate reports for internal tracking and LP updates</li>
-    </ul>
-    <p style="margin:0;line-height:1.6;color:rgba(245,245,245,0.72);">
-      Reply to this email if you want a quick walkthrough.
-    </p>
-  `
-
-  const html = baseEmailTemplate({
-    preheader: "Welcome to Trackify",
-    title: "Welcome to Trackify",
-    introHtml: intro,
-    bodyHtml: payload.role === "founder" ? bodyFounder : bodyInvestor,
-    cta: {
-      label: "Open Trackify",
-      href: payload.role === "founder" ? "https://mytrackify.com/founder" : "https://mytrackify.com/portfolio",
-    },
-    footerHtml: `<p style="margin:0;line-height:1.6;color:rgba(245,245,245,0.72);">
-      Sent by Divine Gabriel, CEO • Trackify Finance
-    </p>`,
+  const html = welcomeEmailHtml({
+    firstName,
+    workspace: founder ? "Your founder workspace" : "Your investor workspace",
+    steps: founder
+      ? [
+          "Add your fundraising details and targets",
+          "Upload your deck, model, and diligence docs",
+          "Track investors and send updates weekly",
+          "Join the investor lounge and meet the community",
+        ]
+      : [
+          "Add the companies in your portfolio",
+          "Open a deal flow pipeline and score opportunities",
+          "Pull reports for your team and LPs",
+        ],
+    reply: founder
+      ? "Reply to this email if you want help setting up your raise."
+      : "Reply to this email if you want a short walkthrough.",
+    href,
   })
 
   const text = [
@@ -207,7 +263,7 @@ export async function sendWelcomeEmail(payload: {
     `I’m Divine Gabriel, CEO at Trackify Finance — welcome to Trackify.`,
     ``,
     payload.role === "founder"
-      ? `You’re set up as a Founder. Next steps: fundraising details, docs, and investor tracking.`
+      ? `You’re set up as a Founder. Next steps: fundraising details, docs, investor tracking, and the investor lounge.`
       : `You’re set up as an Investor. Next steps: portfolio companies, deal flow, and reports.`,
     ``,
     `Open Trackify: ${payload.role === "founder" ? "https://mytrackify.com/founder" : "https://mytrackify.com/portfolio"}`,
@@ -246,22 +302,19 @@ export async function sendContactEmail(payload: ContactEmailPayload) {
   const html = baseEmailTemplate({
     preheader: `New message from ${payload.firstName} ${payload.lastName} (${payload.workEmail})`,
     title: "New contact form submission",
-    introHtml: `<span>${escapeHtml(payload.firstName)} ${escapeHtml(payload.lastName)}</span> <span style="color:rgba(245,245,245,0.55);">(${escapeHtml(payload.workEmail)})</span>`,
+    introHtml: `<span style="color:#111111;font-weight:700;">${escapeHtml(payload.firstName)} ${escapeHtml(payload.lastName)}</span> <span style="color:#71717a;">(${escapeHtml(payload.workEmail)})</span>`,
     bodyHtml: `
-      <div style="padding:12px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#0E0E0E;margin:10px 0 14px;">
-        <div style="font-size:12px;color:rgba(245,245,245,0.6);margin-bottom:6px;">Subject</div>
-        <div style="font-weight:700;">${escapeHtml(payload.subject)}</div>
+      <div style="padding:16px 18px;border-radius:16px;background:#f4f4f5;margin:10px 0 14px;">
+        <div style="font-size:12px;font-weight:700;color:#71717a;margin-bottom:6px;">Subject</div>
+        <div style="font-weight:700;color:#111111;">${escapeHtml(payload.subject)}</div>
       </div>
-
-      <div style="padding:12px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#0E0E0E;">
-        <div style="font-size:12px;color:rgba(245,245,245,0.6);margin-bottom:6px;">Message</div>
+      <div style="padding:16px 18px;border-radius:16px;background:#f4f4f5;">
+        <div style="font-size:12px;font-weight:700;color:#71717a;margin-bottom:6px;">Message</div>
         ${toHtmlParagraphs(payload.message)}
       </div>
     `,
     cta: { label: "Reply to sender", href: `mailto:${encodeURIComponent(payload.workEmail)}` },
-    footerHtml: `<p style="margin:0;line-height:1.6;color:rgba(245,245,245,0.72);">
-      You can reply directly to this email to reach the sender.
-    </p>`,
+    footerHtml: `<div style="font-size:14px;line-height:1.5;color:#71717a;">Reply directly to this email to reach the sender.</div>`,
   })
 
   return await resend.emails.send({
@@ -295,19 +348,17 @@ export async function sendContactConfirmationEmail(payload: ContactEmailPayload)
   const html = baseEmailTemplate({
     preheader: "We received your message and will reply soon.",
     title: "We received your message",
-    introHtml: `Hi <strong style="color:#F5F5F5;">${escapeHtml(payload.firstName)}</strong> — thanks for reaching out.`,
+    introHtml: `Hi <strong style="color:#111111;">${escapeHtml(payload.firstName)}</strong> — thanks for reaching out.`,
     bodyHtml: `
-      <p style="margin:0 0 12px;line-height:1.6;">
+      <p style="margin:0 0 14px;line-height:1.65;color:#3f3f46;">
         Our team has your message and will get back to you soon.
       </p>
-
-      <div style="padding:12px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#0E0E0E;margin:10px 0 14px;">
-        <div style="font-size:12px;color:rgba(245,245,245,0.6);margin-bottom:6px;">Subject</div>
-        <div style="font-weight:700;">${escapeHtml(payload.subject)}</div>
+      <div style="padding:16px 18px;border-radius:16px;background:#f4f4f5;margin:0 0 12px;">
+        <div style="font-size:12px;font-weight:700;color:#71717a;margin-bottom:6px;">Subject</div>
+        <div style="font-weight:700;color:#111111;">${escapeHtml(payload.subject)}</div>
       </div>
-
-      <div style="padding:12px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#0E0E0E;">
-        <div style="font-size:12px;color:rgba(245,245,245,0.6);margin-bottom:6px;">Copy of your message</div>
+      <div style="padding:16px 18px;border-radius:16px;background:#f4f4f5;">
+        <div style="font-size:12px;font-weight:700;color:#71717a;margin-bottom:6px;">Copy of your message</div>
         ${toHtmlParagraphs(payload.message)}
       </div>
     `,
@@ -361,27 +412,25 @@ export async function sendAcceleratorApplicationEmail(payload: AcceleratorApplic
   const html = baseEmailTemplate({
     preheader: `New accelerator application — ${payload.companyName}`,
     title: "New accelerator application",
-    introHtml: `<span style="color:rgba(245,245,245,0.72);">Cohort:</span> <strong style="color:#F5F5F5;">${escapeHtml(payload.cohort)}</strong>`,
+    introHtml: `<span style="color:#71717a;">Cohort:</span> <strong style="color:#111111;">${escapeHtml(payload.cohort)}</strong>`,
     bodyHtml: `
-      <div style="padding:12px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#0E0E0E;margin:10px 0 14px;">
-        <div style="font-size:12px;color:rgba(245,245,245,0.6);margin-bottom:6px;">Applicant</div>
-        <div style="font-weight:800;">${escapeHtml(payload.fullName)}</div>
-        <div style="margin-top:4px;color:rgba(245,245,245,0.72);">${escapeHtml(payload.email)}</div>
+      <div style="padding:16px 18px;border-radius:16px;background:#f4f4f5;margin:0 0 12px;">
+        <div style="font-size:12px;font-weight:700;color:#71717a;margin-bottom:6px;">Applicant</div>
+        <div style="font-weight:800;color:#111111;">${escapeHtml(payload.fullName)}</div>
+        <div style="margin-top:4px;color:#3f3f46;">${escapeHtml(payload.email)}</div>
       </div>
-
-      <div style="padding:12px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#0E0E0E;margin:10px 0 14px;">
-        <div style="font-size:12px;color:rgba(245,245,245,0.6);margin-bottom:6px;">Startup</div>
-        <div style="font-weight:800;">${escapeHtml(payload.companyName)}</div>
-        <div style="margin-top:6px;color:rgba(245,245,245,0.72);">
+      <div style="padding:16px 18px;border-radius:16px;background:#f4f4f5;margin:0 0 12px;">
+        <div style="font-size:12px;font-weight:700;color:#71717a;margin-bottom:6px;">Startup</div>
+        <div style="font-weight:800;color:#111111;">${escapeHtml(payload.companyName)}</div>
+        <div style="margin-top:6px;color:#3f3f46;line-height:1.6;">
           Stage: ${escapeHtml(payload.stage)}<br/>
           Location: ${escapeHtml(payload.location)}<br/>
-          Website: ${payload.website ? `<a href="${escapeHtml(payload.website)}" style="color:#c0fc64;text-decoration:none;">${escapeHtml(payload.website)}</a>` : "—"}
+          Website: ${payload.website ? `<a href="${escapeHtml(payload.website)}" style="color:#3f6212;text-decoration:none;">${escapeHtml(payload.website)}</a>` : "—"}
         </div>
       </div>
-
-      <div style="padding:12px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#0E0E0E;">
-        <div style="font-size:12px;color:rgba(245,245,245,0.6);margin-bottom:6px;">Notes</div>
-        ${payload.notes ? toHtmlParagraphs(payload.notes) : `<p style="margin:0;color:rgba(245,245,245,0.72);">—</p>`}
+      <div style="padding:16px 18px;border-radius:16px;background:#f4f4f5;">
+        <div style="font-size:12px;font-weight:700;color:#71717a;margin-bottom:6px;">Notes</div>
+        ${payload.notes ? toHtmlParagraphs(payload.notes) : `<p style="margin:0;color:#3f3f46;">—</p>`}
       </div>
     `,
     cta: { label: "Reply to applicant", href: `mailto:${encodeURIComponent(payload.email)}` },
@@ -417,20 +466,19 @@ export async function sendAcceleratorConfirmationEmail(payload: AcceleratorAppli
   const html = baseEmailTemplate({
     preheader: `Application received for ${payload.cohort}.`,
     title: "Application received",
-    introHtml: `Hi <strong style="color:#F5F5F5;">${escapeHtml(payload.fullName)}</strong> — thanks for applying.`,
+    introHtml: `Hi <strong style="color:#111111;">${escapeHtml(payload.fullName)}</strong> — thanks for applying.`,
     bodyHtml: `
-      <p style="margin:0 0 12px;line-height:1.6;">
-        We’ve received your application for <strong>${escapeHtml(payload.cohort)}</strong>.
-        The cohort is launching in <strong>November</strong> — we’ll email you next steps.
+      <p style="margin:0 0 14px;line-height:1.65;color:#3f3f46;">
+        We’ve received your application for <strong style="color:#111111;">${escapeHtml(payload.cohort)}</strong>.
+        The cohort is launching in <strong style="color:#111111;">November</strong> — we’ll email you next steps.
       </p>
-
-      <div style="padding:12px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#0E0E0E;">
-        <div style="font-size:12px;color:rgba(245,245,245,0.6);margin-bottom:6px;">Your details</div>
-        <div style="color:rgba(245,245,245,0.72);line-height:1.6;">
-          Company: <strong style="color:#F5F5F5;">${escapeHtml(payload.companyName)}</strong><br/>
+      <div style="padding:16px 18px;border-radius:16px;background:#f4f4f5;">
+        <div style="font-size:12px;font-weight:700;color:#71717a;margin-bottom:6px;">Your details</div>
+        <div style="color:#3f3f46;line-height:1.6;">
+          Company: <strong style="color:#111111;">${escapeHtml(payload.companyName)}</strong><br/>
           Stage: ${escapeHtml(payload.stage)}<br/>
           Location: ${escapeHtml(payload.location)}<br/>
-          Website: ${payload.website ? `<a href="${escapeHtml(payload.website)}" style="color:#c0fc64;text-decoration:none;">${escapeHtml(payload.website)}</a>` : "—"}
+          Website: ${payload.website ? `<a href="${escapeHtml(payload.website)}" style="color:#3f6212;text-decoration:none;">${escapeHtml(payload.website)}</a>` : "—"}
         </div>
       </div>
     `,

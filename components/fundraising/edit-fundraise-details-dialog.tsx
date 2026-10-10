@@ -47,24 +47,52 @@ import {
 
 type FundraiseSource = Parameters<typeof fundraiseToDetailsForm>[0]
 
+const SECTION_COPY: Record<string, { title: string; description: string }> = {
+  company: {
+    title: "Company",
+    description: "Logo, name, website, and the profile on your investor page.",
+  },
+  story: {
+    title: "Story",
+    description: "Pitch narrative, traction, market, and why you win.",
+  },
+  round: {
+    title: "Round",
+    description: "Round type, target, valuation, ticket size, and close date.",
+  },
+  materials: {
+    title: "Materials",
+    description: "Pitch deck, financial model, data room, and demo.",
+  },
+}
+
 type Props = {
   open: boolean
   onOpenChange: (open: boolean) => void
   fundraise: FundraiseSource | null
+  initialTab?: string
+  singleSection?: boolean
   onSuccess?: () => void
 }
 
-export function EditFundraiseDetailsDialog({ open, onOpenChange, fundraise, onSuccess }: Props) {
+export function EditFundraiseDetailsDialog({
+  open,
+  onOpenChange,
+  fundraise,
+  initialTab = "company",
+  singleSection = false,
+  onSuccess,
+}: Props) {
   const [form, setForm] = useState<FundraiseDetailsFields>(emptyFundraiseDetailsForm())
   const [saving, setSaving] = useState(false)
-  const [tab, setTab] = useState("company")
+  const [tab, setTab] = useState(initialTab)
 
   useEffect(() => {
     if (open && fundraise) {
       setForm(fundraiseToDetailsForm(fundraise))
-      setTab("company")
+      setTab(initialTab)
     }
-  }, [open, fundraise])
+  }, [open, fundraise, initialTab])
 
   function updateField<K extends keyof FundraiseDetailsFields>(field: K, value: FundraiseDetailsFields[K]) {
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -82,7 +110,7 @@ export function EditFundraiseDetailsDialog({ open, onOpenChange, fundraise, onSu
   async function handleSave() {
     if (!form.roundType || !form.targetAmount || !form.targetCloseDate) {
       toast.error("Round type, target amount, and close date are required")
-      setTab("round")
+      if (!singleSection) setTab("round")
       return
     }
 
@@ -107,27 +135,35 @@ export function EditFundraiseDetailsDialog({ open, onOpenChange, fundraise, onSu
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto w-[95vw] sm:w-full">
+      <DialogContent className="max-h-[90vh] w-[95vw] overflow-y-auto sm:w-full max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Edit fundraise details</DialogTitle>
+          <DialogTitle>
+            {singleSection ? SECTION_COPY[tab]?.title ?? "Edit details" : "Edit fundraise details"}
+          </DialogTitle>
           <DialogDescription>
-            Company profile, pitch narrative, round terms, and investor materials.
+            {singleSection
+              ? SECTION_COPY[tab]?.description
+              : "Company profile, pitch narrative, round terms, and investor materials."}
           </DialogDescription>
         </DialogHeader>
 
         <Tabs value={tab} onValueChange={setTab} className="space-y-4">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto">
-            <TabsTrigger value="company" className="text-xs sm:text-sm">Company</TabsTrigger>
-            <TabsTrigger value="story" className="text-xs sm:text-sm">Story</TabsTrigger>
-            <TabsTrigger value="round" className="text-xs sm:text-sm">Round</TabsTrigger>
-            <TabsTrigger value="materials" className="text-xs sm:text-sm">Materials</TabsTrigger>
-          </TabsList>
+          {singleSection ? null : (
+            <TabsList className="grid h-auto w-full grid-cols-2 sm:grid-cols-4">
+              <TabsTrigger value="company" className="text-xs sm:text-sm">Company</TabsTrigger>
+              <TabsTrigger value="story" className="text-xs sm:text-sm">Story</TabsTrigger>
+              <TabsTrigger value="round" className="text-xs sm:text-sm">Round</TabsTrigger>
+              <TabsTrigger value="materials" className="text-xs sm:text-sm">Materials</TabsTrigger>
+            </TabsList>
+          )}
 
           <TabsContent value="company" className="space-y-4 mt-0">
-            <h3 className="flex items-center gap-2 font-semibold">
-              <Building2 className="h-4 w-4 text-primary" />
-              Company profile
-            </h3>
+            {singleSection ? null : (
+              <h3 className="flex items-center gap-2 font-semibold">
+                <Building2 className="h-4 w-4 text-primary" />
+                Company profile
+              </h3>
+            )}
             <div className="grid gap-6 sm:grid-cols-2">
               <FundraiseImageUpload
                 label="Company logo"
@@ -214,10 +250,12 @@ export function EditFundraiseDetailsDialog({ open, onOpenChange, fundraise, onSu
           </TabsContent>
 
           <TabsContent value="story" className="space-y-4 mt-0">
-            <h3 className="flex items-center gap-2 font-semibold">
-              <TrendingUp className="h-4 w-4 text-primary" />
-              Traction & market
-            </h3>
+            {singleSection ? null : (
+              <h3 className="flex items-center gap-2 font-semibold">
+                <TrendingUp className="h-4 w-4 text-primary" />
+                Traction & market
+              </h3>
+            )}
             <div className="space-y-2">
               <Label htmlFor="traction">Traction & key metrics</Label>
               <Textarea
@@ -251,10 +289,12 @@ export function EditFundraiseDetailsDialog({ open, onOpenChange, fundraise, onSu
           </TabsContent>
 
           <TabsContent value="round" className="space-y-4 mt-0">
-            <h3 className="flex items-center gap-2 font-semibold">
-              <Target className="h-4 w-4 text-primary" />
-              Round terms
-            </h3>
+            {singleSection ? null : (
+              <h3 className="flex items-center gap-2 font-semibold">
+                <Target className="h-4 w-4 text-primary" />
+                Round terms
+              </h3>
+            )}
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label>Round type *</Label>
@@ -363,10 +403,12 @@ export function EditFundraiseDetailsDialog({ open, onOpenChange, fundraise, onSu
           </TabsContent>
 
           <TabsContent value="materials" className="space-y-4 mt-0">
-            <h3 className="flex items-center gap-2 font-semibold">
-              <FileText className="h-4 w-4 text-primary" />
-              Investor materials
-            </h3>
+            {singleSection ? null : (
+              <h3 className="flex items-center gap-2 font-semibold">
+                <FileText className="h-4 w-4 text-primary" />
+                Investor materials
+              </h3>
+            )}
 
             <div className="space-y-2">
               <Label>Pitch deck</Label>

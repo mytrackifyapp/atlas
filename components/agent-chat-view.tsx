@@ -8,10 +8,13 @@ import { toast } from "sonner"
 
 import type { AgentChatMessage } from "@/lib/agents/types"
 import { ChatMessageText } from "@/components/chat-message-text"
+import { FinnaVoiceBeam } from "@/components/finna-voice-beam"
+import { useFinnaVoice } from "@/hooks/use-finna-voice"
 import { AgentChatSidebar } from "@/components/agents/agent-chat-sidebar"
 import { AiCreditsBadge } from "@/components/ai-credits-badge"
 import { MarketerSocialCta } from "@/components/marketer-social-cta"
 import { AI_AGENTS_CATALOG, resolveAgentId } from "@/lib/ai-agents-catalog"
+import { getAgentFoundationConfig } from "@/lib/agents/foundation-config"
 import {
   assistantMentionsSocialDraft,
   isSocialDesignRequest,
@@ -19,6 +22,7 @@ import {
   SOCIAL_DRAFTS_PATH,
 } from "@/lib/social/marketer-chat-intent"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import {
   Sheet,
   SheetContent,
@@ -35,6 +39,10 @@ import {
 
 type Props = {
   agentId: string
+  homeHref?: string
+  heading?: string
+  subheading?: string
+  composerVariant?: "default" | "glow"
 }
 
 type DisplayMessage = AgentChatMessage & { id?: string }
@@ -74,6 +82,7 @@ function ChatComposer({
   voiceInput,
   onMicPress,
   className,
+  variant = "default",
 }: {
   input: string
   onInputChange: (value: string) => void
@@ -84,10 +93,91 @@ function ChatComposer({
   voiceInput: ReturnType<typeof useVoiceInput>
   onMicPress: () => void
   className?: string
+  variant?: "default" | "glow"
 }) {
   const disabled = busy || loadingHistory || !conversationId
   const expanded = hasContent(input)
-  const inputRef = useRef<HTMLTextAreaElement | null>(null)
+  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null)
+  const glowVoice = useFinnaVoice({
+    onFinalTranscript: (text) => {
+      onInputChange([input, text].filter(Boolean).join(" ").trim())
+    },
+  })
+
+  if (variant === "glow") {
+    return (
+      <div className={cn("mx-auto w-full max-w-xl overflow-visible", className)}>
+        <FinnaVoiceBeam
+          stream={glowVoice.listening ? glowVoice.stream : null}
+          processing={busy}
+          type="pill"
+          theme="light"
+          scale={1.2}
+          idle={0.5}
+          strength={1}
+        >
+          <div className="flex items-center gap-2 rounded-full border border-black/[0.06] bg-white px-3 py-1.5 shadow-[0_8px_24px_rgba(0,0,0,0.06)] dark:border-white/10 dark:bg-[#171717]">
+            <Input
+              ref={inputRef}
+              value={input}
+              onChange={(event) => onInputChange(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && !event.shiftKey) {
+                  event.preventDefault()
+                  onSend()
+                }
+              }}
+              placeholder={
+                glowVoice.listening ? "Listening…" : "Ask about a post, graphic, or campaign…"
+              }
+              disabled={disabled}
+              className="h-9 border-0 bg-transparent text-sm shadow-none focus-visible:ring-0"
+            />
+            {glowVoice.supported ? (
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className={cn(
+                  "h-8 w-8 shrink-0 rounded-full",
+                  glowVoice.listening && "text-red-500 hover:text-red-500",
+                )}
+                disabled={disabled}
+                onClick={() => void glowVoice.toggle()}
+                aria-label={glowVoice.listening ? "Stop listening" : "Voice input"}
+              >
+                <Mic className="h-4 w-4" />
+              </Button>
+            ) : null}
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 shrink-0 rounded-full"
+              disabled={disabled}
+              onClick={() => inputRef.current?.focus()}
+              aria-label="Focus message"
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+            <Button
+              type="button"
+              size="icon"
+              className="h-8 w-8 shrink-0 rounded-full"
+              disabled={disabled || !input.trim()}
+              onClick={onSend}
+              aria-label="Send message"
+            >
+              <AudioLines className="h-4 w-4" strokeWidth={2.25} />
+            </Button>
+          </div>
+        </FinnaVoiceBeam>
+        {glowVoice.error ? (
+          <p className="mt-2 text-center text-xs text-destructive">{glowVoice.error}</p>
+        ) : null}
+      </div>
+    )
+  }
 
   return (
     <div className={cn("w-full", className)}>
@@ -169,7 +259,13 @@ function hasContent(value: string) {
   return value.trim().length > 0 || value.includes("\n")
 }
 
-export function AgentChatView({ agentId }: Props) {
+export function AgentChatView({
+  agentId,
+  homeHref,
+  heading,
+  subheading,
+  composerVariant = "default",
+}: Props) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -181,6 +277,12 @@ export function AgentChatView({ agentId }: Props) {
   )
   const agentBaseHref = pathname.startsWith("/founder") ? "/founder/ai" : "/dashboard/ai"
   const detailHref = `${agentBaseHref}/${resolvedAgentId}`
+  const backHref = homeHref ?? detailHref
+  const pageHeading = heading ?? agent?.name ?? "AI Agent"
+  const pageSubheading = subheading ?? agent?.category
+  const foundationConfig = getAgentFoundationConfig(resolvedAgentId)
+  const setupTabLabel = foundationConfig.tabLabel ?? "setup"
+  const toolsTabLabel = foundationConfig.toolsTabLabel ?? "tools"
   const greeting = useMemo(() => {
     if (agentId === "ai-marketer") {
       return agent
@@ -710,6 +812,7 @@ export function AgentChatView({ agentId }: Props) {
               conversationId={conversationId}
               voiceInput={voiceInput}
               onMicPress={handleMicPress}
+              variant={composerVariant}
             />
           </div>
         </div>
@@ -762,6 +865,7 @@ export function AgentChatView({ agentId }: Props) {
               conversationId={conversationId}
               voiceInput={voiceInput}
               onMicPress={handleMicPress}
+              variant={composerVariant}
             />
           </div>
         </div>
@@ -787,33 +891,51 @@ export function AgentChatView({ agentId }: Props) {
       >
         <div className="flex items-center gap-3">
           <Link
-            href={detailHref}
+            href={backHref}
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 text-neutral-500 transition-colors hover:text-neutral-900 dark:border-neutral-800 dark:hover:text-white"
-            aria-label={`Back to ${agent?.name ?? "agent"}`}
+            aria-label={`Back to ${pageHeading}`}
           >
             <ArrowLeft className="h-4 w-4" />
           </Link>
           <div>
             <p className="text-sm font-medium text-neutral-950 dark:text-white">
-              {agent?.name ?? "AI Agent"}
+              {pageHeading}
             </p>
-            <p className="text-xs text-neutral-500">{agent?.category}</p>
+            <p className="text-xs text-neutral-500">{pageSubheading}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <AiCreditsBadge compact className="hidden sm:inline-flex" />
-          <Link
-            href={`${agentBaseHref}/approvals`}
-            className="relative inline-flex h-9 items-center gap-1.5 rounded-full border border-neutral-200 px-3 text-xs font-medium text-neutral-600 transition-colors hover:border-neutral-300 hover:text-neutral-900 dark:border-neutral-800 dark:text-neutral-400 dark:hover:text-white"
-          >
-            <ShieldAlert className="h-3.5 w-3.5" />
-            Approvals
-            {pendingApprovals > 0 ? (
-              <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-1 text-[9px] font-semibold leading-none text-white">
-                {pendingApprovals > 9 ? "9+" : pendingApprovals}
-              </span>
-            ) : null}
-          </Link>
+          {pathname !== "/founder/social" ? (
+            <>
+              {isMarketer ? (
+                <Link
+                  href="/founder/social/drafts"
+                  className="inline-flex h-9 items-center gap-1.5 rounded-full border border-neutral-200 px-3 text-xs font-medium text-neutral-600 transition-colors hover:border-neutral-300 hover:text-neutral-900 dark:border-neutral-800 dark:text-neutral-400 dark:hover:text-white"
+                >
+                  Drafts
+                </Link>
+              ) : null}
+              <Link
+                href={`${agentBaseHref}/approvals`}
+                className="relative inline-flex h-9 items-center gap-1.5 rounded-full border border-neutral-200 px-3 text-xs font-medium text-neutral-600 transition-colors hover:border-neutral-300 hover:text-neutral-900 dark:border-neutral-800 dark:text-neutral-400 dark:hover:text-white"
+              >
+                <ShieldAlert className="h-3.5 w-3.5" />
+                Approvals
+                {pendingApprovals > 0 ? (
+                  <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-1 text-[9px] font-semibold leading-none text-white">
+                    {pendingApprovals > 9 ? "9+" : pendingApprovals}
+                  </span>
+                ) : null}
+              </Link>
+              <Link
+                href={detailHref}
+                className="hidden text-xs text-neutral-500 transition-colors hover:text-neutral-900 lg:inline dark:hover:text-white"
+              >
+                About this agent
+              </Link>
+            </>
+          ) : null}
           <Button
             type="button"
             variant="ghost"
@@ -824,12 +946,6 @@ export function AgentChatView({ agentId }: Props) {
           >
             <PanelRight className="h-4 w-4" />
           </Button>
-          <Link
-            href={detailHref}
-            className="hidden text-xs text-neutral-500 transition-colors hover:text-neutral-900 lg:inline dark:hover:text-white"
-          >
-            About this agent
-          </Link>
         </div>
       </header>
 
@@ -837,7 +953,7 @@ export function AgentChatView({ agentId }: Props) {
         <SheetContent side="right" className="w-[min(320px,92vw)] gap-0 p-0 sm:max-w-[320px]">
           <SheetTitle className="sr-only">Chat options</SheetTitle>
           <SheetDescription className="sr-only">
-            History, setup, and tools for this agent
+            {`History, ${setupTabLabel.toLowerCase()}, and ${toolsTabLabel.toLowerCase()} for this agent`}
           </SheetDescription>
           <AgentChatSidebar {...sidebarProps} className="h-full max-h-none rounded-none border-0" />
         </SheetContent>

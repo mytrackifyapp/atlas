@@ -16,10 +16,14 @@ export function isKnownAgentId(agentId: string): boolean {
   return AI_AGENTS_CATALOG.some((a) => a.id === resolved)
 }
 
-export function getAgentConfig(agentId: string): AgentRuntimeConfig {
+export function getAgentConfig(
+  agentId: string,
+  options?: { userRole?: string | null }
+): AgentRuntimeConfig {
   const resolved = resolveAgentId(agentId)
   const systemPrompt =
-    getSystemPrompt(resolved) + getToolGuidanceAppendix(resolved)
+    getSystemPrompt(resolved) +
+    getToolGuidanceAppendix(resolved, options?.userRole)
   return {
     ...BASE_CONFIG,
     systemPrompt,

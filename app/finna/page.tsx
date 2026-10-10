@@ -1,12 +1,15 @@
 import { Suspense } from "react"
 import { redirect } from "next/navigation"
-import { FinnaChatFullPage } from "@/components/finna-chat-fullpage"
+
+import { DashboardShell } from "@/components/dashboard-shell"
+import { FinnaWorkspace } from "@/components/finna-workspace"
 import { getSessionWithRole } from "@/lib/auth-helpers"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Finna AI | Trackify",
-  description: "Chat with Finna, your Trackify assistant — finance, fundraising, and portfolio guidance.",
+  description:
+    "Chat with Finna, your Trackify operating partner — finance, fundraising, portfolio, and company operations.",
 }
 
 export const dynamic = "force-dynamic"
@@ -29,11 +32,13 @@ export default async function FinnaPage({
     redirect(`/onboarding?redirect=${encodeURIComponent(next)}`)
   }
 
+  const viewerRole = session.user.role === "investor" ? "investor" : "founder"
+
   return (
-    <main className="min-h-screen bg-background">
+    <DashboardShell viewerRole={viewerRole}>
       <Suspense fallback={null}>
-        <FinnaChatFullPage />
+        <FinnaWorkspace viewerRole={viewerRole} />
       </Suspense>
-    </main>
+    </DashboardShell>
   )
 }

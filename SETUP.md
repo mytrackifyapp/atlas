@@ -33,6 +33,23 @@ UPLOADTHING_APP_ID="your-uploadthing-app-id"
 
 # Admin Access (comma-separated list of admin emails)
 ADMIN_EMAILS="admin@example.com,another-admin@example.com"
+
+# Stripe (card subscriptions + credit packs)
+# Dashboard: https://dashboard.stripe.com/apikeys
+STRIPE_SECRET_KEY="sk_test_..."
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_..."
+# Webhook endpoint: /api/stripe/webhook
+# Local: stripe listen --forward-to localhost:3000/api/stripe/webhook
+STRIPE_WEBHOOK_SECRET="whsec_..."
+# Optional. If omitted, Checkout creates prices from Trackify plan amounts.
+# STRIPE_PRICE_PRO_MONTHLY="price_..."
+# STRIPE_PRICE_PRO_ANNUAL="price_..."
+# STRIPE_PRICE_TEAM_MONTHLY="price_..."
+# STRIPE_PRICE_TEAM_ANNUAL="price_..."
+# STRIPE_PRICE_CREDITS_250="price_..."
+# STRIPE_PRICE_CREDITS_500="price_..."
+# STRIPE_PRICE_CREDITS_1000="price_..."
+# STRIPE_TRIAL_DAYS="14"
 ```
 
 **Important:** Generate a secure secret key for `BETTER_AUTH_SECRET`. You can use:

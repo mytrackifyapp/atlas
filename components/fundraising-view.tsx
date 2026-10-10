@@ -1,54 +1,42 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
-import { PageHeader } from "@/components/page-header"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
-  DollarSign,
-  TrendingUp,
-  Users,
-  Calendar,
+  AudioLines,
+  BookOpen,
   Building2,
-  Mail,
-  Phone,
-  MessageSquare,
+  CircleHelp,
+  Copy,
   FileText,
-  Upload,
-  CheckCircle2,
-  Clock,
-  Target,
-  BarChart3,
-  Share2,
-  Download,
-  Plus,
-  X,
-  RefreshCw,
   Loader2,
-  AlertCircle,
+  Mic,
+  MoreHorizontal,
+  Plus,
+  RefreshCw,
+  Target,
+  Send,
+  Sparkles,
+  Wallet,
+  X,
 } from "lucide-react"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
-import { AddInvestorDialog } from "@/components/add-investor-dialog"
-import { UploadButton } from "@uploadthing/react"
-import type { OurFileRouter } from "@/app/api/uploadthing/core"
-import { cn } from "@/lib/utils"
+import { Line, LineChart, ResponsiveContainer } from "recharts"
 import { toast } from "sonner"
-import { FundraiseRaisePanel } from "@/components/fundraising/fundraise-raise-panel"
-import { FundraiseDetailsPanel } from "@/components/fundraising/fundraise-details-panel"
+
+import { AddInvestorDialog } from "@/components/add-investor-dialog"
+import { FinnaOrb } from "@/components/finna-orb"
+import { FinnaVoiceBeam } from "@/components/finna-voice-beam"
 import { EditFundraiseDetailsDialog } from "@/components/fundraising/edit-fundraise-details-dialog"
+import { FundraiseRaisePanel } from "@/components/fundraising/fundraise-raise-panel"
+import { StartFundraiseDialog } from "@/components/start-fundraise-dialog"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { useFinnaVoice } from "@/hooks/use-finna-voice"
+import { CHECKOUT_CHAINS } from "@/lib/checkout/chains"
 import type { PendingSettlementGroup } from "@/lib/fundraising/platform-fees"
 import type { PlatformFee, PlatformFeeSummary } from "@/lib/fundraising/types"
-
-const statusColors: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
-  Committed: "default",
-  Interested: "secondary",
-  "In Discussion": "outline",
-  Passed: "destructive",
-}
+import { cn } from "@/lib/utils"
 
 interface Fundraise {
   id: string
@@ -123,10 +111,110 @@ interface InvestorStats {
   interested: number
 }
 
+function formatCurrency(amount: number) {
+  if (amount >= 1000000) return `$${(amount / 1000000).toFixed(1)}M`
+  if (amount >= 1000) return `$${(amount / 1000).toFixed(0)}K`
+  return `$${amount.toFixed(0)}`
+}
+
+function formatDate(date: string | Date) {
+  if (!date) return "—"
+  const parsed = date instanceof Date ? date : new Date(date)
+  if (Number.isNaN(parsed.getTime())) return "—"
+  return parsed.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })
+}
+
+function formatTime(date: string | Date) {
+  const parsed = date instanceof Date ? date : new Date(date)
+  if (Number.isNaN(parsed.getTime())) return ""
+  return parsed.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })
+}
+
+function shortenAddress(address: string) {
+  return `${address.slice(0, 6)}…${address.slice(-4)}`
+}
+
+function LiftedCard({
+  header,
+  footer,
+  children,
+}: {
+  header?: ReactNode
+  footer?: ReactNode
+  children: ReactNode
+}) {
+  return (
+    <div className="overflow-hidden rounded-[20px] border border-[#d4d4d4] bg-[#ebebeb] p-1.5 dark:border-white/15 dark:bg-white/[0.08]">
+      {header ? <div className="px-3 pb-2 pt-2.5">{header}</div> : null}
+      <section className="overflow-hidden rounded-[16px] border border-[#c9cccf] bg-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.9),0_1px_2px_rgba(26,26,26,0.08),0_6px_16px_rgba(26,26,26,0.06)] dark:border-white/20 dark:bg-[#171717] dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06),0_8px_20px_rgba(0,0,0,0.3)]">
+        {children}
+      </section>
+      {footer ? <div className="-mx-1.5 pt-1">{footer}</div> : null}
+    </div>
+  )
+}
+
+function ConfigRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex min-h-9 items-center gap-1.5 rounded-full bg-[#f1f2f4] py-1 pl-3 pr-1 dark:bg-white/10">
+      <span className="shrink-0 text-sm text-neutral-600 dark:text-neutral-400">{label}:</span>
+      <span className="max-w-full truncate rounded-full bg-white px-2.5 py-1 text-sm font-medium text-neutral-950 dark:bg-[#171717] dark:text-white">
+        {value}
+      </span>
+    </div>
+  )
+}
+
+function JoinRule() {
+  return (
+    <div className="relative h-3" aria-hidden>
+      <div className="absolute inset-x-0 -mx-px top-0 h-3 rounded-t-[14px] border-x border-t border-[#d4d4d4] dark:border-white/15" />
+    </div>
+  )
+}
+
+function SetupRow({
+  icon,
+  title,
+  description,
+  action,
+  onDismiss,
+}: {
+  icon: ReactNode
+  title: string
+  description: string
+  action: ReactNode
+  onDismiss?: () => void
+}) {
+  return (
+    <div className="flex items-start gap-3 px-5 py-4 sm:items-center">
+      <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-black/[0.08] bg-white text-neutral-700 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-200">
+        {icon}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-medium text-neutral-950 dark:text-white">{title}</p>
+        <p className="mt-0.5 text-sm leading-relaxed text-neutral-500">{description}</p>
+      </div>
+      <div className="flex shrink-0 items-center gap-1">
+        {action}
+        {onDismiss ? (
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-neutral-400" onClick={onDismiss} aria-label="Dismiss">
+            <X className="h-4 w-4" />
+          </Button>
+        ) : null}
+      </div>
+    </div>
+  )
+}
+
 export function FundraisingView() {
+  const router = useRouter()
   const [addInvestorOpen, setAddInvestorOpen] = useState(false)
   const [editDetailsOpen, setEditDetailsOpen] = useState(false)
-  const [activeTab, setActiveTab] = useState("overview")
+  const [editDetailsTab, setEditDetailsTab] = useState("company")
+  const [editDetailsSingle, setEditDetailsSingle] = useState(true)
+  const [startFundraiseOpen, setStartFundraiseOpen] = useState(false)
+  const [showRaiseDesk, setShowRaiseDesk] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [fundraise, setFundraise] = useState<Fundraise | null>(null)
@@ -141,6 +229,13 @@ export function FundraisingView() {
     committed: 0,
     inDiscussion: 0,
     interested: 0,
+  })
+  const [draft, setDraft] = useState("")
+  const voice = useFinnaVoice({
+    onFinalTranscript: (text) => {
+      const next = [draft, text].filter(Boolean).join(" ").trim()
+      setDraft(next)
+    },
   })
 
   const fetchFundraise = useCallback(async () => {
@@ -215,650 +310,429 @@ export function FundraisingView() {
     }
   }
 
+  const investUrl = fundraise
+    ? typeof window !== "undefined"
+      ? `${window.location.origin}/invest/${fundraise.id}`
+      : `/invest/${fundraise.id}`
+    : ""
 
-  const formatDate = (date: string | Date) => {
-    if (!date) return "—"
-    const d = date instanceof Date ? date : new Date(date)
-    return d.toLocaleDateString()
+  const askFinna = (text?: string) => {
+    const query = (text ?? draft).trim()
+    if (!query) {
+      router.push("/finna")
+      return
+    }
+    router.push(`/finna?q=${encodeURIComponent(query)}`)
   }
 
-  const formatCurrency = (amount: number) => {
-    if (amount >= 1000000) {
-      return `$${(amount / 1000000).toFixed(1)}M`
+  const activity = useMemo(() => {
+    const items: Array<{ id: string; title: string; at: Date }> = []
+
+    onChainPayments.forEach((payment) => {
+      items.push({
+        id: `pay-${payment.id}`,
+        title: `Received ${payment.amountUsd.toLocaleString()} ${payment.stablecoin} from ${shortenAddress(payment.payerAddress)}`,
+        at: new Date(payment.createdAt),
+      })
+    })
+
+    investors.forEach((investor) => {
+      items.push({
+        id: `inv-${investor.id}`,
+        title: `${investor.name} is ${investor.status.toLowerCase()}${investor.amount ? ` · ${formatCurrency(investor.amount)}` : ""}`,
+        at: new Date(investor.lastContact),
+      })
+    })
+
+    if (fundraise?.receivingWalletAddress) {
+      items.push({
+        id: "wallet",
+        title: "Receiving wallet linked to this round",
+        at: fundraise.createdAt ? new Date(fundraise.createdAt) : new Date(),
+      })
     }
-    if (amount >= 1000) {
-      return `$${(amount / 1000).toFixed(0)}K`
+
+    return items
+      .filter((item) => !Number.isNaN(item.at.getTime()))
+      .sort((a, b) => b.at.getTime() - a.at.getTime())
+      .slice(0, 6)
+  }, [fundraise, investors, onChainPayments])
+
+  const walletReady = Boolean(fundraise?.receivingWalletAddress)
+
+  function openDetails(tab: string) {
+    if (!fundraise) {
+      setStartFundraiseOpen(true)
+      return
     }
-    return `$${amount.toFixed(0)}`
+    setEditDetailsTab(tab)
+    setEditDetailsSingle(true)
+    setEditDetailsOpen(true)
   }
+
+  const detailsRows = [
+    {
+      id: "company",
+      icon: <Building2 className="h-4 w-4" />,
+      title: "Company",
+      description: "Logo, name, website, and the startup image on your investor page.",
+    },
+    {
+      id: "story",
+      icon: <BookOpen className="h-4 w-4" />,
+      title: "Story",
+      description: "Pitch narrative, traction, market, and why you win.",
+    },
+    {
+      id: "round",
+      icon: <Target className="h-4 w-4" />,
+      title: "Round",
+      description: "Round type, target, valuation, ticket size, and close date.",
+    },
+    {
+      id: "materials",
+      icon: <FileText className="h-4 w-4" />,
+      title: "Materials",
+      description: "Pitch deck, financial model, data room, and demo.",
+    },
+  ]
 
   return (
-    <div className="space-y-6 p-4 sm:p-6 lg:p-8">
-      <PageHeader
-        title="Fundraising"
-        description="Raise your round in USDC and USDT — investors pay on-chain to your wallet"
-        actions={
-          fundraise ? (
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
-              <Button
-                size="sm"
-                className="w-full sm:w-auto bg-[#c1ff72] text-neutral-950 hover:bg-[#b4f25f]"
-                onClick={() => setActiveTab("raise")}
-              >
-                <TrendingUp className="h-4 w-4 mr-2" />
-                Raise funds
-              </Button>
-              <Button size="sm" onClick={() => setAddInvestorOpen(true)} className="w-full sm:w-auto">
-                <Plus className="h-4 w-4 mr-2" />
-                Add Investor
-              </Button>
-            </div>
-          ) : undefined
-        }
+    <div className="relative mx-auto w-full max-w-6xl space-y-6 pb-28">
+      <StartFundraiseDialog
+        open={startFundraiseOpen}
+        onOpenChange={setStartFundraiseOpen}
+        onSuccess={fetchFundraise}
       />
-
       <AddInvestorDialog
         open={addInvestorOpen}
         onOpenChange={setAddInvestorOpen}
         onSuccess={handleInvestorAdded}
       />
-
       <EditFundraiseDetailsDialog
         open={editDetailsOpen}
         onOpenChange={setEditDetailsOpen}
         fundraise={fundraise}
+        initialTab={editDetailsTab}
+        singleSection={editDetailsSingle}
         onSuccess={fetchFundraise}
       />
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-12 text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-primary mb-3" />
-          <p className="text-muted-foreground">Loading fundraising data...</p>
+        <div className="flex items-center justify-center py-16">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
         </div>
       ) : error && !fundraise ? (
-        <div className="flex flex-col items-center justify-center py-12 text-center">
-          <AlertCircle className="h-12 w-12 text-destructive mb-3" />
-          <p className="text-destructive mb-4">{error}</p>
-          <Button onClick={() => { fetchFundraise(); fetchInvestors(); }}>
-            <RefreshCw className="h-4 w-4 mr-2" />
+        <div className="rounded-2xl border border-black/[0.08] bg-white px-6 py-12 text-center shadow-[0_1px_2px_rgba(15,23,42,0.04)] dark:border-white/10 dark:bg-[#171717]">
+          <p className="mb-4 text-sm text-destructive">{error}</p>
+          <Button onClick={() => { fetchFundraise(); fetchInvestors() }}>
+            <RefreshCw className="mr-2 h-4 w-4" />
             Retry
           </Button>
         </div>
-      ) : !fundraise ? (
-        <div className="flex flex-col items-center justify-center py-12 text-center">
-          <Target className="h-12 w-12 text-muted-foreground mb-3" />
-          <p className="text-muted-foreground mb-2">No active fundraise found.</p>
-          <p className="text-sm text-muted-foreground mb-4 max-w-md">
-            Start a round to accept investments in USDC and USDT on Base, Polygon, or Ethereum.
-          </p>
-          <Button asChild>
-            <a href="/founder">Start a Fundraise</a>
-          </Button>
-        </div>
       ) : (
-
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5 h-auto">
-          <TabsTrigger value="overview" className="text-xs sm:text-sm py-2 sm:py-1.5">Overview</TabsTrigger>
-          <TabsTrigger value="investors" className="text-xs sm:text-sm py-2 sm:py-1.5">Investors</TabsTrigger>
-          <TabsTrigger value="documents" className="text-xs sm:text-sm py-2 sm:py-1.5">Documents</TabsTrigger>
-          <TabsTrigger value="milestones" className="text-xs sm:text-sm py-2 sm:py-1.5">Milestones</TabsTrigger>
-          <TabsTrigger value="updates" className="text-xs sm:text-sm py-2 sm:py-1.5">Updates</TabsTrigger>
-        </TabsList>
-
-        {/* Raise Tab — stablecoin fundraising */}
-        <TabsContent value="raise" className="mt-4 sm:mt-6">
-          <FundraiseRaisePanel
-            fundraise={fundraise}
-            onChainPayments={onChainPayments}
-            platformFeeSummary={platformFeeSummary}
-            platformFees={platformFees}
-            settlementGroups={settlementGroups}
-            bindingWallet={bindingWallet}
-            onBindWallet={() => void bindReceivingWallet()}
-            onFeesSettled={fetchFundraise}
-            formatCurrency={formatCurrency}
-          />
-        </TabsContent>
-
-        {/* Overview Tab */}
-        <TabsContent value="overview" className="space-y-4 sm:space-y-6 mt-4 sm:mt-6">
-          {/* Key Metrics */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="space-y-2">
+        <>
+          <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1.7fr)_minmax(320px,1fr)]">
+            <LiftedCard
+              header={
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <DollarSign className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-sm font-medium text-muted-foreground">Target Raise</p>
+                    <Sparkles className="h-4 w-4 text-neutral-500" />
+                    <h2 className="text-sm font-medium text-neutral-700 dark:text-neutral-200">Fundraising</h2>
                   </div>
-                  <p className="text-3xl font-bold">{formatCurrency(fundraise.targetAmount)}</p>
-                  <p className="text-sm text-muted-foreground">{fundraise.roundType} Round</p>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-6">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-sm font-medium text-muted-foreground">Raised to Date</p>
-                  </div>
-                  <p className="text-3xl font-bold">{formatCurrency(fundraise.committedAmount)}</p>
-                  <div className="flex items-center text-sm text-primary">
-                    <span>{fundraise.percentage}% of target</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-6">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-sm font-medium text-muted-foreground">Active Investors</p>
-                  </div>
-                  <p className="text-3xl font-bold">{investorStats.total}</p>
-                  <p className="text-sm text-muted-foreground">{investorStats.committed} committed</p>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-6">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-sm font-medium text-muted-foreground">Target Close</p>
-                  </div>
-                  <p className="text-3xl font-bold">{formatDate(fundraise.targetCloseDate).split(",")[0]}</p>
-                  <p className="text-sm text-muted-foreground">{fundraise.daysRemaining} days remaining</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Fundraising Progress */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>Fundraising Progress</CardTitle>
-                <Button variant="ghost" size="icon" onClick={() => { fetchFundraise(); fetchInvestors(); }} disabled={loading}>
-                  <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4 sm:space-y-6">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="font-medium">
-                    {formatCurrency(fundraise.committedAmount)} of {formatCurrency(fundraise.targetAmount)} goal
-                  </span>
-                  <span className="text-muted-foreground">{fundraise.percentage}%</span>
-                </div>
-                <Progress value={fundraise.percentage} className="h-3" />
-              </div>
-              <div className="w-full overflow-x-auto">
-                <ResponsiveContainer width="100%" height={250} minHeight={200}>
-                  <LineChart data={fundraise.fundraisingData || []}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                    <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
-                    <YAxis stroke="hsl(var(--muted-foreground))" tickFormatter={(value) => formatCurrency(value)} />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "hsl(var(--card))",
-                        border: "1px solid hsl(var(--border))",
-                        borderRadius: "8px",
-                      }}
-                      formatter={(value: number) => [formatCurrency(value), "Raised"]}
-                    />
-                    <Line type="monotone" dataKey="raised" stroke="#c1ff72" strokeWidth={2} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Investor Pipeline */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Investor Pipeline</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {investors.length === 0 ? (
-                <div className="text-center py-12">
-                  <Users className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
-                  <p className="text-muted-foreground mb-4">No investors yet.</p>
-                  <Button onClick={() => setAddInvestorOpen(true)}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Your First Investor
-                  </Button>
-                </div>
-              ) : (
-                <div className="space-y-3 sm:space-y-4">
-                  {investors.map((investor) => (
-              <div
-                key={investor.id}
-                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors"
-              >
-                <div className="flex items-start sm:items-center gap-3 sm:gap-4 flex-1 min-w-0">
-                  <Avatar className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0">
-                    <AvatarImage src={investor.avatar || "/placeholder.svg"} alt={investor.name} />
-                    <AvatarFallback>
-                      {investor.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="space-y-1 min-w-0 flex-1">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                      <p className="font-semibold truncate">{investor.name}</p>
-                      <Badge variant={statusColors[investor.status] ?? "secondary"} className="w-fit">{investor.status}</Badge>
-                    </div>
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground">
-                      <span className="flex items-center gap-1.5 truncate">
-                        <Building2 className="h-3.5 w-3.5 flex-shrink-0" />
-                        <span className="truncate">{investor.firm}</span>
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <Calendar className="h-3.5 w-3.5 flex-shrink-0" />
-                        <span className="hidden sm:inline">Last contact: </span>
-                        {formatDate(investor.lastContact)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 flex-shrink-0">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
-                    <div className="text-left sm:text-right space-y-1">
-                      <p className="text-xs sm:text-sm text-muted-foreground">Commitment</p>
-                      <p className="font-semibold text-sm sm:text-base">{formatCurrency(investor.amount)}</p>
-                    </div>
-                    <div className="text-left sm:text-right space-y-1">
-                      <p className="text-xs sm:text-sm text-muted-foreground">Stage</p>
-                      <p className="font-semibold text-sm sm:text-base">{investor.stage}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
-                      <Mail className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
-                      <Phone className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
-                      <MessageSquare className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Fundraise details */}
-          <FundraiseDetailsPanel
-            fundraise={fundraise}
-            formatCurrency={formatCurrency}
-            formatDate={formatDate}
-            onEdit={() => setEditDetailsOpen(true)}
-          />
-        </TabsContent>
-
-        {/* Investors Tab */}
-        <TabsContent value="investors" className="space-y-4 sm:space-y-6 mt-4 sm:mt-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold">Investor Pipeline</h2>
-              <p className="text-sm sm:text-base text-muted-foreground">Track and manage your investor relationships</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="flex-1 sm:flex-initial">
-                <Download className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">Export</span>
-              </Button>
-              <Button variant="outline" size="sm" className="flex-1 sm:flex-initial">
-                <BarChart3 className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">Analytics</span>
-              </Button>
-            </div>
-          </div>
-
-          {/* Investor Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Total Investors</p>
-                  <p className="text-3xl font-bold">{investorStats.total}</p>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-6">
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Committed</p>
-                  <p className="text-3xl font-bold text-emerald-600">{investorStats.committed}</p>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-6">
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">In Discussion</p>
-                  <p className="text-3xl font-bold text-blue-600">{investorStats.inDiscussion}</p>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="pt-6">
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Interested</p>
-                  <p className="text-3xl font-bold text-yellow-600">{investorStats.interested}</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Investor List */}
-          <Card>
-            <CardHeader>
-              <CardTitle>All Investors</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {investors.length === 0 ? (
-                <div className="text-center py-12">
-                  <Users className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
-                  <p className="text-muted-foreground mb-4">No investors yet.</p>
-                  <Button onClick={() => setAddInvestorOpen(true)}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Your First Investor
-                  </Button>
-                </div>
-              ) : (
-                <div className="space-y-3 sm:space-y-4">
-                  {investors.map((investor) => (
-                  <div
-                    key={investor.id}
-                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors"
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => { fetchFundraise(); fetchInvestors() }}
+                    aria-label="Refresh"
                   >
-                    <div className="flex items-start sm:items-center gap-3 sm:gap-4 flex-1 min-w-0">
-                      <Avatar className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0">
-                        <AvatarImage src={investor.avatar || "/placeholder.svg"} alt={investor.name} />
-                        <AvatarFallback>
-                          {investor.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="space-y-1 min-w-0 flex-1">
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                          <p className="font-semibold truncate">{investor.name}</p>
-                          <Badge variant={statusColors[investor.status] ?? "secondary"} className="w-fit">{investor.status}</Badge>
-                        </div>
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground">
-                          <span className="flex items-center gap-1.5 truncate">
-                            <Building2 className="h-3.5 w-3.5 flex-shrink-0" />
-                            <span className="truncate">{investor.firm}</span>
-                          </span>
-                          <span className="flex items-center gap-1.5">
-                            <Calendar className="h-3.5 w-3.5 flex-shrink-0" />
-                            <span className="hidden sm:inline">Last contact: </span>
-                            {formatDate(investor.lastContact)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 flex-shrink-0">
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
-                        <div className="text-left sm:text-right space-y-1">
-                          <p className="text-xs sm:text-sm text-muted-foreground">Commitment</p>
-                          <p className="font-semibold text-sm sm:text-base">{formatCurrency(investor.amount)}</p>
-                        </div>
-                        <div className="text-left sm:text-right space-y-1">
-                          <p className="text-xs sm:text-sm text-muted-foreground">Stage</p>
-                          <p className="font-semibold text-sm sm:text-base">{investor.stage}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10" title="Send Email">
-                          <Mail className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10" title="Call">
-                          <Phone className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10" title="Message">
-                          <MessageSquare className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                    <RefreshCw className="h-4 w-4" />
+                  </Button>
                 </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Documents Tab */}
-        <TabsContent value="documents" className="space-y-4 sm:space-y-6 mt-4 sm:mt-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold">Fundraising Documents</h2>
-              <p className="text-sm sm:text-base text-muted-foreground">Manage your pitch deck, financials, and data room</p>
-            </div>
-            <Button variant="outline" size="sm" className="w-full sm:w-auto">
-              <Share2 className="h-4 w-4 mr-2" />
-              Share Data Room
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Pitch Deck</CardTitle>
-                <CardDescription>Your main fundraising presentation</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {fundraise.pitchDeck ? (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between gap-3 p-3 border border-border rounded-lg">
-                      <div className="flex items-center gap-3 min-w-0 flex-1">
-                        <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                        <div className="min-w-0 flex-1">
-                          <p className="font-medium truncate">Pitch Deck - {fundraise.roundType}</p>
-                          <p className="text-sm text-muted-foreground">PDF</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 flex-shrink-0">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
-                          <Download className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
-                          <Share2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                    <UploadButton<OurFileRouter, "companyLogo">
-                      endpoint="companyLogo"
-                      onClientUploadComplete={(res) => {
-                        console.log("Upload complete:", res)
-                      }}
-                      className="ut-button:w-full"
-                      content={{
-                        button: ({ ready }) => (
-                          <div className="flex items-center justify-center gap-2 w-full">
-                            <Upload className="h-4 w-4" />
-                            <span>{ready ? "Upload New Version" : "Preparing..."}</span>
-                          </div>
-                        ),
-                      }}
-                    />
+              }
+              footer={
+                !fundraise ? (
+                  <div className="px-3 py-4">
+                    <p className="text-sm text-neutral-500">No live raise yet. Start one to collect investments and track the pipeline here.</p>
+                    <Button className="mt-3 h-8 rounded-full" onClick={() => setStartFundraiseOpen(true)}>
+                      Start fundraising
+                    </Button>
                   </div>
                 ) : (
-                  <UploadButton<OurFileRouter, "companyLogo">
-                    endpoint="companyLogo"
-                    onClientUploadComplete={(res) => {
-                      console.log("Upload complete:", res)
-                    }}
-                    className="ut-button:w-full"
-                    content={{
-                      button: ({ ready }) => (
-                        <div className="flex items-center justify-center gap-2 w-full">
-                          <Upload className="h-4 w-4" />
-                          <span>{ready ? "Upload Pitch Deck" : "Preparing..."}</span>
+                  <div className="-mb-1.5">
+                    {detailsRows.map((row, index, rows) => (
+                        <div key={row.id}>
+                          <SetupRow
+                            icon={row.icon}
+                            title={row.title}
+                            description={row.description}
+                            action={
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-8 rounded-full"
+                                onClick={() => openDetails(row.id)}
+                              >
+                                Edit
+                              </Button>
+                            }
+                          />
+                          {index < rows.length - 1 ? <JoinRule /> : null}
                         </div>
-                      ),
-                    }}
+                      ))}
+                  </div>
+                )
+              }
+            >
+              <div className="grid sm:grid-cols-2">
+                <div className="px-5 py-5">
+                  <p className="text-sm font-medium">Summary</p>
+                  <p className="mt-2 text-sm leading-relaxed text-neutral-500">
+                    {fundraise
+                      ? `Finna is tracking your ${fundraise.roundType} round — ${formatCurrency(fundraise.committedAmount)} raised of ${formatCurrency(fundraise.targetAmount)}, ${investorStats.total} investors in the pipeline, and ${fundraise.daysRemaining} days to target close.`
+                      : "Start a round to accept USDC and USDT on Base, Polygon, or Ethereum. Finna will help you set up the wallet, pipeline, and materials."}
+                  </p>
+                </div>
+                <div className="border-t border-black/[0.05] px-5 py-5 dark:border-white/10 sm:border-l sm:border-t-0">
+                  <p className="text-sm font-medium">Raised to date</p>
+                  <div className="mt-2 flex items-end justify-between gap-4">
+                    <p className="text-2xl font-semibold tracking-tight">
+                      {fundraise ? formatCurrency(fundraise.committedAmount) : "$0"}
+                      <span className="ml-2 text-sm font-normal text-neutral-400">
+                        {fundraise ? `${fundraise.percentage}%` : "—"}
+                      </span>
+                    </p>
+                  </div>
+                  <div className="mt-3 h-10">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={fundraise?.fundraisingData?.length ? fundraise.fundraisingData : [{ month: "Now", raised: 0 }]}>
+                        <Line type="monotone" dataKey="raised" stroke="#3b82f6" strokeWidth={2} dot={false} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              </div>
+            </LiftedCard>
+
+            <LiftedCard
+              header={
+                <div className="flex items-center justify-between">
+                  <h2 className="text-sm font-medium text-neutral-700 dark:text-neutral-200">Round configuration</h2>
+                  {fundraise ? (
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-neutral-400" onClick={() => { setEditDetailsSingle(false); setEditDetailsOpen(true) }} aria-label="Edit terms">
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  ) : null}
+                </div>
+              }
+            >
+              <div className="px-5 pb-5 pt-4">
+                <p className="mb-3 flex items-center gap-1.5 text-sm font-medium">
+                  Channels
+                  <CircleHelp className="h-3.5 w-3.5 text-neutral-400" />
+                </p>
+                <div className="space-y-0.5">
+                  {[
+                    {
+                      label: "Receiving wallet",
+                      icon: Wallet,
+                      onClick: () => {
+                        if (!fundraise) {
+                          setStartFundraiseOpen(true)
+                          return
+                        }
+                        if (walletReady) {
+                          setShowRaiseDesk(true)
+                          return
+                        }
+                        void bindReceivingWallet()
+                      },
+                    },
+                    {
+                      label: "Investors",
+                      icon: Sparkles,
+                      onClick: () => setAddInvestorOpen(true),
+                    },
+                    {
+                      label: "Pitch deck",
+                      icon: FileText,
+                      onClick: () => {
+                        if (fundraise?.pitchDeck) {
+                          window.open(fundraise.pitchDeck, "_blank")
+                          return
+                        }
+                        openDetails("materials")
+                      },
+                    },
+                    {
+                      label: "Invest link",
+                      icon: Copy,
+                      onClick: () => {
+                        if (!fundraise) {
+                          setStartFundraiseOpen(true)
+                          return
+                        }
+                        void navigator.clipboard.writeText(investUrl)
+                        toast.success("Invest link copied")
+                      },
+                    },
+                    {
+                      label: "Lounge",
+                      icon: Send,
+                      onClick: () => router.push("/founder/updates"),
+                    },
+                  ].map((channel, index) => {
+                    const Icon = channel.icon
+                    return (
+                      <div key={channel.label} className="flex items-center justify-between py-1.5">
+                        <span className="flex items-center gap-2.5 text-sm">
+                          <Icon className="h-4 w-4 text-neutral-500" />
+                          {channel.label}
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className={cn(
+                            "h-8 w-8",
+                            index === 0
+                              ? "rounded-full border border-[#005bd3] text-[#005bd3] hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400"
+                              : "text-neutral-500",
+                          )}
+                          onClick={channel.onClick}
+                          aria-label={`Open ${channel.label}`}
+                        >
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+
+              <div className="border-t border-black/[0.06] px-5 py-5 dark:border-white/10">
+                <p className="mb-3 flex items-center gap-1.5 text-sm font-medium">
+                  Guardrails
+                  <CircleHelp className="h-3.5 w-3.5 text-neutral-400" />
+                </p>
+                <div className="space-y-2">
+                  <ConfigRow
+                    label="Target close"
+                    value={fundraise ? `${formatDate(fundraise.targetCloseDate)} · ${fundraise.daysRemaining} days` : "—"}
                   />
-                )}
-              </CardContent>
-            </Card>
+                  <ConfigRow
+                    label="Ticket size"
+                    value={
+                      fundraise
+                        ? `${fundraise.minInvestment ? formatCurrency(fundraise.minInvestment) : "No min"} – ${fundraise.maxInvestment ? formatCurrency(fundraise.maxInvestment) : "No cap"}`
+                        : "—"
+                    }
+                  />
+                  <ConfigRow
+                    label="Networks"
+                    value={Object.values(CHECKOUT_CHAINS).map((chain) => chain.shortLabel).join(", ")}
+                  />
+                </div>
+              </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Financial Documents</CardTitle>
-                <CardDescription>Financial models, projections, and statements</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {fundraise.financialModel ? (
-                  <div className="flex items-center justify-between gap-3 p-3 border border-border rounded-lg">
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium truncate">Financial Model</p>
-                        <p className="text-sm text-muted-foreground">PDF</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10" asChild>
-                        <a href={fundraise.financialModel} target="_blank" rel="noopener noreferrer">
-                          <Download className="h-4 w-4" />
-                        </a>
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <p className="text-sm text-muted-foreground">No financial model uploaded yet.</p>
-                )}
-                <Button variant="outline" className="w-full" size="sm">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Financial Document
-                </Button>
-              </CardContent>
-            </Card>
+              <div className="border-t border-black/[0.06] px-5 py-5 dark:border-white/10">
+                <p className="mb-3 flex items-center gap-1.5 text-sm font-medium">
+                  Permissions
+                  <CircleHelp className="h-3.5 w-3.5 text-neutral-400" />
+                </p>
+                <div className="space-y-2">
+                  <ConfigRow
+                    label="Collect investment"
+                    value={walletReady ? "Always allow" : "Wallet required"}
+                  />
+                  <ConfigRow label="Update round" value="Always allow" />
+                  <ConfigRow
+                    label="Platform fees"
+                    value={
+                      platformFeeSummary?.feesOwedUsd
+                        ? `${formatCurrency(platformFeeSummary.feesOwedUsd)} pending`
+                        : "Settled"
+                    }
+                  />
+                </div>
+              </div>
+            </LiftedCard>
           </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>All Documents</CardTitle>
-              <CardDescription>Complete list of fundraising documents</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {fundraise.pitchDeck && (
-                  <div className="flex items-center justify-between gap-3 p-3 border border-border rounded-lg hover:bg-accent/50 transition-colors">
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium truncate">Pitch Deck - {fundraise.roundType}</p>
-                        <p className="text-sm text-muted-foreground">
-                          PDF • Uploaded {fundraise.createdAt != null ? formatDate(fundraise.createdAt) : "—"}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10" asChild>
-                        <a href={fundraise.pitchDeck} target="_blank" rel="noopener noreferrer">
-                          <Download className="h-4 w-4" />
-                        </a>
-                      </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
-                        <Share2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                )}
-                {fundraise.financialModel && (
-                  <div className="flex items-center justify-between gap-3 p-3 border border-border rounded-lg hover:bg-accent/50 transition-colors">
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium truncate">Financial Model</p>
-                        <p className="text-sm text-muted-foreground">
-                          PDF • Uploaded {fundraise.createdAt != null ? formatDate(fundraise.createdAt) : "—"}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10" asChild>
-                        <a href={fundraise.financialModel} target="_blank" rel="noopener noreferrer">
-                          <Download className="h-4 w-4" />
-                        </a>
-                      </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
-                        <Share2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                )}
-                {!fundraise.pitchDeck && !fundraise.financialModel && (
-                  <div className="text-center py-8">
-                    <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
-                    <p className="text-muted-foreground">No documents uploaded yet.</p>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+          <section className="px-1">
+            <h3 className="text-sm font-medium text-neutral-950 dark:text-white">Activity</h3>
+            <p className="mt-4 text-xs font-medium uppercase tracking-wide text-neutral-400">Recent</p>
+            {activity.length === 0 ? (
+              <p className="mt-3 text-sm text-neutral-500">No activity yet. Connect a wallet or add an investor to get started.</p>
+            ) : (
+              <ul className="mt-2 divide-y divide-black/[0.04] dark:divide-white/5">
+                {activity.map((item) => (
+                  <li key={item.id} className="flex items-center justify-between gap-4 py-3 text-sm">
+                    <span className="min-w-0 text-neutral-600 dark:text-neutral-300">{item.title}</span>
+                    <span className="shrink-0 tabular-nums text-neutral-400">{formatTime(item.at)}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
 
-        {/* Milestones Tab */}
-        <TabsContent value="milestones" className="space-y-4 sm:space-y-6 mt-4 sm:mt-6">
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold">Fundraising Milestones</h2>
-            <p className="text-sm sm:text-base text-muted-foreground">Track your progress through the fundraising process</p>
-          </div>
-
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center py-12">
-                <Target className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
-                <p className="text-muted-foreground">Milestones tracking coming soon.</p>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Updates Tab */}
-        <TabsContent value="updates" className="space-y-4 sm:space-y-6 mt-4 sm:mt-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold">Investor Updates</h2>
-              <p className="text-sm sm:text-base text-muted-foreground">Send updates and track engagement with your investors</p>
-            </div>
-            <Button size="sm" className="w-full sm:w-auto">
-              <Plus className="h-4 w-4 mr-2" />
-              Create Update
-            </Button>
-          </div>
-
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center py-12">
-                <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
-                <p className="text-muted-foreground">Investor updates feature coming soon.</p>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+          {showRaiseDesk && fundraise ? (
+            <FundraiseRaisePanel
+              fundraise={fundraise}
+              onChainPayments={onChainPayments}
+              platformFeeSummary={platformFeeSummary}
+              platformFees={platformFees}
+              settlementGroups={settlementGroups}
+              bindingWallet={bindingWallet}
+              onBindWallet={() => void bindReceivingWallet()}
+              onFeesSettled={fetchFundraise}
+              formatCurrency={formatCurrency}
+            />
+          ) : null}
+        </>
       )}
+
+      <div className="pointer-events-none fixed inset-x-0 bottom-20 z-20 px-4 lg:bottom-6">
+        <div className="pointer-events-auto mx-auto w-full max-w-xl">
+          <FinnaVoiceBeam stream={voice.listening ? voice.stream : null}>
+            <div className="flex items-center gap-2 rounded-full border border-black/[0.08] bg-white p-1 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-[#171717]">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center">
+                <FinnaOrb size={20} />
+              </span>
+              <Input
+                value={draft}
+                onChange={(event) => setDraft(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" && !event.shiftKey) {
+                    event.preventDefault()
+                    askFinna()
+                  }
+                }}
+                placeholder="Help me with this raise…"
+                className="h-10 flex-1 border-0 bg-transparent px-0 text-sm shadow-none focus-visible:ring-0"
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className={cn("h-9 w-9 shrink-0 rounded-full", voice.listening && "text-red-500 hover:text-red-500")}
+                onClick={() => void voice.toggle()}
+                aria-label={voice.listening ? "Stop listening" : "Voice input"}
+              >
+                <Mic className="h-4 w-4" />
+              </Button>
+              <Button
+                size="icon"
+                className="h-9 w-9 shrink-0 rounded-full"
+                onClick={() => askFinna()}
+                aria-label="Ask Finna"
+              >
+                <AudioLines className="h-4 w-4" strokeWidth={2.25} />
+              </Button>
+            </div>
+          </FinnaVoiceBeam>
+        </div>
+      </div>
     </div>
   )
 }

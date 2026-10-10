@@ -1,11 +1,4 @@
-import {
-  Facebook,
-  Github,
-  Instagram,
-  Linkedin,
-  Youtube,
-  type LucideIcon,
-} from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 
 export const FOUNDER_SOCIAL_PLATFORMS = [
   "twitter",
@@ -30,7 +23,8 @@ type PlatformConfig = {
   prefix: string
   placeholder: string
   Icon: LucideIcon | null
-  customIcon?: "x"
+  customIcon?: "x" | "tiktok" | "linkedin" | "instagram" | "github" | "facebook" | "youtube"
+  iconSrc?: string
 }
 
 export const SOCIAL_PLATFORM_CONFIG: Record<FounderSocialPlatform, PlatformConfig> = {
@@ -47,35 +41,43 @@ export const SOCIAL_PLATFORM_CONFIG: Record<FounderSocialPlatform, PlatformConfi
     label: "LinkedIn",
     prefix: "linkedin.com/in/",
     placeholder: "janedoe",
-    Icon: Linkedin,
+    Icon: null,
+    customIcon: "linkedin",
+    iconSrc: "/icons/linkedin.svg",
   },
   instagram: {
     id: "instagram",
     label: "Instagram",
     prefix: "@",
     placeholder: "janedoe",
-    Icon: Instagram,
+    Icon: null,
+    customIcon: "instagram",
+    iconSrc: "/icons/instagram.png",
   },
   github: {
     id: "github",
     label: "GitHub",
     prefix: "github.com/",
     placeholder: "janedoe",
-    Icon: Github,
+    Icon: null,
+    customIcon: "github",
   },
   facebook: {
     id: "facebook",
     label: "Facebook",
     prefix: "facebook.com/",
     placeholder: "janedoe",
-    Icon: Facebook,
+    Icon: null,
+    customIcon: "facebook",
+    iconSrc: "/icons/facebook.png",
   },
   youtube: {
     id: "youtube",
     label: "YouTube",
     prefix: "@",
     placeholder: "janedoe",
-    Icon: Youtube,
+    Icon: null,
+    customIcon: "youtube",
   },
   tiktok: {
     id: "tiktok",
@@ -84,6 +86,7 @@ export const SOCIAL_PLATFORM_CONFIG: Record<FounderSocialPlatform, PlatformConfi
     placeholder: "janedoe",
     Icon: null,
     customIcon: "tiktok",
+    iconSrc: "/icons/tik-tok.png",
   },
 }
 

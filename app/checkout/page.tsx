@@ -5,6 +5,7 @@ import { StablecoinCheckout } from "@/components/checkout/stablecoin-checkout"
 import { DashboardShell } from "@/components/dashboard-shell"
 import { getSettingsHref } from "@/lib/role-config"
 import { getSessionWithRole } from "@/lib/auth-helpers"
+import { getStripePublishableKey } from "@/lib/stripe/config"
 
 export const dynamic = "force-dynamic"
 
@@ -31,7 +32,11 @@ export default async function CheckoutPage({
   return (
     <DashboardShell>
       <Suspense fallback={<div className="py-20 text-center text-sm text-neutral-500">Loading checkout…</div>}>
-        <StablecoinCheckout settingsHref={settingsHref} agentsHubHref={agentsHubHref} />
+        <StablecoinCheckout
+          settingsHref={settingsHref}
+          agentsHubHref={agentsHubHref}
+          stripePublishableKey={getStripePublishableKey()}
+        />
       </Suspense>
     </DashboardShell>
   )

@@ -800,7 +800,7 @@ export function AgentDetailView({ agentId }: { agentId: string }) {
         </div>
       </section>
 
-      <div className="fixed inset-x-0 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-20 border-t border-neutral-200 bg-white/95 px-4 py-3 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-950/95 lg:hidden">
+      <div className="fixed inset-x-0 bottom-[calc(6.25rem+env(safe-area-inset-bottom))] z-20 border-t border-neutral-200 bg-white/95 px-4 py-3 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-950/95 lg:hidden">
         <ActionButtons {...actionProps} className="w-full [&_button]:flex-1 [&_a]:flex-1" size="default" />
       </div>
     </div>

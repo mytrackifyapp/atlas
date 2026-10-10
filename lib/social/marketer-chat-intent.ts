@@ -130,7 +130,7 @@ export function assistantMentionsSocialDraft(content: string): boolean {
   )
 }
 
-export const SOCIAL_DRAFTS_PATH = "/founder/social"
+export const SOCIAL_DRAFTS_PATH = "/founder/social/drafts"
 
 export function socialDesignClarificationPrompt(userMessage: string): string {
   return `

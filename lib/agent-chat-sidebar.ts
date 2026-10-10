@@ -43,7 +43,7 @@ const WORKSPACE_LINKS: Record<string, AgentWorkspaceLink[]> = {
   "ai-cfo": [
     { label: "Finance", href: "/founder/finance", description: "Accounts, transactions, runway" },
     { label: "Fundraising", href: "/founder/fundraising", description: "Round progress & pipeline" },
-    { label: "Investor updates", href: "/founder/updates", description: "Past updates & drafts" },
+    { label: "Lounge", href: "/founder/updates", description: "Founders and investors" },
     { label: "Analytics", href: "/founder/analytics", description: "Growth & KPI trends" },
   ],
   "ai-lawyer": [
@@ -55,7 +55,7 @@ const WORKSPACE_LINKS: Record<string, AgentWorkspaceLink[]> = {
     { label: "Investors", href: "/founder/investors", description: "Investor relationships" },
   ],
   "ai-marketer": [
-    { label: "Social studio", href: "/founder/social", description: "Drafts, graphics, publish" },
+    { label: "Social studio", href: "/founder/social/drafts", description: "Drafts, graphics, publish" },
     { label: "Analytics", href: "/founder/analytics", description: "Channel performance" },
   ],
   "ai-ops-manager": [

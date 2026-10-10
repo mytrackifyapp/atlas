@@ -51,6 +51,11 @@ export async function getAiSubscription(ownerId: string): Promise<AiSubscription
     planId: (doc.planId as AiCreditPlanId) ?? "free",
     status: (doc.status as AiSubscriptionStatus) ?? "active",
     updatedAt: doc.updatedAt?.toISOString?.() ?? new Date().toISOString(),
+    stripeCustomerId: typeof doc.stripeCustomerId === "string" ? doc.stripeCustomerId : undefined,
+    stripeSubscriptionId:
+      typeof doc.stripeSubscriptionId === "string" ? doc.stripeSubscriptionId : undefined,
+    billingInterval: doc.billingInterval === "monthly" || doc.billingInterval === "annual" ? doc.billingInterval : undefined,
+    provider: doc.provider === "stripe" || doc.provider === "crypto" ? doc.provider : undefined,
   }
 }
 
@@ -58,15 +63,34 @@ export async function setAiSubscriptionPlan(
   ownerId: string,
   planId: AiCreditPlanId,
   status: AiSubscriptionStatus = "active",
+  extras?: {
+    stripeCustomerId?: string
+    stripeSubscriptionId?: string | null
+    billingInterval?: "monthly" | "annual"
+    provider?: "stripe" | "crypto"
+  },
 ): Promise<AiSubscription> {
   await ensureIndexes()
   const db = await getDatabase()
   const now = new Date()
   const monthlyAllowance = getMonthlyCreditsForPlan(planId)
 
+  const $set: Record<string, unknown> = { ownerId, planId, status, updatedAt: now }
+  const $unset: Record<string, string> = {}
+  if (extras?.stripeCustomerId) $set.stripeCustomerId = extras.stripeCustomerId
+  if (extras?.billingInterval) $set.billingInterval = extras.billingInterval
+  if (extras?.provider) $set.provider = extras.provider
+  if (extras && "stripeSubscriptionId" in extras) {
+    if (extras.stripeSubscriptionId) $set.stripeSubscriptionId = extras.stripeSubscriptionId
+    else $unset.stripeSubscriptionId = ""
+  }
+
   await db.collection("ai_subscriptions").updateOne(
     { ownerId },
-    { $set: { ownerId, planId, status, updatedAt: now } },
+    {
+      $set,
+      ...(Object.keys($unset).length ? { $unset } : {}),
+    },
     { upsert: true },
   )
 
@@ -92,6 +116,10 @@ export async function setAiSubscriptionPlan(
     planId,
     status,
     updatedAt: now.toISOString(),
+    stripeCustomerId: extras?.stripeCustomerId,
+    stripeSubscriptionId: extras?.stripeSubscriptionId ?? undefined,
+    billingInterval: extras?.billingInterval,
+    provider: extras?.provider,
   }
 }
 

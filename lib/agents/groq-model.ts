@@ -2,15 +2,32 @@ import { groq } from "@ai-sdk/groq"
 import { generateText, streamText, type StreamTextResult } from "ai"
 
 export const GROQ_PRIMARY_MODEL =
-  process.env.GROQ_MODEL ?? "llama-3.3-70b-versatile"
+  process.env.GROQ_MODEL ?? "openai/gpt-oss-120b"
 
 export const GROQ_FALLBACK_MODEL =
-  process.env.GROQ_FALLBACK_MODEL ?? "llama-3.1-8b-instant"
+  process.env.GROQ_FALLBACK_MODEL ?? "openai/gpt-oss-20b"
 
 const GROQ_MAX_RETRIES = 0
 
 export function getDefaultGroqModel(): string {
   return GROQ_PRIMARY_MODEL
+}
+
+export function softenEmDashes(text: string): string {
+  return text
+    .replace(/\s*[—–]\s*/g, ", ")
+    .replace(/\s+--\s+/g, ", ")
+    .replace(/\s+,/g, ",")
+    .replace(/,\s*,+/g, ",")
+}
+
+export function extractGeneratedText(result: {
+  text?: string
+  reasoningText?: string
+}): string {
+  const text = typeof result.text === "string" ? result.text.trim() : ""
+  const raw = text || (typeof result.reasoningText === "string" ? result.reasoningText.trim() : "")
+  return softenEmDashes(raw)
 }
 
 export function getGroqModelChain(preferredModel?: string): string[] {
@@ -42,6 +59,23 @@ function collectErrorText(error: unknown): string {
   return parts.join(" ")
 }
 
+export function isGroqModelUnavailableError(error: unknown): boolean {
+  if (!error || typeof error !== "object") return false
+
+  const err = error as {
+    statusCode?: number
+    lastError?: { statusCode?: number }
+    errors?: Array<{ statusCode?: number }>
+  }
+
+  if (err.statusCode === 404) return true
+  if (err.lastError?.statusCode === 404) return true
+  if (err.errors?.some((e) => e.statusCode === 404)) return true
+
+  const text = collectErrorText(error).toLowerCase()
+  return text.includes("model_not_found") || text.includes("does not exist")
+}
+
 export function isGroqRateLimitError(error: unknown): boolean {
   if (!error || typeof error !== "object") return false
 
@@ -69,7 +103,7 @@ export function formatGroqRateLimitMessage(error?: unknown): string {
     return `Daily Groq token limit reached for the primary model. Try again in about ${totalMinutes} minute${totalMinutes === 1 ? "" : "s"}, switch GROQ_MODEL to a smaller model in .env, or upgrade at https://console.groq.com/settings/billing`
   }
 
-  return "Daily Groq token limit reached. Try again later, set GROQ_FALLBACK_MODEL=llama-3.1-8b-instant in .env, or upgrade your Groq plan."
+  return "Daily Groq token limit reached. Try again later, set GROQ_FALLBACK_MODEL=openai/gpt-oss-20b in .env, or upgrade your Groq plan."
 }
 
 export async function generateTextWithGroqFallback(
@@ -88,17 +122,27 @@ export async function generateTextWithGroqFallback(
         ...rest,
         model: groq(modelId),
         maxRetries: GROQ_MAX_RETRIES,
+        providerOptions: {
+          ...rest.providerOptions,
+          groq: {
+            reasoningEffort: "low",
+            ...(typeof rest.providerOptions?.groq === "object" ? rest.providerOptions.groq : {}),
+          },
+        },
       })
       if (i > 0) {
         console.warn(`Groq primary model rate limited; used fallback ${modelId}`)
       }
-      return { ...result, modelId }
+      return Object.assign(result, { modelId })
     } catch (error) {
       lastError = error
-      if (!isGroqRateLimitError(error) || i === models.length - 1) {
+      if (
+        !(isGroqRateLimitError(error) || isGroqModelUnavailableError(error)) ||
+        i === models.length - 1
+      ) {
         throw error
       }
-      console.warn(`Groq rate limit on ${modelId}, trying ${models[i + 1]}...`)
+      console.warn(`Groq ${modelId} failed, trying ${models[i + 1]}...`)
     }
   }
 
@@ -120,6 +164,13 @@ export async function streamTextWithGroqFallback(
       ...rest,
       model: groq(modelId),
       maxRetries: GROQ_MAX_RETRIES,
+      providerOptions: {
+        ...rest.providerOptions,
+        groq: {
+          reasoningEffort: "low",
+          ...(typeof rest.providerOptions?.groq === "object" ? rest.providerOptions.groq : {}),
+        },
+      },
     })
 
     try {
@@ -130,10 +181,13 @@ export async function streamTextWithGroqFallback(
       return { result, modelId }
     } catch (error) {
       lastError = error
-      if (!isGroqRateLimitError(error) || i === models.length - 1) {
+      if (
+        !(isGroqRateLimitError(error) || isGroqModelUnavailableError(error)) ||
+        i === models.length - 1
+      ) {
         throw error
       }
-      console.warn(`Groq rate limit on ${modelId}, trying ${models[i + 1]}...`)
+      console.warn(`Groq ${modelId} failed, trying ${models[i + 1]}...`)
     }
   }
 

@@ -4,7 +4,7 @@ import { useRef, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import {
-  ArrowUp,
+  AudioLines,
   ChevronLeft,
   ChevronRight,
   Plus,
@@ -161,7 +161,7 @@ export function FoundersHero({ solution }: { solution: SolutionContent }) {
                   className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-400 text-white shadow-sm transition-colors hover:bg-sky-500"
                   aria-label="Ask Finna"
                 >
-                  <ArrowUp className="h-5 w-5" strokeWidth={2.5} />
+                  <AudioLines className="h-5 w-5" strokeWidth={2.25} />
                 </button>
               </div>
             </div>

@@ -2,33 +2,51 @@
 
 import { useState, useRef, useEffect } from "react"
 import Link from "next/link"
-import { Send, Loader2, X, Maximize2 } from "lucide-react"
+import { AudioLines, Loader2, Maximize2, Mic, X } from "lucide-react"
 
-const FINNA_ICON = "/icons/finna.PNG"
 import { ChatMessageText } from "@/components/chat-message-text"
+import { FinnaOrb } from "@/components/finna-orb"
+import { FinnaThinkingPill } from "@/components/finna-thinking-pill"
+import { FinnaVoiceBeam } from "@/components/finna-voice-beam"
 import { Button } from "@/components/ui/button"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { useSession } from "@/lib/auth-client"
+import {
+  getFinnaIntro,
+  getFinnaSuggestions,
+  getFinnaTagline,
+} from "@/lib/finna-suggestions"
+import { useFinnaVoice } from "@/hooks/use-finna-voice"
 import { cn } from "@/lib/utils"
-
-const suggestedActions = [
-  "What is Trackify?",
-  "What can the founder dashboard do?",
-  "How does investor deal flow work?",
-  "Where is finance management?",
-  "How do I get started?",
-  "What are the pricing plans?",
-]
 
 type ChatMessage = { role: "user" | "assistant"; content: string }
 
-export function AIAssistant({ compactMobile = false }: { compactMobile?: boolean }) {
+export function AIAssistant({
+  compactMobile = false,
+  viewerRole,
+}: {
+  compactMobile?: boolean
+  viewerRole?: "founder" | "investor" | null
+}) {
+  const { data: session } = useSession()
+  const sessionRole = (session?.user as { role?: string | null } | undefined)?.role
+  const signedIn = Boolean(session?.user)
+  const role = viewerRole ?? sessionRole ?? (signedIn ? "founder" : null)
+  const suggestions = getFinnaSuggestions(signedIn ? role : null)
+  const tagline = getFinnaTagline(signedIn ? role : null)
+  const intro = getFinnaIntro(signedIn ? role : null)
   const [isOpen, setIsOpen] = useState(false)
   const [message, setMessage] = useState("")
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
+  const voice = useFinnaVoice({
+    onFinalTranscript: (text) => {
+      setMessage((prev) => [prev, text].filter(Boolean).join(" ").trim())
+    },
+  })
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -58,7 +76,10 @@ export function AIAssistant({ compactMobile = false }: { compactMobile?: boolean
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newMessages }),
+        body: JSON.stringify({
+          messages: newMessages,
+          viewerRole: signedIn ? role : null,
+        }),
       })
       const data = await res.json()
 
@@ -98,16 +119,16 @@ export function AIAssistant({ compactMobile = false }: { compactMobile?: boolean
         <Button
           size="lg"
           className={cn(
-            "fixed z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary p-0 text-primary-foreground shadow-xl shadow-primary/25 transition-all duration-200 hover:scale-105 hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:scale-95",
+            "fixed z-50 flex h-16 w-16 items-center justify-center rounded-full bg-primary p-0 text-primary-foreground shadow-xl shadow-primary/25 transition-all duration-200 hover:scale-105 hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:scale-95",
             compactMobile
-              ? "bottom-[calc(5rem+env(safe-area-inset-bottom))] right-4 lg:bottom-6 lg:right-6"
+              ? "bottom-[calc(6.5rem+env(safe-area-inset-bottom))] right-4 lg:bottom-6 lg:right-6"
               : "bottom-6 right-6",
           )}
           onClick={() => setIsOpen(true)}
           aria-label="Open Finna AI Assistant"
           title="Chat with Finna AI"
         >
-          <img src={FINNA_ICON} alt="" className="h-12 w-12 min-h-[48px] min-w-[48px] object-contain" />
+          <FinnaOrb size={64} theme="light" />
         </Button>
       )}
 
@@ -118,21 +139,19 @@ export function AIAssistant({ compactMobile = false }: { compactMobile?: boolean
           role="dialog"
           aria-label="Finna AI chat"
           className={cn(
-            "fixed z-50 flex max-w-[calc(100vw-2rem)] flex-col rounded-2xl border border-border/60 bg-card/95 shadow-2xl backdrop-blur-xl animate-in fade-in duration-200 slide-in-from-bottom-4",
+            "fixed z-50 flex max-w-[calc(100vw-2rem)] flex-col overflow-visible rounded-2xl border border-border/60 bg-card/95 shadow-2xl backdrop-blur-xl animate-in fade-in duration-200 slide-in-from-bottom-4",
             compactMobile
-              ? "bottom-[calc(5.5rem+env(safe-area-inset-bottom))] right-4 h-[min(520px,calc(100dvh-7rem-env(safe-area-inset-bottom)))] w-[calc(100vw-2rem)] sm:w-[420px] lg:bottom-6 lg:right-6 lg:h-[600px]"
-              : "bottom-6 right-6 h-[min(560px,calc(100vh-6rem))] w-[calc(100vw-2rem)] sm:h-[600px] sm:w-[420px]",
+              ? "bottom-[calc(7rem+env(safe-area-inset-bottom))] right-4 h-[min(520px,calc(100dvh-8.5rem-env(safe-area-inset-bottom)))] w-[min(340px,calc(100vw-2rem))] lg:bottom-6 lg:right-6 lg:h-[560px]"
+              : "bottom-6 right-6 h-[min(540px,calc(100vh-6rem))] w-[min(340px,calc(100vw-2rem))] sm:h-[560px]",
           )}
         >
           <CardHeader className="shrink-0 border-b border-border/60 bg-muted/30 px-4 py-3 rounded-t-2xl">
             <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 shadow-sm overflow-hidden p-1.5">
-                  <img src={FINNA_ICON} alt="Finna" className="h-full w-full object-contain" />
-                </div>
+              <div className="flex items-center gap-2 min-w-0">
+                <FinnaOrb thinking={isLoading} size={20} />
                 <div className="min-w-0">
                   <CardTitle className="text-base font-semibold truncate">Finna AI</CardTitle>
-                  <p className="text-xs text-muted-foreground">Your Trackify assistant</p>
+                  <p className="text-xs text-muted-foreground">{tagline}</p>
                 </div>
               </div>
               <div className="flex items-center gap-1">
@@ -153,21 +172,21 @@ export function AIAssistant({ compactMobile = false }: { compactMobile?: boolean
               </div>
             </div>
           </CardHeader>
-          <CardContent className="p-0 flex flex-col flex-1 min-h-0">
+          <CardContent className="flex min-h-0 flex-1 flex-col overflow-visible p-0">
             {/* Messages */}
             <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-4 scroll-smooth">
               {messages.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-10 px-2 text-center">
-                  <div className="h-20 w-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 overflow-hidden p-2.5">
-                    <img src={FINNA_ICON} alt="Finna" className="h-full w-full object-contain" />
+                  <div className="mb-4">
+                    <FinnaOrb size={64} />
                   </div>
                   <p className="text-sm font-medium text-foreground mb-1">Hi, I'm Finna</p>
                   <p className="text-sm text-muted-foreground mb-6 max-w-[260px]">
-                    Ask me about Trackify, your dashboard, fundraising, or the African startup ecosystem.
+                    {intro}
                   </p>
                   <p className="text-xs text-muted-foreground mb-3">Try asking:</p>
                   <div className="flex flex-wrap gap-2 justify-center">
-                    {suggestedActions.slice(0, 4).map((action) => (
+                    {suggestions.slice(0, 4).map((action) => (
                       <button
                         key={action}
                         type="button"
@@ -188,8 +207,8 @@ export function AIAssistant({ compactMobile = false }: { compactMobile?: boolean
                       className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                     >
                       {msg.role === "assistant" && (
-                        <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5 overflow-hidden p-1">
-                          <img src={FINNA_ICON} alt="" className="h-full w-full object-contain" />
+                        <div className="mt-1 shrink-0">
+                          <FinnaOrb size={20} />
                         </div>
                       )}
                       <div
@@ -208,14 +227,8 @@ export function AIAssistant({ compactMobile = false }: { compactMobile?: boolean
                     </div>
                   ))}
                   {isLoading && (
-                    <div className="flex gap-2 justify-start">
-                      <div className="h-20 w-20 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                        <Loader2 className="h-5 w-5 text-primary animate-spin" />
-                      </div>
-                      <div className="rounded-2xl rounded-bl-md px-4 py-2.5 text-sm bg-muted border border-border/40 flex items-center gap-2">
-                        <span className="inline-block h-2 w-2 rounded-full bg-primary animate-pulse" />
-                        <span className="text-muted-foreground">Thinking…</span>
-                      </div>
+                    <div className="flex justify-start">
+                      <FinnaThinkingPill />
                     </div>
                   )}
                   <div ref={messagesEndRef} />
@@ -224,35 +237,60 @@ export function AIAssistant({ compactMobile = false }: { compactMobile?: boolean
             </div>
 
             {/* Input */}
-            <div className="shrink-0 p-4 pt-2 border-t border-border/60 bg-background/50 rounded-b-2xl">
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Ask Finna anything…"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault()
-                      handleSend()
-                    }
-                  }}
-                  disabled={isLoading}
-                  className="rounded-xl border-border/60 focus-visible:ring-primary/20 min-h-10"
-                />
-                <Button
-                  size="icon"
-                  className="shrink-0 rounded-xl h-10 w-10 bg-primary text-primary-foreground hover:bg-primary/90"
-                  onClick={handleSend}
-                  disabled={isLoading || !message.trim()}
-                  aria-label="Send message"
-                >
-                  {isLoading ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <Send className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
+            <div className="shrink-0 overflow-visible rounded-b-2xl border-t border-border/60 bg-background/50 px-4 pb-5 pt-4">
+              <FinnaVoiceBeam
+                stream={voice.listening ? voice.stream : null}
+                processing={isLoading}
+                type="pill"
+                theme="light"
+                scale={1.15}
+                idle={0.48}
+                strength={1}
+              >
+                <div className="flex gap-2 rounded-xl border border-border/60 bg-background p-1">
+                  <Input
+                    placeholder={voice.listening ? "Listening…" : "Ask Finna anything…"}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault()
+                        handleSend()
+                      }
+                    }}
+                    disabled={isLoading}
+                    className="min-h-10 flex-1 border-0 bg-transparent shadow-none focus-visible:ring-0"
+                  />
+                  {voice.supported ? (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className={cn(
+                        "h-10 w-10 shrink-0 rounded-xl",
+                        voice.listening && "text-red-500 hover:text-red-500",
+                      )}
+                      onClick={() => void voice.toggle()}
+                      aria-label={voice.listening ? "Stop listening" : "Voice input"}
+                    >
+                      <Mic className="h-4 w-4" />
+                    </Button>
+                  ) : null}
+                  <Button
+                    size="icon"
+                    className="shrink-0 rounded-xl h-10 w-10 bg-primary text-primary-foreground hover:bg-primary/90"
+                    onClick={handleSend}
+                    disabled={isLoading || !message.trim()}
+                    aria-label="Send message"
+                  >
+                    {isLoading ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <AudioLines className="h-4 w-4" strokeWidth={2.25} />
+                    )}
+                  </Button>
+                </div>
+              </FinnaVoiceBeam>
               <p className="text-[10px] text-muted-foreground mt-2 text-center">Press Enter to send</p>
             </div>
           </CardContent>

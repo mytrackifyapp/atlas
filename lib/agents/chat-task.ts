@@ -2,7 +2,7 @@ import "server-only"
 
 import { generateText, stepCountIs, type ToolSet } from "ai"
 
-import { generateTextWithGroqFallback } from "@/lib/agents/groq-model"
+import { extractGeneratedText, generateTextWithGroqFallback } from "@/lib/agents/groq-model"
 import { formatFoundationForPrompt } from "@/lib/agents/foundation-prompt"
 import { getAgentConfig } from "@/lib/agents/registry"
 import { getAgentFoundation } from "@/lib/agents/services/foundation"
@@ -114,7 +114,7 @@ export async function executeChatTask(input: {
     stopWhen: hasTools ? stepCountIs(12) : undefined,
   })
 
-  const content = result.text.trim()
+  const content = extractGeneratedText(result)
   if (!content) {
     throw new Error("Agent returned an empty response")
   }

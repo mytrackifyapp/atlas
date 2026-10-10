@@ -139,6 +139,27 @@ export const ourFileRouter = {
         sizeBytes: file.size,
       }
     }),
+
+  loungeMedia: f({
+    image: { maxFileSize: "8MB", maxFileCount: 4 },
+    pdf: { maxFileSize: "16MB", maxFileCount: 4 },
+    blob: { maxFileSize: "16MB", maxFileCount: 4 },
+  })
+    .middleware(async () => {
+      const session = await getSessionWithRole()
+      if (!session) {
+        throw new Error("Unauthorized")
+      }
+      return { userId: session.user.id }
+    })
+    .onUploadComplete(async ({ file }) => {
+      return {
+        url: file.url,
+        name: file.name,
+        mimeType: file.type || undefined,
+        sizeBytes: file.size,
+      }
+    }),
 } satisfies FileRouter
 
 export type OurFileRouter = typeof ourFileRouter

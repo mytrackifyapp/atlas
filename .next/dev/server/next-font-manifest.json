@@ -1,104 +1,64 @@
 {
   "app": {
-    "[project]/app/_not-found/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+    "[project]/app/accelerator/page": [
+      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
     ],
-    "[project]/app/about/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
-    ],
-    "[project]/app/ai-agents/[agentId]/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+    "[project]/app/admin/page": [
+      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
     ],
     "[project]/app/ai-agents/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
     ],
-    "[project]/app/blog/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
-    ],
-    "[project]/app/companies/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
-    ],
-    "[project]/app/contact/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
-    ],
-    "[project]/app/dashboard/ai/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+    "[project]/app/dashboard/finance/us-account/page": [
+      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
     ],
     "[project]/app/dashboard/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
     ],
-    "[project]/app/dashboard/settings/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+    "[project]/app/deal-flow/page": [
+      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
     ],
-    "[project]/app/developer/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+    "[project]/app/finna-site/page": [
+      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
     ],
-    "[project]/app/finna/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
-    ],
-    "[project]/app/founder/fundraising/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+    "[project]/app/founder/finance/us-account/page": [
+      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
     ],
     "[project]/app/founder/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
     ],
-    "[project]/app/founder/workspace/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+    "[project]/app/founder/settings/page": [
+      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
+    ],
+    "[project]/app/onboarding/page": [
+      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
     ],
     "[project]/app/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
-    ],
-    "[project]/app/pitch/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
-    ],
-    "[project]/app/portfolio/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
-    ],
-    "[project]/app/pricing/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
     ],
     "[project]/app/sign-in/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
     ],
     "[project]/app/sign-up/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
     ],
-    "[project]/app/solutions/[slug]/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
-    ],
-    "[project]/app/stages/pre-seed-seed/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
-    ],
-    "[project]/app/stages/series-a/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
-    ],
-    "[project]/app/whitepaper/page": [
-      "static/media/caa3a2e1cccd8315-s.p.3b6cae6d.woff2",
-      "static/media/797e433ab948586e-s.p.29207c2f.woff2"
+    "[project]/app/workspace/page": [
+      "static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2"
     ]
   },
   "appUsingSizeAdjust": true,

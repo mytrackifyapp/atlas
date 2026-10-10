@@ -6,7 +6,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  transpilePackages: ["three", "@react-three/fiber", "@react-three/drei"],
+  agentRules: false,
   serverExternalPackages: ["sharp", "@resvg/resvg-js", "playwright-core"],
 }
 

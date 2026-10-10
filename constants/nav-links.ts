@@ -15,6 +15,7 @@ import {
   Brain,
   Banknote,
   FolderOpen,
+  Landmark,
   Wallet,
 } from "lucide-react"
 
@@ -30,14 +31,20 @@ export const NAV_LINKS = [
     icon: Package,
     menu: [
       {
+        title: "Trackify Capital",
+        tagline: "Discover, access, and manage private-market investments.",
+        href: "/capital",
+        icon: Landmark,
+      },
+      {
         title: "Finna AI",
         tagline: "Your venture copilot for fundraising, diligence, and portfolio questions.",
         href: "/finna",
         icon: Sparkles,
       },
       {
-        title: "AI Employees",
-        tagline: "CFO, legal, and marketing agents that work alongside your team.",
+        title: "AI Agents",
+        tagline: "One operating partner. Finance, legal, sales, and marketing skills behind it.",
         href: "/ai-agents",
         icon: Brain,
       },
@@ -77,6 +84,12 @@ export const NAV_LINKS = [
         href: "/accelerator",
         icon: Users,
       },
+      {
+        title: "U.S. Company",
+        tagline: "Form an LLC or C-Corp from your Trackify dashboard, then operate here.",
+        href: "/incorporate",
+        icon: Building2,
+      },
     ],
   },
   {
@@ -105,7 +118,7 @@ export const NAV_LINKS = [
     ],
   },
   {
-    title: "AI Agents",
+    title: "Finna AI",
     href: "/ai-agents",
     icon: Brain,
   },

@@ -2,31 +2,67 @@
 
 import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Building2, Rocket, ArrowRight, Check } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { ArrowRight, Loader2 } from "lucide-react"
+
+import { FinnaOrb } from "@/components/finna-orb"
 import { authClient } from "@/lib/auth-client"
 import { safeInternalPath } from "@/lib/safe-redirect"
 
 type UserRole = "investor" | "founder"
 
+const QUESTION = "Are you a founder or an investor?"
+
+function TypedQuestion() {
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    if (reduce) {
+      setCount(QUESTION.length)
+      return
+    }
+    if (count >= QUESTION.length) return
+    const timer = window.setTimeout(() => setCount((value) => value + 1), 38)
+    return () => window.clearTimeout(timer)
+  }, [count])
+
+  const done = count >= QUESTION.length
+
+  return (
+    <h1
+      aria-label={QUESTION}
+      className="min-h-[2.6em] text-[1.65rem] font-semibold tracking-tight text-[#1c1c1c]"
+    >
+      <span aria-hidden>
+        {QUESTION.slice(0, count)}
+        <span
+          className={`ml-0.5 inline-block h-[1.05em] w-px translate-y-[0.12em] bg-[#1c1c1c] ${done ? "opacity-0" : "animate-pulse"}`}
+        />
+      </span>
+    </h1>
+  )
+}
+
 export function OnboardingClient() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const continuePath = safeInternalPath(searchParams.get("redirect"), "")
-  const { data: session } = authClient.useSession()
+  const { data: session, isPending } = authClient.useSession()
   const [selectedRole, setSelectedRole] = useState<UserRole | null>(null)
   const [loading, setLoading] = useState(false)
   const [checkingStatus, setCheckingStatus] = useState(true)
   const [error, setError] = useState("")
 
-  // Redirect to sign-in if no session
+  // Wait until the session request finishes. A missing session while it is
+  // still loading is not a signed-out user, and must not bounce a fresh
+  // sign-up back to the login page.
   useEffect(() => {
-    if (!session?.user) {
-      router.push("/sign-in")
-      return
-    }
-  }, [session, router])
+    if (isPending || session?.user) return
+    const next = continuePath
+      ? `/onboarding?redirect=${encodeURIComponent(continuePath)}`
+      : "/onboarding"
+    router.replace(`/sign-in?redirect=${encodeURIComponent(next)}`)
+  }, [isPending, session, router, continuePath])
 
   // Check if user has already completed onboarding
   useEffect(() => {
@@ -65,27 +101,16 @@ export function OnboardingClient() {
   }, [session, router, continuePath])
 
   // Show loading state while checking onboarding status or if no session
-  if (checkingStatus || !session?.user) {
+  if (isPending || checkingStatus || !session?.user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
-              <Building2 className="h-7 w-7 text-primary-foreground" />
-            </div>
-            <span className="text-3xl font-semibold">Trackify Atlas</span>
-          </div>
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
+      <div className="flex min-h-screen items-center justify-center bg-[#f6f5f2]">
+        <Loader2 className="h-5 w-5 animate-spin text-neutral-400" />
       </div>
     )
   }
 
-  const handleSubmit = async () => {
-    if (!selectedRole) {
-      setError("Please select a role")
-      return
-    }
+  const handleSubmit = async (role: UserRole) => {
+    setSelectedRole(role)
 
     setError("")
     setLoading(true)
@@ -96,7 +121,7 @@ export function OnboardingClient() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ role: selectedRole }),
+        body: JSON.stringify({ role }),
       })
 
       const data = await response.json()
@@ -126,7 +151,7 @@ export function OnboardingClient() {
           const verifyResponse = await fetch("/api/user/check-onboarding")
           const verifyData = await verifyResponse.json()
           
-          if (verifyData.onboardingCompleted && verifyData.role === selectedRole) {
+          if (verifyData.onboardingCompleted && verifyData.role === role) {
             verified = true
             console.log("Onboarding status verified:", verifyData)
             break
@@ -144,8 +169,7 @@ export function OnboardingClient() {
 
       // Use hard redirect to ensure server-side checks get fresh data
       // This forces a full page reload and fresh server-side session check
-      const redirectPath =
-        continuePath || (selectedRole === "investor" ? "/portfolio" : "/founder")
+      const redirectPath = continuePath || (role === "investor" ? "/portfolio" : "/founder")
       window.location.href = redirectPath
     } catch (err) {
       console.error("Error in handleSubmit:", err)
@@ -154,133 +178,47 @@ export function OnboardingClient() {
     }
   }
 
+  const choices: { role: UserRole; label: string }[] = [
+    { role: "founder", label: "Founder / startup" },
+    { role: "investor", label: "Investor / VC / accelerator" },
+  ]
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="w-full max-w-4xl">
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
-              <Building2 className="h-7 w-7 text-primary-foreground" />
-            </div>
-            <span className="text-3xl font-semibold">Trackify Atlas</span>
-          </div>
-          <h1 className="text-3xl font-bold mb-2">Welcome! Let's get you started</h1>
-          <p className="text-lg text-muted-foreground">Choose your role to customize your experience</p>
+    <div className="flex min-h-screen items-center justify-center bg-[#f6f5f2] px-6">
+      <div className="w-full max-w-md -translate-y-8">
+        <div className="mb-3 flex items-center gap-2">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.04]">
+            <FinnaOrb size={20} />
+          </span>
+          <span className="text-sm font-medium text-[#c4a574]">Finna</span>
+        </div>
+        <TypedQuestion />
+
+        <div className="mt-8 space-y-3">
+          {choices.map((choice) => {
+            const active = selectedRole === choice.role
+            return (
+              <button
+                key={choice.role}
+                type="button"
+                disabled={loading}
+                onClick={() => void handleSubmit(choice.role)}
+                className="flex w-full items-center justify-between rounded-2xl bg-white px-5 py-4 text-left text-[15px] text-neutral-800 shadow-[0_1px_2px_rgba(15,23,42,0.04)] ring-1 ring-black/[0.04] transition hover:ring-black/10 disabled:opacity-70"
+              >
+                <span>{choice.label}</span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1c1c1c] text-white">
+                  {loading && active ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <ArrowRight className="h-4 w-4" />
+                  )}
+                </span>
+              </button>
+            )
+          })}
         </div>
 
-        {error && (
-          <div className="mb-6 p-4 text-sm text-destructive bg-destructive/10 rounded-lg border border-destructive/20 text-center">
-            {error}
-          </div>
-        )}
-
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          {/* Investor Card */}
-          <Card
-            className={`cursor-pointer transition-all duration-200 ${
-              selectedRole === "investor"
-                ? "ring-2 ring-primary shadow-lg border-primary"
-                : "hover:border-primary/50 hover:shadow-md"
-            }`}
-            onClick={() => setSelectedRole("investor")}
-          >
-            <CardHeader>
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-                  <Building2 className="h-6 w-6 text-primary" />
-                </div>
-                {selectedRole === "investor" && (
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                    <Check className="h-4 w-4" />
-                  </div>
-                )}
-              </div>
-              <CardTitle className="text-2xl">Investor / VC</CardTitle>
-              <CardDescription className="text-base">
-                Manage your portfolio, track deals, and analyze investments
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="flex items-start gap-2">
-                  <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Portfolio management and analytics</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Deal flow pipeline management</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Investment tracking and reporting</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Market insights and trends</span>
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* Founder Card */}
-          <Card
-            className={`cursor-pointer transition-all duration-200 ${
-              selectedRole === "founder"
-                ? "ring-2 ring-primary shadow-lg border-primary"
-                : "hover:border-primary/50 hover:shadow-md"
-            }`}
-            onClick={() => setSelectedRole("founder")}
-          >
-            <CardHeader>
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-                  <Rocket className="h-6 w-6 text-primary" />
-                </div>
-                {selectedRole === "founder" && (
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                    <Check className="h-4 w-4" />
-                  </div>
-                )}
-              </div>
-              <CardTitle className="text-2xl">Founder / Startup</CardTitle>
-              <CardDescription className="text-base">
-                Track your fundraising, manage investors, and grow your startup
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="flex items-start gap-2">
-                  <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Fundraising pipeline management</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Investor relationship tracking</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Business metrics and KPIs</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>Document and data room management</span>
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="flex justify-center">
-          <Button
-            size="lg"
-            onClick={handleSubmit}
-            disabled={!selectedRole || loading}
-            className="px-8 h-12 text-base"
-          >
-            {loading ? "Setting up your account..." : "Continue"}
-            {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
-          </Button>
-        </div>
+        {error ? <p className="mt-4 text-sm text-red-600">{error}</p> : null}
       </div>
     </div>
   )

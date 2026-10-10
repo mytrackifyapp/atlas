@@ -26,6 +26,27 @@ function normalizeAttachments(value: unknown): FoundationAttachment[] {
     .filter((item): item is FoundationAttachment => item !== null)
 }
 
+function foundationFromDoc(doc: {
+  agentId?: unknown
+  fields?: unknown
+  connectedTools?: unknown
+  attachments?: unknown
+  updatedAt?: Date
+}): AgentFoundationRecord {
+  const resolved = resolveAgentId(String(doc.agentId ?? ""))
+  const fields =
+    doc.fields && typeof doc.fields === "object" && !Array.isArray(doc.fields)
+      ? (doc.fields as Record<string, string>)
+      : {}
+  return {
+    agentId: resolved,
+    fields: { ...emptyFoundationFields(resolved), ...fields },
+    connectedTools: Array.isArray(doc.connectedTools) ? (doc.connectedTools as string[]) : [],
+    attachments: normalizeAttachments(doc.attachments),
+    updatedAt: doc.updatedAt?.toISOString?.() ?? undefined,
+  }
+}
+
 export async function getAgentFoundation(
   ownerId: string,
   agentId: string,
@@ -34,14 +55,15 @@ export async function getAgentFoundation(
   const db = await getDatabase()
   const doc = await db.collection("agent_foundations").findOne({ ownerId, agentId: resolved })
   if (!doc) return null
+  return foundationFromDoc(doc)
+}
 
-  return {
-    agentId: resolved,
-    fields: { ...emptyFoundationFields(resolved), ...(doc.fields as Record<string, string>) },
-    connectedTools: Array.isArray(doc.connectedTools) ? (doc.connectedTools as string[]) : [],
-    attachments: normalizeAttachments(doc.attachments),
-    updatedAt: doc.updatedAt?.toISOString?.() ?? undefined,
-  }
+export async function listOwnerFoundations(
+  ownerId: string,
+): Promise<AgentFoundationRecord[]> {
+  const db = await getDatabase()
+  const docs = await db.collection("agent_foundations").find({ ownerId }).toArray()
+  return docs.map((doc) => foundationFromDoc(doc))
 }
 
 export async function saveAgentFoundation(

@@ -1,1 +1,11 @@
-{"version":4,"routes":{"/solutions/investors":{},"/solutions/founders":{},"/solutions/startups":{},"/solutions/accelerators":{},"/ai-agents/ai-lawyer":{},"/ai-agents/ai-cfo":{},"/ai-agents/ai-sales-rep":{},"/ai-agents/ai-marketer":{},"/ai-agents/ai-ops-manager":{},"/ai-agents/ai-hr":{}},"dynamicRoutes":{"/solutions/[slug]":{"dataRoute":null,"dataRouteRegex":null,"fallback":null,"fallbackRevalidate":false,"fallbackSourceRoute":"/solutions/[slug]","routeRegex":"^\\/solutions\\/([^/]+?)(?:\\/)?$","allowHeader":[]},"/ai-agents/[agentId]":{"dataRoute":null,"dataRouteRegex":null,"fallback":null,"fallbackRevalidate":false,"fallbackSourceRoute":"/ai-agents/[agentId]","routeRegex":"^\\/ai\\-agents\\/([^/]+?)(?:\\/)?$","allowHeader":[]}},"notFoundRoutes":[],"preview":{"previewModeId":"681ff9ed51b12e19c3e7b93e3dbcf556","previewModeSigningKey":"e1d2ce41ec6e2b51959704290a8f3ee4bbcb1ab05de3cb951556869905ba9a37","previewModeEncryptionKey":"795adfb0606a17d2a6d4b044dfdf35aaa207963c62eb8270822cd13e7383e63d"}}
+{
+  "version": 4,
+  "routes": {},
+  "dynamicRoutes": {},
+  "notFoundRoutes": [],
+  "preview": {
+    "previewModeId": "72b61a50def8278e372dfa58adb2be83",
+    "previewModeSigningKey": "0ec39bf63329c1746d32697904c2b0a8129187b5f808dc3608968ac23f7912b8",
+    "previewModeEncryptionKey": "32293fc484738f58d776ce11cf8a5203a70b4eb73061b8b3dfe20141094e061c"
+  }
+}

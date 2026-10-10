@@ -108,7 +108,7 @@ export const PRICING_FAQS = [
   {
     question: "How do I pay with USDT or USDC?",
     answer:
-      "Choose Pro or Team on the checkout page, pick your network (Base, Polygon, or Ethereum), connect your wallet, and send the exact stablecoin amount shown. Your plan activates automatically after on-chain verification.",
+      "Choose Pro or Team on the checkout page, switch to Crypto, pick your network (Base, Polygon, or Ethereum), connect your wallet, and send the exact stablecoin amount shown. Your plan activates automatically after on-chain verification.",
   },
   {
     question: "Can I change plans later?",
@@ -128,7 +128,7 @@ export const PRICING_FAQS = [
   {
     question: "What payment methods do you accept?",
     answer:
-      "We accept major credit and debit cards globally through our secure checkout partner. Enterprise customers can request invoice billing.",
+      "We accept major credit and debit cards through Stripe, plus USDC and USDT on Base, Polygon, and Ethereum. Enterprise customers can request invoice billing.",
   },
   {
     question: "Do you offer discounts for startups or nonprofits?",

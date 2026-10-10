@@ -1,8 +1,7 @@
-import { Suspense } from "react"
 import { redirect } from "next/navigation"
 
+import { AgentChatView } from "@/components/agent-chat-view"
 import { DashboardShell } from "@/components/dashboard-shell"
-import { SocialPostsView } from "@/components/social-posts-view"
 import { getSessionWithRole } from "@/lib/auth-helpers"
 
 export const dynamic = "force-dynamic"
@@ -14,9 +13,13 @@ export default async function FounderSocialPage() {
 
   return (
     <DashboardShell>
-      <Suspense fallback={<div className="p-6 text-sm text-muted-foreground">Loading social…</div>}>
-        <SocialPostsView />
-      </Suspense>
+      <AgentChatView
+        agentId="ai-marketer"
+        homeHref="/founder"
+        heading="Social"
+        subheading="Draft posts, graphics, and campaigns"
+        composerVariant="glow"
+      />
     </DashboardShell>
   )
 }

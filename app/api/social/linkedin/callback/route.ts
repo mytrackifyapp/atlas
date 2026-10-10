@@ -18,19 +18,24 @@ export async function GET(request: NextRequest) {
   const state = params.get("state")
   const error = params.get("error")
 
+  const cookieStore = await cookies()
+  const nextCookie = cookieStore.get("social_linkedin_oauth_next")?.value
+  const nextPath =
+    nextCookie?.startsWith("/") && !nextCookie.startsWith("//") ? nextCookie : "/founder/social"
+  cookieStore.delete("social_linkedin_oauth_next")
+
   if (error) {
     return NextResponse.redirect(
-      new URL(`/founder/social?error=${encodeURIComponent(error)}`, request.url)
+      new URL(`${nextPath}?error=${encodeURIComponent(error)}`, request.url)
     )
   }
 
-  const cookieStore = await cookies()
   const expectedState = cookieStore.get("social_linkedin_oauth_state")?.value
   cookieStore.delete("social_linkedin_oauth_state")
 
   if (!code || !state || !expectedState || state !== expectedState) {
     return NextResponse.redirect(
-      new URL("/founder/social?error=invalid_oauth_state", request.url)
+      new URL(`${nextPath}?error=invalid_oauth_state`, request.url)
     )
   }
 
@@ -48,11 +53,11 @@ export async function GET(request: NextRequest) {
       displayName: profile.displayName,
     })
 
-    return NextResponse.redirect(new URL("/founder/social?connected=linkedin", request.url))
+    return NextResponse.redirect(new URL(`${nextPath}?connected=linkedin`, request.url))
   } catch (err) {
     const message = err instanceof Error ? err.message : "oauth_failed"
     return NextResponse.redirect(
-      new URL(`/founder/social?error=${encodeURIComponent(message)}`, request.url)
+      new URL(`${nextPath}?error=${encodeURIComponent(message)}`, request.url)
     )
   }
 }

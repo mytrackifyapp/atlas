@@ -1,3 +1,4 @@
+import { getFinnaToolset } from "@/lib/agents/skills"
 import {
   getDomainToolIdsForAgent,
   getFinanceToolIdsForAgent,
@@ -29,7 +30,7 @@ const TOOL_HINTS: Record<string, string> = {
   send_outreach_email: "Send an outreach email (requires human approval — T2).",
   log_outreach_reply: "Log a reply to outreach and update lead stage to Replied (write).",
   get_social_brand_kit: "Workspace brand kit: logo, colors, company name for social graphics.",
-  update_social_brand_kit: "Update brand colors or company name (logo is uploaded in /founder/social UI).",
+  update_social_brand_kit: "Update brand colors or company name (logo is uploaded in Brand kits on /founder/social).",
   get_social_connections: "Check LinkedIn connection status for publishing.",
   resolve_background_image:
     "Search Pexels with post context (headline, caption, templateId). Picks the best-matching stock photo—not just the first result. Use for editorial_photo and photo_launch backgrounds.",
@@ -40,17 +41,24 @@ const TOOL_HINTS: Record<string, string> = {
   publish_social_post: "Publish a rendered LinkedIn post (requires human approval — T2).",
   search_knowledge: "Search indexed notes, workspace memos, and memories.",
   save_memory: "Save an important fact for future sessions.",
-  list_my_agents: "List installed AI Employees (Finna only).",
-  delegate_to_agent: "Delegate a task to a specialist (Finna only).",
+  list_my_agents: "List specialist focus rooms available behind the scenes.",
+  delegate_to_agent:
+    "Delegate specialist drafting or write actions (legal, outreach, social, long-form CFO). Not needed for live reads.",
 }
 
-export function getToolGuidanceAppendix(agentId: string): string {
+export function getToolGuidanceAppendix(
+  agentId: string,
+  userRole?: string | null
+): string {
   const lines: string[] = []
-  const finance = getFinanceToolIdsForAgent(agentId)
-  const domain = getDomainToolIdsForAgent(agentId)
-  const sales = getSalesToolIdsForAgent(agentId)
-  const social = getSocialToolIdsForAgent(agentId)
-  const knowledge = agentSupportsKnowledge(agentId)
+  const finna = agentId === "finna"
+  const finnaTools = finna ? getFinnaToolset(userRole) : null
+  const finance = finnaTools?.financeTools ?? getFinanceToolIdsForAgent(agentId)
+  const domain = finnaTools?.domainTools ?? getDomainToolIdsForAgent(agentId)
+  const sales = finnaTools?.salesTools ?? getSalesToolIdsForAgent(agentId)
+  const social = finna ? [] : getSocialToolIdsForAgent(agentId)
+  const knowledge = finnaTools?.knowledge ?? agentSupportsKnowledge(agentId)
+  const saveMemory = finna ? Boolean(finnaTools?.saveMemory) : agentId !== "finna"
 
   if (finance.length > 0) {
     lines.push("Finance tools — call before inventing numbers:")
@@ -75,13 +83,13 @@ export function getToolGuidanceAppendix(agentId: string): string {
   if (knowledge) {
     lines.push("Knowledge tools:")
     lines.push(`- search_knowledge: ${TOOL_HINTS.search_knowledge}`)
-    if (agentId !== "finna") {
+    if (saveMemory) {
       lines.push(`- save_memory: ${TOOL_HINTS.save_memory}`)
     }
   }
 
-  if (agentId === "finna") {
-    lines.push("Orchestration (signed-in):")
+  if (finna) {
+    lines.push("Specialist skills (only for drafting or write actions you cannot do):")
     lines.push(`- list_my_agents: ${TOOL_HINTS.list_my_agents}`)
     lines.push(`- delegate_to_agent: ${TOOL_HINTS.delegate_to_agent}`)
   }

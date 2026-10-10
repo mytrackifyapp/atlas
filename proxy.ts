@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getSessionCookie } from "better-auth/cookies"
 
+import { isFinnaHost } from "@/lib/finna-host"
+
 // Routes that require authentication
 const protectedRoutes = ["/dashboard", "/portfolio", "/deal-flow", "/reports", "/analytics", "/founder", "/deal-room", "/accelerator", "/admin"]
 
@@ -13,6 +15,12 @@ const onboardingRoutes = ["/onboarding"]
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const sessionCookie = getSessionCookie(request)
+
+  if (isFinnaHost(request.headers.get("host")) && pathname === "/") {
+    const url = request.nextUrl.clone()
+    url.pathname = "/finna-site"
+    return NextResponse.rewrite(url)
+  }
 
   // Check if route is protected
   const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route))

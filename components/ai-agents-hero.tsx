@@ -5,9 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import {
-  ArrowUp,
-  ChevronLeft,
-  ChevronRight,
+  AudioLines,
   Plus,
   Sparkles,
   Wand2,
@@ -16,33 +14,27 @@ import {
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { AI_AGENTS_CATALOG } from "@/lib/ai-agents-catalog"
-import { getAgentPagePath } from "@/lib/ai-agents-marketing"
+import { getAgentMarketingContent } from "@/lib/ai-agents-marketing"
 import { useSession } from "@/lib/auth-client"
 import { finnaPromptPath, signUpForFinnaPath } from "@/lib/safe-redirect"
 
 const EXAMPLE_PROMPTS = [
-  "Hire an AI CFO to model runway and investor updates",
-  "Draft a contractor agreement and flag legal risk",
+  "Analyze my runway and draft this month's investor update",
+  "Review a contractor agreement and flag legal risk",
   "Plan this week's content calendar and launch posts",
   "Build a B2B outreach sequence for Series A prospects",
 ]
 
 const ENHANCED_PROMPTS: Record<string, string> = {
   [EXAMPLE_PROMPTS[0]]:
-    "Hire an AI CFO to model 18-month runway, burn, and a monthly investor update from our metrics",
+    "Analyze 18-month runway and burn, then draft a monthly investor update from our live metrics",
   [EXAMPLE_PROMPTS[1]]:
-    "Draft a contractor agreement, flag unusual terms, and list what to send legal before we sign",
+    "Review a contractor agreement, flag unusual terms, and list what to send legal before we sign",
   [EXAMPLE_PROMPTS[2]]:
     "Plan this week's content calendar, channel mix, and three launch posts for our raise",
   [EXAMPLE_PROMPTS[3]]:
     "Build a B2B outreach sequence for Series A prospects with objections, follow-ups, and CRM notes",
 }
-
-const HERO_AGENTS = AI_AGENTS_CATALOG.slice(0, 4).map((agent) => ({
-  label: agent.name,
-  href: getAgentPagePath(agent.id),
-  img: { src: agent.imageSrc ?? "/cfo.png", alt: agent.name },
-}))
 
 function colorFor(i: number) {
   const colors = [
@@ -72,7 +64,6 @@ export function AiAgentsHero({
   const router = useRouter()
   const { data: session, isPending } = useSession()
   const videoRef = useRef<HTMLVideoElement>(null)
-  const scrollerRef = useRef<HTMLDivElement>(null)
   const [prompt, setPrompt] = useState(EXAMPLE_PROMPTS[0])
   const [promptIndex, setPromptIndex] = useState(0)
 
@@ -112,12 +103,6 @@ export function AiAgentsHero({
       return
     }
     router.push(finnaPromptPath(q))
-  }
-
-  const scrollCards = (direction: -1 | 1) => {
-    const node = scrollerRef.current
-    if (!node) return
-    node.scrollBy({ left: direction * (node.clientWidth * 0.7), behavior: "smooth" })
   }
 
   const ctaButton = ctaHref ? (
@@ -170,7 +155,7 @@ export function AiAgentsHero({
 
         <div className="relative z-10 mx-auto flex min-h-dvh max-w-5xl flex-col items-center justify-end px-5 pb-16 pt-[6.5rem] text-center sm:px-8 sm:pb-20 sm:pt-28 lg:justify-center lg:pb-24 lg:pt-32">
           <h1 className="max-w-4xl text-balance text-[1.85rem] font-semibold leading-[1.12] tracking-tight text-white sm:text-5xl sm:leading-[1.08] lg:text-[3.35rem]">
-            AI employees that never sleep
+            Your operating partner that never sleeps
           </h1>
 
           <div className="mt-8 w-full rounded-[1.75rem] border border-white/70 bg-white/40 p-2.5 shadow-[0_24px_60px_rgba(15,23,42,0.12)] backdrop-blur-2xl sm:mt-10 sm:rounded-[2rem] sm:p-3.5">
@@ -196,7 +181,7 @@ export function AiAgentsHero({
                   }
                 }}
                 className="w-full resize-none bg-transparent text-left text-[0.95rem] leading-relaxed text-neutral-800 outline-none placeholder:text-neutral-400 sm:text-base"
-                placeholder="Ask Finna to hire an AI employee for finance, legal, sales, or marketing"
+                placeholder="Ask Finna about runway, fundraising, sales, or legal"
               />
               <div className="mt-3 flex items-center justify-between gap-2">
                 <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
@@ -227,63 +212,19 @@ export function AiAgentsHero({
                     className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-400 text-white shadow-sm transition-colors hover:bg-sky-500"
                     aria-label="Ask Finna"
                   >
-                    <ArrowUp className="h-5 w-5" strokeWidth={2.5} />
+                    <AudioLines className="h-5 w-5" strokeWidth={2.25} />
                   </button>
                 </div>
               </div>
             </form>
 
-            <div
-              ref={scrollerRef}
-              className="mt-3 flex snap-x snap-mandatory gap-2.5 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-3 [&::-webkit-scrollbar]:hidden"
-            >
-              {HERO_AGENTS.map((card) => (
-                <Link
-                  key={card.label}
-                  href={card.href}
-                  className="group min-w-[calc(50%-0.3rem)] snap-start overflow-hidden rounded-[0.95rem] border border-white/50 bg-white/55 shadow-[0_8px_24px_rgba(15,23,42,0.08)] sm:min-w-[calc(33.333%-0.45rem)] sm:rounded-[1.1rem] lg:min-w-0 lg:flex-1"
-                >
-                  <div className="p-1 pb-0 sm:p-1.5 sm:pb-0">
-                    <div className="aspect-[16/10] overflow-hidden rounded-[0.75rem] sm:rounded-[0.9rem]">
-                      <img
-                        src={card.img.src}
-                        alt={card.img.alt}
-                        className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
-                      />
-                    </div>
-                  </div>
-                  <p className="px-2.5 py-1.5 text-left text-[0.7rem] font-medium tracking-tight text-neutral-800 sm:px-3 sm:py-2 sm:text-[0.8rem]">
-                    {card.label}
-                  </p>
-                </Link>
-              ))}
-            </div>
-
-            <div className="mt-3 flex items-center justify-between gap-3 px-0.5 sm:mt-3.5">
+            <div className="mt-3 flex items-center px-0.5 sm:mt-3.5">
               <Link
                 href={ctaHref}
                 className="inline-flex h-10 items-center rounded-full bg-white px-4 text-sm font-medium text-neutral-800 shadow-sm ring-1 ring-black/5 transition-colors hover:bg-neutral-50 sm:h-11 sm:px-5"
               >
-                Hire your AI team
+                Talk to Finna
               </Link>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => scrollCards(-1)}
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-neutral-700 shadow-sm ring-1 ring-black/5 transition-colors hover:bg-neutral-50"
-                  aria-label="Previous agents"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => scrollCards(1)}
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-neutral-700 shadow-sm ring-1 ring-black/5 transition-colors hover:bg-neutral-50"
-                  aria-label="Next agents"
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -334,8 +275,11 @@ export function AiAgentsHero({
                     </div>
 
                     <div className="absolute bottom-3 left-3">
-                      <div className="inline-flex items-center rounded-md bg-white/85 px-2.5 py-1 text-[11px] font-medium text-black shadow-sm">
-                        {a.name}
+                      <div className="rounded-md bg-white/85 px-2.5 py-1 text-black shadow-sm">
+                        <p className="text-[11px] font-medium leading-tight">{a.name}</p>
+                        <p className="text-[10px] leading-tight text-black/55">
+                          {getAgentMarketingContent(a).roleTitle}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -350,10 +294,10 @@ export function AiAgentsHero({
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_0%,hsl(var(--primary)/0.12),transparent_70%)]" />
         <div className="relative mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-4xl">
-            Your AI team to scale your business
+            One AI. Every skill your company needs.
           </h2>
           <p className="mt-4 text-sm text-muted-foreground sm:text-base">
-            Get an AI team to help with legal, finance, sales, marketing, and operations.
+            Talk to Finna. Finance, legal, sales, marketing, and operations run behind the scenes.
           </p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">{ctaButton}</div>
         </div>

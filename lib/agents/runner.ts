@@ -1,4 +1,4 @@
-import { generateTextWithGroqFallback } from "@/lib/agents/groq-model"
+import { extractGeneratedText, generateTextWithGroqFallback } from "@/lib/agents/groq-model"
 import { getAgentConfig } from "@/lib/agents/registry"
 import {
   computeRunway,
@@ -61,7 +61,7 @@ Use plain text only.`,
       },
     })
 
-    return { summary: result.text.trim(), data }
+    return { summary: extractGeneratedText(result), data }
   }
 
   if (input.taskType === "chat_task") {
@@ -93,7 +93,7 @@ Use plain text only.`,
       metadata: { taskType: input.taskType },
     })
 
-    return { summary: result.text.trim() }
+    return { summary: extractGeneratedText(result) }
   }
 
   throw new Error(`Unsupported run task: ${input.taskType} for agent ${input.agentId}`)

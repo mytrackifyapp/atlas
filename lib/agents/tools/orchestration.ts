@@ -48,7 +48,7 @@ export function createOrchestrationTools(
 
   const listMyAgents = tool({
     description:
-      "List the user's installed AI Employees (specialist agents) available for delegation.",
+      "List specialist skills/focus rooms available for this user. Optional — Finna should handle most requests itself.",
     inputSchema: z.object({}),
     execute: async () => {
       const agents = await listInstalledAgentProfiles(ctx.userId)
@@ -64,7 +64,7 @@ export function createOrchestrationTools(
 
   const delegateToAgentTool = tool({
     description:
-      "Delegate a specific task to an installed specialist agent. Use for runway, contracts, outreach, marketing, legal, and other domain work instead of guessing.",
+      "Delegate specialist drafting or a write action Finna cannot do (contracts, outreach send, social graphics). Do not use for live finance/pipeline reads — call those tools yourself.",
     inputSchema: z.object({
       agentId: z
         .string()
@@ -98,6 +98,7 @@ export function createOrchestrationTools(
         workspaceId: workspaceId ?? ctx.workspaceId,
         correlationId,
         conversationId,
+        userRole,
       })
 
       return {

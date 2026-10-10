@@ -87,6 +87,10 @@ function alternatePublicOrigins(): string[] {
     if (alt !== u.origin) {
       extra.add(alt)
     }
+    const bare = u.hostname.replace(/^www\./, "")
+    if (bare && !bare.startsWith("finna.")) {
+      extra.add(`${u.protocol}//finna.${bare}`)
+    }
   } catch {
     /* ignore */
   }
@@ -103,6 +107,7 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    autoSignIn: true,
     requireEmailVerification: false, // Set to true if you want email verification
     sendResetPassword: async ({ user, url, token }, request) => {
       // TODO: Integrate with your email service (Resend, SendGrid, etc.)

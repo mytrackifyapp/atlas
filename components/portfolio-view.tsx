@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { PageHeader } from "@/components/page-header"
+import { KPIStrip } from "@/components/kpi-card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -10,6 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import {
   TrendingUp,
   TrendingDown,
+  DollarSign,
+  Briefcase,
   Building2,
   MapPin,
   Calendar,
@@ -176,63 +179,38 @@ export function PortfolioView() {
         onSuccess={handleCompanyAdded}
       />
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-muted-foreground">Total Portfolio Value</p>
-              <p className="text-3xl font-bold">
-                {analytics
-                  ? `$${(analytics.summary.totalPortfolioValue / 1000000).toFixed(1)}M`
-                  : "$0M"}
-              </p>
-              <div className="flex items-center text-sm text-primary">
-                <TrendingUp className="h-4 w-4 mr-1" />
-                <span>+{analytics?.summary.growthPercentage || "0"}%</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-muted-foreground">Active Companies</p>
-              <p className="text-3xl font-bold">{analytics?.summary.activeCompanies || 0}</p>
-              <p className="text-sm text-muted-foreground">
-                Across {analytics?.summary.uniqueSectors || 0} sector{analytics?.summary.uniqueSectors !== 1 ? "s" : ""}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-muted-foreground">Total Invested</p>
-              <p className="text-3xl font-bold">
-                {analytics ? `$${(analytics.summary.totalInvested / 1000000).toFixed(2)}M` : "$0M"}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Average: ${analytics ? (analytics.summary.averageInvestment / 1000000).toFixed(2) : "0"}M
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-muted-foreground">Unrealized Gains</p>
-              <p className="text-3xl font-bold">
-                {analytics ? `$${(analytics.summary.unrealizedGains / 1000000).toFixed(2)}M` : "$0M"}
-              </p>
-              <div className="flex items-center text-sm text-primary">
-                <TrendingUp className="h-4 w-4 mr-1" />
-                <span>{analytics?.summary.roi || "0"}% ROI</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <KPIStrip
+        items={[
+          {
+            title: "Total Portfolio Value",
+            value: analytics
+              ? `$${(analytics.summary.totalPortfolioValue / 1000000).toFixed(1)}M`
+              : "$0M",
+            change: `+${analytics?.summary.growthPercentage || "0"}%`,
+            trend: "up",
+            icon: DollarSign,
+          },
+          {
+            title: "Active Companies",
+            value: String(analytics?.summary.activeCompanies || 0),
+            change: `Across ${analytics?.summary.uniqueSectors || 0} sector${analytics?.summary.uniqueSectors !== 1 ? "s" : ""}`,
+            icon: Building2,
+          },
+          {
+            title: "Total Invested",
+            value: analytics ? `$${(analytics.summary.totalInvested / 1000000).toFixed(2)}M` : "$0M",
+            change: `Average: $${analytics ? (analytics.summary.averageInvestment / 1000000).toFixed(2) : "0"}M`,
+            icon: Briefcase,
+          },
+          {
+            title: "Unrealized Gains",
+            value: analytics ? `$${(analytics.summary.unrealizedGains / 1000000).toFixed(2)}M` : "$0M",
+            change: `${analytics?.summary.roi || "0"}% ROI`,
+            trend: "up",
+            icon: TrendingUp,
+          },
+        ]}
+      />
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">

@@ -18,8 +18,18 @@ export async function GET(request: NextRequest) {
     )
   }
 
+  const nextPath = request.nextUrl.searchParams.get("next")
+  const safeNext = nextPath?.startsWith("/") && !nextPath.startsWith("//") ? nextPath : "/founder/social"
+
   const state = crypto.randomUUID()
   const cookieStore = await cookies()
+  cookieStore.set("social_linkedin_oauth_next", safeNext, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 600,
+    path: "/",
+  })
   cookieStore.set("social_linkedin_oauth_state", state, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",

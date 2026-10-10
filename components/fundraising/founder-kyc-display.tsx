@@ -1,23 +1,19 @@
 "use client"
 
 import {
-  Facebook,
-  Github,
-  Instagram,
-  Linkedin,
   MapPin,
   Phone,
   User,
-  Youtube,
   type LucideIcon,
 } from "lucide-react"
+
+import { SocialPlatformIcon } from "@/components/founder-social-icon"
 
 import {
   SOCIAL_PLATFORM_CONFIG,
   buildSocialUrl,
   formatSocialLink,
   type FounderSocialLink,
-  type FounderSocialPlatform,
 } from "@/lib/founder/social-platforms"
 import { cn } from "@/lib/utils"
 
@@ -26,26 +22,6 @@ export type FounderKycDisplayData = {
   location: string
   phoneNumber: string
   socialLinks: FounderSocialLink[]
-}
-
-function SocialPlatformIcon({
-  platform,
-  className,
-}: {
-  platform: FounderSocialPlatform
-  className?: string
-}) {
-  const config = SOCIAL_PLATFORM_CONFIG[platform]
-  const Icon = config.Icon
-
-  if (config.customIcon === "x") {
-    return <span className={cn("text-[12px] font-bold leading-none", className)}>𝕏</span>
-  }
-  if (config.customIcon === "tiktok") {
-    return <span className={cn("text-[10px] font-bold leading-none", className)}>TT</span>
-  }
-  if (!Icon) return null
-  return <Icon className={className} />
 }
 
 function DetailRow({

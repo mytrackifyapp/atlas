@@ -15,6 +15,11 @@ export function MarketingFooter() {
             <h4 className="mb-3 text-sm font-semibold text-white">Platform</h4>
             <ul className="space-y-2 text-sm text-white/55">
               <li>
+                <Link href="/capital" className="transition-colors hover:text-white">
+                  Trackify Capital
+                </Link>
+              </li>
+              <li>
                 <Link href="/solutions/investors" className="transition-colors hover:text-white">
                   For Investors
                 </Link>
@@ -22,6 +27,11 @@ export function MarketingFooter() {
               <li>
                 <Link href="/solutions/founders" className="transition-colors hover:text-white">
                   For Founders
+                </Link>
+              </li>
+              <li>
+                <Link href="/incorporate" className="transition-colors hover:text-white">
+                  Register a U.S. company
                 </Link>
               </li>
             </ul>

@@ -1,128 +1,132 @@
 "use client"
 
 import { useRef, useState } from "react"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { AudioLines, FileText, Loader2, Mic, Plus, Sparkles, Trophy, Users } from "lucide-react"
+import {
+  AudioLines,
+  Briefcase,
+  FileText,
+  Loader2,
+  Mic,
+  Plus,
+  Trophy,
+  Wallet,
+} from "lucide-react"
 
 import {
   AGENT_CATEGORIES,
   type AgentCategory,
 } from "@/lib/ai-agents-catalog"
-import { getAgentChatHref, suggestAgentForTask } from "@/lib/agent-task-routing"
 import { QuickFeatureCard } from "@/components/agents/quick-feature-card"
-import { useVoiceInput } from "@/hooks/use-voice-input"
+import { FinnaOrb } from "@/components/finna-orb"
+import { FinnaVoiceBeam } from "@/components/finna-voice-beam"
+import { useFinnaVoice } from "@/hooks/use-finna-voice"
+import { getFinnaIntro, getFinnaTagline } from "@/lib/finna-suggestions"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-type ComposerMode = "ask" | "agents"
-
-const ASK_FEATURES = [
+const FOUNDER_FEATURES = [
   {
-    icon: Sparkles,
-    title: "Learn Trackify",
-    description: "Explain core features",
-    prompt: "What is Trackify and what can it do?",
-  },
-  {
-    icon: Trophy,
-    title: "Optimize Workflow",
-    description: "Prioritize pending items",
-    prompt: "Help me prioritize what to work on next in my workspace",
-  },
-  {
-    icon: FileText,
-    title: "Setup Summary",
-    description: "Summarize onboarding progress",
-    prompt: "Summarize my setup and what I should do next to get started",
-  },
-  {
-    icon: Sparkles,
-    title: "Founder Dashboard",
-    description: "Explore workspace tools",
-    prompt: "What can the founder dashboard do?",
-  },
-] as const
-
-const QUICK_FEATURES = [
-  {
-    agentId: "ai-lawyer",
     title: "Legal",
     features: ["Review NDAs", "Draft contractor agreements", "Flag compliance risks"],
-    superpowers: "12+ Superpowers",
     glow: "from-violet-500/35 via-fuchsia-500/15 to-transparent",
     iconSrc: "/lawyer2.png",
     prompt: "Help me review an NDA and flag any risky clauses for my startup",
   },
   {
-    agentId: "ai-cfo",
     title: "Finance",
-    features: ["Raise funds", "Model runway & burn", "Draft investor updates"],
-    superpowers: "10+ Superpowers",
+    features: ["Analyze runway", "Explain burn", "Prep investor updates"],
     glow: "from-emerald-500/35 via-green-500/15 to-transparent",
     iconSrc: "/cfo.png",
-    prompt: "Help me raise funds and prepare for my next investor conversation",
+    prompt: "Analyze my runway and tell me what changed in expenses",
   },
   {
-    agentId: "ai-sales-rep",
     title: "Sales",
-    features: ["Write cold outreach", "Prioritize pipeline deals", "Handle objections"],
-    superpowers: "8+ Superpowers",
+    features: ["Write cold outreach", "Prioritize pipeline", "Handle objections"],
     glow: "from-sky-500/35 via-blue-500/15 to-transparent",
     iconSrc: "/sales.png",
-    prompt: "Write a personalized cold outreach email for a B2B prospect in my pipeline",
+    prompt: "What's in my sales pipeline and who needs a follow-up?",
   },
   {
-    agentId: "ai-marketer",
     title: "Marketing",
-    features: ["Design TikTok posts", "Schedule IG content", "Plan launch campaigns"],
-    superpowers: "9+ Superpowers",
+    features: ["Draft social posts", "Plan launch campaigns", "Sharpen positioning"],
     glow: "from-rose-500/35 via-pink-500/15 to-transparent",
-    iconSrc: "/marketer.png",
-    prompt: "Design and schedule a TikTok post and Instagram post for this week's launch",
+    iconSrc: "/ops.png",
+    prompt: "Help me plan this week's social content and launch messaging",
   },
   {
-    agentId: "ai-ops-manager",
     title: "Operations",
-    features: ["Build weekly SOPs", "Compare vendor quotes", "Plan team priorities"],
-    superpowers: "7+ Superpowers",
+    features: ["Build weekly SOPs", "Set team priorities", "Unblock vendors"],
     glow: "from-amber-500/35 via-orange-500/15 to-transparent",
-    iconSrc: "/ops.png",
+    iconSrc: "/marketer.png",
     prompt: "Help me plan this week's team priorities and draft a simple SOP",
   },
   {
-    agentId: "ai-hr",
-    title: "HR",
+    title: "People",
     features: ["Write job descriptions", "Prep interview kits", "Onboard new hires"],
-    superpowers: "6+ Superpowers",
     glow: "from-cyan-500/35 via-teal-500/15 to-transparent",
     iconSrc: "/lawyer.png",
     prompt: "Write a job description and interview kit for my next hire",
   },
 ] as const
 
+const INVESTOR_FEATURES = [
+  {
+    title: "Deal flow",
+    features: ["Summarize the pipeline", "Flag stale deals", "Prep next meetings"],
+    glow: "from-sky-500/35 via-blue-500/15 to-transparent",
+    icon: Briefcase,
+    prompt: "Summarize my deal flow and which deals need attention",
+  },
+  {
+    title: "Finance",
+    features: ["Cash position", "Recent spend", "Workspace balances"],
+    glow: "from-emerald-500/35 via-green-500/15 to-transparent",
+    icon: Wallet,
+    prompt: "What's my cash position and what changed recently?",
+  },
+  {
+    title: "Diligence",
+    features: ["Pull workspace notes", "Issue-spot a startup", "Prep IC questions"],
+    glow: "from-violet-500/35 via-fuchsia-500/15 to-transparent",
+    icon: FileText,
+    prompt: "Help me diligence the next startup in my pipeline using my notes",
+  },
+  {
+    title: "Portfolio",
+    features: ["Track updates", "Compare performance", "Plan follow-ons"],
+    glow: "from-amber-500/35 via-orange-500/15 to-transparent",
+    icon: Trophy,
+    prompt: "How do I use the portfolio dashboard to see what needs attention?",
+  },
+] as const
+
 type Props = {
-  agentBaseHref: string
   activeCategory: AgentCategory | "All"
   onCategoryChange: (category: AgentCategory | "All") => void
-  installedSet: Set<string>
+  viewerRole?: "founder" | "investor" | null
   onSearch?: (query: string) => void
+  onAsk: (prompt: string) => void
 }
 
 export function AiAgentsHubHero({
-  agentBaseHref,
   activeCategory,
   onCategoryChange,
-  installedSet,
+  viewerRole,
   onSearch,
+  onAsk,
 }: Props) {
-  const router = useRouter()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const [mode, setMode] = useState<ComposerMode>("agents")
   const [input, setInput] = useState("")
   const [submitting, setSubmitting] = useState(false)
+  const isInvestor = viewerRole === "investor"
+  const tagline = getFinnaTagline(viewerRole ?? "founder")
+  const intro = getFinnaIntro(viewerRole ?? "founder")
+  const features = isInvestor ? INVESTOR_FEATURES : FOUNDER_FEATURES
+  const categories = (
+    isInvestor ? (["All", "Legal", "Finance", "Operations"] as const) : (["All", ...AGENT_CATEGORIES] as const)
+  )
 
-  const voiceInput = useVoiceInput({
+  const voice = useFinnaVoice({
     onFinalTranscript: (text) => {
       setInput((prev) => (prev ? `${prev.trim()} ${text}` : text))
     },
@@ -135,19 +139,16 @@ export function AiAgentsHubHero({
     el.style.height = `${Math.min(el.scrollHeight, 160)}px`
   }
 
+  function goToFinna(prompt: string) {
+    onAsk(prompt)
+  }
+
   async function handleSubmit() {
     const text = input.trim()
     if (!text || submitting) return
-
     setSubmitting(true)
     try {
-      if (mode === "ask") {
-        router.push(`/finna?q=${encodeURIComponent(text)}`)
-        return
-      }
-
-      const agentId = suggestAgentForTask(text, installedSet)
-      router.push(getAgentChatHref(agentBaseHref, agentId, text))
+      goToFinna(text)
     } finally {
       setSubmitting(false)
     }
@@ -175,59 +176,29 @@ export function AiAgentsHubHero({
       <div className="relative mx-auto max-w-3xl">
         <div className="flex flex-col items-center text-center">
           <div className="flex items-center gap-2.5">
-            <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-xl">
-              <Image
-                src="/orb.jpeg"
-                alt="Super Team"
-                fill
-                className="object-cover"
-                sizes="36px"
-                priority
-              />
+            <FinnaOrb thinking={submitting} size={64} />
+            <div className="text-left">
+              <h2 className="text-xl font-semibold tracking-tight text-neutral-950 dark:text-white sm:text-2xl">
+                Finna
+              </h2>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                {tagline}
+              </p>
             </div>
-            <h2 className="text-xl font-semibold tracking-tight text-neutral-950 dark:text-white sm:text-2xl">
-              Super Team
-            </h2>
           </div>
 
-          <div className="mt-8 w-full">
-            <div className="mb-3 hidden justify-center">
-              <div
-                className="inline-flex rounded-full border border-neutral-200/80 bg-white/70 p-0.5 dark:border-neutral-800 dark:bg-neutral-900/70"
-                role="tablist"
-                aria-label="Composer mode"
-              >
-                {(
-                  [
-                    { id: "ask" as const, label: "Ask", icon: Sparkles },
-                    { id: "agents" as const, label: "Agents", icon: Users },
-                  ] as const
-                ).map(({ id, label, icon: Icon }) => {
-                  const active = mode === id
-                  return (
-                    <button
-                      key={id}
-                      type="button"
-                      role="tab"
-                      aria-selected={active}
-                      onClick={() => setMode(id)}
-                      className={cn(
-                        "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors sm:px-3.5 sm:text-sm",
-                        active
-                          ? "bg-neutral-950 text-white dark:bg-white dark:text-neutral-950"
-                          : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200",
-                      )}
-                    >
-                      <Icon className="h-3.5 w-3.5" />
-                      {label}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
+          <p className="mt-4 max-w-lg text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">
+            {intro}
+          </p>
 
-            <div className="rounded-2xl bg-gradient-to-br from-[#4483f2]/25 via-[#f4f4f5]/80 to-rose-300/20 p-[1px] dark:from-[#4483f2]/45 dark:via-neutral-800/40 dark:to-rose-500/25">
-              <div className="rounded-2xl border border-neutral-200/80 bg-white/90 px-4 pb-3 pt-4 backdrop-blur-sm dark:border-neutral-800/80 dark:bg-neutral-900/90 sm:px-5 sm:pb-4 sm:pt-5">
+          <div className="mt-8 w-full">
+            <FinnaVoiceBeam
+              stream={voice.listening ? voice.stream : null}
+              processing={submitting}
+              theme="light"
+            >
+              <div className="rounded-2xl bg-gradient-to-br from-[#4483f2]/25 via-[#f4f4f5]/80 to-rose-300/20 p-[1px] dark:from-[#4483f2]/45 dark:via-neutral-800/40 dark:to-rose-500/25">
+                <div className="rounded-2xl border border-neutral-200/80 bg-white/90 px-4 pb-3 pt-4 backdrop-blur-sm dark:border-neutral-800/80 dark:bg-neutral-900/90 sm:px-5 sm:pb-4 sm:pt-5">
                 <textarea
                   ref={textareaRef}
                   value={input}
@@ -238,9 +209,11 @@ export function AiAgentsHubHero({
                   onKeyDown={handleKeyDown}
                   rows={2}
                   placeholder={
-                    mode === "ask"
-                      ? "Ask Finna anything about Trackify, your workspace, or next steps…"
-                      : "Describe tasks or workflows that need automating…"
+                    voice.listening
+                      ? "Listening…"
+                      : isInvestor
+                        ? "Ask Finna about deal flow, cash, or a startup in your pipeline…"
+                        : "Ask Finna about runway, fundraising, sales, or anything in the business…"
                   }
                   className="min-h-[3.5rem] w-full resize-none bg-transparent text-left text-sm leading-relaxed text-neutral-900 placeholder:text-neutral-400 focus:outline-none dark:text-white dark:placeholder:text-neutral-500 sm:text-base"
                 />
@@ -255,21 +228,17 @@ export function AiAgentsHubHero({
                   </button>
 
                   <div className="flex items-center gap-2">
-                    {voiceInput.supported ? (
+                    {voice.supported ? (
                       <button
                         type="button"
-                        onClick={() =>
-                          voiceInput.state === "listening"
-                            ? voiceInput.stopListening()
-                            : voiceInput.startListening()
-                        }
+                        onClick={() => void voice.toggle()}
                         className={cn(
                           "flex h-9 w-9 items-center justify-center rounded-full border transition-colors",
-                          voiceInput.state === "listening"
+                          voice.listening
                             ? "border-red-500/50 bg-red-500/10 text-red-500 dark:text-red-400"
                             : "border-neutral-200 bg-neutral-50 text-neutral-600 hover:border-neutral-300 hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-700 dark:bg-neutral-800/80 dark:text-neutral-300 dark:hover:border-neutral-600 dark:hover:text-white",
                         )}
-                        aria-label="Voice input"
+                        aria-label={voice.listening ? "Stop listening" : "Voice input"}
                       >
                         <Mic className="h-4 w-4" />
                       </button>
@@ -285,83 +254,66 @@ export function AiAgentsHubHero({
                       {submitting ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
                       ) : (
-                        <AudioLines className="h-4 w-4" />
+                        <AudioLines className="h-4 w-4" strokeWidth={2.25} />
                       )}
                     </Button>
                   </div>
                 </div>
 
-                {voiceInput.error ? (
-                  <p className="mt-2 text-xs text-destructive">{voiceInput.error}</p>
+                {voice.error ? (
+                  <p className="mt-2 text-xs text-destructive">{voice.error}</p>
                 ) : null}
+                </div>
               </div>
-            </div>
+            </FinnaVoiceBeam>
           </div>
         </div>
       </div>
 
       <div className="relative mt-8 w-full sm:mt-10">
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
-          {mode === "ask"
-            ? ASK_FEATURES.map(({ icon: Icon, title, description, prompt }) => (
-                <button
-                  key={title}
-                  type="button"
-                  onClick={() => router.push(`/finna?q=${encodeURIComponent(prompt)}`)}
-                  className="flex min-h-[9.5rem] w-full flex-col rounded-xl border border-neutral-200/70 bg-white/70 px-3 py-3 text-left backdrop-blur-sm transition-colors hover:border-neutral-300/80 hover:bg-white/90 dark:border-neutral-800/70 dark:bg-neutral-900/50 dark:hover:border-neutral-700 dark:hover:bg-neutral-900/70"
-                >
-                  <Icon className="h-4 w-4 text-neutral-500 dark:text-neutral-400" strokeWidth={2} />
-                  <span className="mt-2 text-sm font-medium text-neutral-900 dark:text-white">
-                    {title}
-                  </span>
-                  <span className="mt-1 line-clamp-2 text-[11px] leading-snug text-neutral-500 dark:text-neutral-400">
-                    {description}
-                  </span>
-                </button>
-              ))
-            : QUICK_FEATURES.map((feature) => (
-                <QuickFeatureCard
-                  key={feature.agentId}
-                  title={feature.title}
-                  features={feature.features}
-                  superpowers={feature.superpowers}
-                  glow={feature.glow}
-                  iconSrc={feature.iconSrc}
-                  onClick={() =>
-                    router.push(getAgentChatHref(agentBaseHref, feature.agentId, feature.prompt))
-                  }
-                />
-              ))}
+        <div
+          className={cn(
+            "grid gap-2.5",
+            isInvestor ? "grid-cols-2 lg:grid-cols-4" : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-6",
+          )}
+        >
+          {features.map((feature) => (
+            <QuickFeatureCard
+              key={feature.title}
+              title={feature.title}
+              features={feature.features}
+              glow={feature.glow}
+              iconSrc={"iconSrc" in feature ? feature.iconSrc : undefined}
+              icon={"icon" in feature ? feature.icon : undefined}
+              onClick={() => goToFinna(feature.prompt)}
+            />
+          ))}
         </div>
       </div>
 
       <div className="relative mx-auto max-w-3xl">
-        <div className="flex flex-col items-center text-center">
-          {mode === "agents" ? (
-            <div className="mt-10 flex w-full gap-2 overflow-x-auto pb-1 sm:mt-12 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:justify-center">
-              {(["All", ...AGENT_CATEGORIES] as const).map((category) => {
-                const active = activeCategory === category
-                return (
-                  <button
-                    key={category}
-                    type="button"
-                    onClick={() => {
-                      onCategoryChange(category)
-                      onSearch?.("")
-                    }}
-                    className={cn(
-                      "shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                      active
-                        ? "bg-neutral-950 text-white dark:bg-white dark:text-neutral-950"
-                        : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900 dark:bg-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-200",
-                    )}
-                  >
-                    {category}
-                  </button>
-                )
-              })}
-            </div>
-          ) : null}
+        <div className="mt-10 flex w-full gap-2 overflow-x-auto pb-1 sm:mt-12 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:justify-center">
+          {categories.map((category) => {
+            const active = activeCategory === category
+            return (
+              <button
+                key={category}
+                type="button"
+                onClick={() => {
+                  onCategoryChange(category)
+                  onSearch?.("")
+                }}
+                className={cn(
+                  "shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                  active
+                    ? "bg-neutral-950 text-white dark:bg-white dark:text-neutral-950"
+                    : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900 dark:bg-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-200",
+                )}
+              >
+                {category}
+              </button>
+            )
+          })}
         </div>
       </div>
     </section>

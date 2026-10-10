@@ -6,6 +6,7 @@ import { Plus, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { SocialPlatformIcon } from "@/components/founder-social-icon"
 import {
   FOUNDER_SOCIAL_PLATFORMS,
   SOCIAL_PLATFORM_CONFIG,
@@ -19,36 +20,6 @@ import { cn } from "@/lib/utils"
 type Props = {
   value: FounderSocialLink[]
   onChange: (links: FounderSocialLink[]) => void
-}
-
-function SocialPlatformIcon({
-  platform,
-  className,
-}: {
-  platform: FounderSocialPlatform
-  className?: string
-}) {
-  const config = SOCIAL_PLATFORM_CONFIG[platform]
-  const Icon = config.Icon
-
-  if (config.customIcon === "x") {
-    return (
-      <span className={cn("text-[13px] font-bold leading-none", className)} aria-hidden>
-        𝕏
-      </span>
-    )
-  }
-
-  if (config.customIcon === "tiktok") {
-    return (
-      <span className={cn("text-[11px] font-bold leading-none", className)} aria-hidden>
-        TT
-      </span>
-    )
-  }
-
-  if (!Icon) return null
-  return <Icon className={className} />
 }
 
 function defaultDraftPlatform(usedPlatforms: Set<FounderSocialPlatform>): FounderSocialPlatform {

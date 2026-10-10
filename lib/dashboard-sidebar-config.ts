@@ -3,34 +3,30 @@ import {
   BarChart3,
   Brain,
   Briefcase,
-  Building2,
+  BuildingComplex,
   Home,
+  ImagePlay,
+  Landmark,
   LayoutPanelTop,
   Lightbulb,
-  Megaphone,
   Menu,
-  MessageSquare,
+  MessagesCircle,
   Rocket,
   Shield,
+  Sparkles,
   Target,
+  UserRoundGroup,
   Users,
   Wallet,
 } from "lucide-react"
 
-import { AI_AGENTS_CATALOG } from "@/lib/ai-agents-catalog"
 import type { UserRole } from "@/lib/role-config"
 
 export type SidebarAction = {
   name: string
   href: string
   icon: LucideIcon
-}
-
-export type SidebarPinnedAgent = {
-  id: string
-  name: string
-  href: string
-  imageSrc?: string
+  children?: SidebarAction[]
 }
 
 export type SidebarConfig = {
@@ -39,44 +35,42 @@ export type SidebarConfig = {
   quickActions: SidebarAction[]
   manage: SidebarAction[]
   resources: SidebarAction[]
-  pinnedAgents: SidebarPinnedAgent[]
   agentsHubHref: string
+  finnaHref: string
 }
 
 const FOUNDER_HOME = "/founder"
 const INVESTOR_HOME = "/dashboard"
-
-function pinnedAgents(base: string): SidebarPinnedAgent[] {
-  return AI_AGENTS_CATALOG.filter((a) => a.imageSrc)
-    .slice(0, 4)
-    .map((a) => ({
-      id: a.id,
-      name: a.name,
-      href: `${base}/ai/${a.id}`,
-      imageSrc: a.imageSrc,
-    }))
-}
+const FINNA_HREF = "/finna"
 
 export function getSidebarConfig(role: UserRole): SidebarConfig {
   if (role === "founder") {
     return {
       home: { name: "Home", href: FOUNDER_HOME, icon: Home },
-      featured: { name: "Finance", href: "/founder/finance", icon: Wallet },
+      featured: {
+        name: "Finance",
+        href: "/founder/finance",
+        icon: Wallet,
+        children: [
+          { name: "US bank account", href: "/founder/finance/us-account", icon: Landmark },
+        ],
+      },
       quickActions: [
         { name: "Fundraising", href: "/founder/fundraising", icon: Rocket },
         { name: "Sales", href: "/founder/sales", icon: Target },
-        { name: "Social", href: "/founder/social", icon: Megaphone },
-        { name: "Updates", href: "/founder/updates", icon: MessageSquare },
+        { name: "Social", href: "/founder/social", icon: ImagePlay },
+        { name: "Lounge", href: "/founder/updates", icon: MessagesCircle },
       ],
       manage: [
         { name: "Workspace", href: "/founder/workspace", icon: LayoutPanelTop },
-        { name: "Company Structure", href: "/founder/structure", icon: Building2 },
+        { name: "Company Structure", href: "/founder/structure", icon: UserRoundGroup },
+        { name: "U.S. company", href: "/founder/incorporate", icon: BuildingComplex },
         { name: "Analytics", href: "/founder/analytics", icon: BarChart3 },
         { name: "Documents", href: "/founder/documents", icon: Briefcase },
       ],
       resources: [{ name: "Accelerator", href: "/accelerator", icon: Users }],
       agentsHubHref: "/founder/ai",
-      pinnedAgents: pinnedAgents("/founder"),
+      finnaHref: FINNA_HREF,
     }
   }
 
@@ -85,14 +79,22 @@ export function getSidebarConfig(role: UserRole): SidebarConfig {
     featured: { name: "Portfolio", href: "/portfolio", icon: Briefcase },
     quickActions: [
       { name: "Deal Flow", href: "/deal-flow", icon: Lightbulb },
-      { name: "Finance", href: "/dashboard/finance", icon: Wallet },
+      {
+        name: "Finance",
+        href: "/dashboard/finance",
+        icon: Wallet,
+        children: [
+          { name: "US bank account", href: "/dashboard/finance/us-account", icon: Landmark },
+        ],
+      },
       { name: "Workspace", href: "/workspace", icon: LayoutPanelTop },
+      { name: "Lounge", href: "/dashboard/updates", icon: MessagesCircle },
       { name: "Reports", href: "/reports", icon: BarChart3 },
     ],
     manage: [],
     resources: [{ name: "Accelerator", href: "/accelerator", icon: Users }],
     agentsHubHref: "/dashboard/ai",
-    pinnedAgents: pinnedAgents("/dashboard"),
+    finnaHref: FINNA_HREF,
   }
 }
 
@@ -102,14 +104,23 @@ export const adminSidebarItem: SidebarAction = {
   icon: Shield,
 }
 
-export const allAgentsAction = (href: string): SidebarAction => ({
-  name: "All Agents",
+export const finnaSidebarAction = (href = "/finna"): SidebarAction => ({
+  name: "Finna",
+  href,
+  icon: Sparkles,
+})
+
+export const skillsSidebarAction = (href: string): SidebarAction => ({
+  name: "Skills",
   href,
   icon: Brain,
 })
 
-export function isNavActive(pathname: string, href: string) {
-  if (href === "/founder" || href === "/dashboard") {
+/** @deprecated Use finnaSidebarAction / skillsSidebarAction */
+export const allAgentsAction = (href: string): SidebarAction => skillsSidebarAction(href)
+
+export function isNavActive(pathname: string, href: string, exact = false) {
+  if (exact || href === "/founder" || href === "/dashboard" || href === "/founder/finance" || href === "/dashboard/finance") {
     return pathname === href
   }
   return pathname === href || pathname.startsWith(`${href}/`)
@@ -132,10 +143,10 @@ export function getMobileNavLayout(role: UserRole): MobileNavLayout {
         { kind: "link", name: "Home", href: FOUNDER_HOME, icon: Home },
         { kind: "link", name: "Finance", href: "/founder/finance", icon: Wallet },
       ],
-      center: { kind: "link", name: "AI", href: "/founder/ai", icon: Brain },
+      center: { kind: "menu", name: "More", icon: Menu },
       right: [
+        { kind: "link", name: "AI", href: "/finna", icon: Sparkles },
         { kind: "link", name: "Sales", href: "/founder/sales", icon: Target },
-        { kind: "menu", name: "More", icon: Menu },
       ],
     }
   }
@@ -145,10 +156,10 @@ export function getMobileNavLayout(role: UserRole): MobileNavLayout {
       { kind: "link", name: "Home", href: INVESTOR_HOME, icon: Home },
       { kind: "link", name: "Portfolio", href: "/portfolio", icon: Briefcase },
     ],
-    center: { kind: "link", name: "AI", href: "/dashboard/ai", icon: Brain },
+    center: { kind: "menu", name: "More", icon: Menu },
     right: [
+      { kind: "link", name: "AI", href: "/finna", icon: Sparkles },
       { kind: "link", name: "Deals", href: "/deal-flow", icon: Lightbulb },
-      { kind: "menu", name: "More", icon: Menu },
     ],
   }
 }

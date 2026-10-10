@@ -162,7 +162,7 @@ export function AgentApprovalsInbox({ agentBaseHref }: Props) {
           </p>
         </div>
         <Button variant="outline" asChild>
-          <Link href={agentBaseHref}>← Back to AI Agents</Link>
+          <Link href={agentBaseHref}>← Back to skills</Link>
         </Button>
       </div>
 

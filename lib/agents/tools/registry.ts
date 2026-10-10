@@ -1,3 +1,4 @@
+import { getFinnaToolset } from "@/lib/agents/skills"
 import { createFinanceTools, type FinanceToolName } from "@/lib/agents/tools/finance"
 import {
   wrapDomainToolsForAgent,
@@ -76,8 +77,10 @@ export function getToolsForAgent(
   }
 
   const tools: Record<string, unknown> = {}
+  const finnaTools =
+    toolCtx.agentId === "finna" ? getFinnaToolset(toolCtx.userRole) : null
 
-  const financeToolIds = getFinanceToolIdsForAgent(toolCtx.agentId)
+  const financeToolIds = finnaTools?.financeTools ?? getFinanceToolIdsForAgent(toolCtx.agentId)
   if (financeToolIds.length > 0) {
     const financeTools = createFinanceTools(toolCtx, correlationId)
     for (const id of financeToolIds) {
@@ -86,7 +89,7 @@ export function getToolsForAgent(
     }
   }
 
-  const domainToolIds = getDomainToolIdsForAgent(toolCtx.agentId)
+  const domainToolIds = finnaTools?.domainTools ?? getDomainToolIdsForAgent(toolCtx.agentId)
   if (domainToolIds.length > 0) {
     Object.assign(
       tools,
@@ -94,7 +97,7 @@ export function getToolsForAgent(
     )
   }
 
-  const salesToolIds = getSalesToolIdsForAgent(toolCtx.agentId)
+  const salesToolIds = finnaTools?.salesTools ?? getSalesToolIdsForAgent(toolCtx.agentId)
   if (salesToolIds.length > 0) {
     Object.assign(
       tools,
@@ -102,7 +105,10 @@ export function getToolsForAgent(
     )
   }
 
-  const socialToolIds = getSocialToolIdsForAgent(toolCtx.agentId)
+  const socialToolIds =
+    toolCtx.agentId === "finna"
+      ? []
+      : getSocialToolIdsForAgent(toolCtx.agentId)
   if (socialToolIds.length > 0) {
     Object.assign(
       tools,

@@ -373,7 +373,7 @@ function FoundersStartups() {
         </p>
       </div>
       <div className="relative mt-8 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] sm:mt-10">
-        <Marquee pauseOnHover className="[--duration:40s] [--gap:3.5rem] p-0 sm:[--gap:4.5rem]">
+        <Marquee pauseOnHover className="[--duration:22s] [--gap:3.5rem] p-0 sm:[--gap:4.5rem]">
           {FOUNDER_STARTUPS.map((startup) => (
             <p
               key={startup.name}

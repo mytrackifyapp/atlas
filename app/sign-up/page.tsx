@@ -46,13 +46,28 @@ function SignUpForm() {
         email,
         password,
         name,
+        callbackURL: afterSignUp,
       })
 
       if (result.error) {
         setError(result.error.message || "Failed to sign up")
-      } else {
-        window.location.href = afterSignUp
+        return
       }
+
+      const session = await authClient.getSession()
+      if (!session.data?.user) {
+        const signedIn = await authClient.signIn.email({
+          email,
+          password,
+          callbackURL: afterSignUp,
+        })
+        if (signedIn.error) {
+          setError(signedIn.error.message || "Account created. Sign in to continue.")
+          return
+        }
+      }
+
+      window.location.href = afterSignUp
     } catch {
       setError("An unexpected error occurred")
     } finally {

@@ -3,26 +3,30 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import { Send, Loader2, ArrowLeft } from "lucide-react"
+import { ArrowLeft, AudioLines, Loader2 } from "lucide-react"
 import { ChatMessageText } from "@/components/chat-message-text"
+import { FinnaOrb } from "@/components/finna-orb"
+import { FinnaThinkingPill } from "@/components/finna-thinking-pill"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-
-const FINNA_ICON = "/icons/finna.PNG"
-
-const suggestedActions = [
-  "What is Trackify?",
-  "What can the founder dashboard do?",
-  "How does investor deal flow work?",
-  "Where is finance management?",
-  "How do I get started?",
-  "What are the pricing plans?",
-]
+import { useSession } from "@/lib/auth-client"
+import {
+  getFinnaIntro,
+  getFinnaSuggestions,
+  getFinnaTagline,
+} from "@/lib/finna-suggestions"
 
 type ChatMessage = { role: "user" | "assistant"; content: string }
 
 export function FinnaChatFullPage() {
   const searchParams = useSearchParams()
+  const { data: session } = useSession()
+  const sessionRole = (session?.user as { role?: string | null } | undefined)?.role ?? null
+  const [viewRole, setViewRole] = useState<string | null>(sessionRole)
+  const role = viewRole ?? sessionRole
+  const suggestions = getFinnaSuggestions(role)
+  const tagline = getFinnaTagline(role)
+  const intro = getFinnaIntro(role)
   const [message, setMessage] = useState("")
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -33,6 +37,17 @@ export function FinnaChatFullPage() {
   useEffect(() => {
     messagesRef.current = messages
   }, [messages])
+
+  useEffect(() => {
+    const stored = window.sessionStorage.getItem("trackify-view-role")
+    if (stored === "founder" || stored === "investor") {
+      setViewRole(stored)
+      return
+    }
+    if (sessionRole === "founder" || sessionRole === "investor") {
+      setViewRole(sessionRole)
+    }
+  }, [sessionRole])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -50,7 +65,7 @@ export function FinnaChatFullPage() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: payload }),
+        body: JSON.stringify({ messages: payload, viewerRole: role }),
       })
       const data = await res.json()
 
@@ -74,7 +89,7 @@ export function FinnaChatFullPage() {
     } finally {
       setIsLoading(false)
     }
-  }, [])
+  }, [role])
 
   useEffect(() => {
     const q = searchParams.get("q")?.trim()
@@ -103,13 +118,11 @@ export function FinnaChatFullPage() {
               <ArrowLeft className="h-5 w-5" />
             </Link>
           </Button>
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 overflow-hidden p-1.5">
-              <img src={FINNA_ICON} alt="Finna" className="h-full w-full object-contain" />
-            </div>
+          <div className="flex items-center gap-2 min-w-0">
+            <FinnaOrb thinking={isLoading} size={20} />
             <div className="min-w-0">
               <h1 className="text-lg font-semibold truncate">Finna AI</h1>
-              <p className="text-xs text-muted-foreground">Your Trackify assistant</p>
+              <p className="text-xs text-muted-foreground">{tagline}</p>
             </div>
           </div>
         </div>
@@ -120,16 +133,16 @@ export function FinnaChatFullPage() {
         <div className="mx-auto max-w-3xl space-y-4">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-              <div className="h-20 w-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 overflow-hidden p-2.5">
-                <img src={FINNA_ICON} alt="Finna" className="h-full w-full object-contain" />
+              <div className="mb-6">
+                <FinnaOrb size={64} />
               </div>
               <p className="text-base font-medium text-foreground mb-2">Hi, I'm Finna</p>
               <p className="text-sm text-muted-foreground mb-8 max-w-md">
-                Ask me about Trackify, your dashboard, fundraising, or the African startup ecosystem.
+                {intro}
               </p>
               <p className="text-xs text-muted-foreground mb-4">Try asking:</p>
               <div className="flex flex-wrap gap-2 justify-center">
-                {suggestedActions.slice(0, 4).map((action) => (
+                {suggestions.slice(0, 4).map((action) => (
                   <button
                     key={action}
                     type="button"
@@ -147,11 +160,11 @@ export function FinnaChatFullPage() {
               {messages.map((msg, i) => (
                 <div
                   key={i}
-                  className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                  className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                 >
                   {msg.role === "assistant" && (
-                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5 overflow-hidden p-1">
-                      <img src={FINNA_ICON} alt="" className="h-full w-full object-contain" />
+                    <div className="mt-1 shrink-0">
+                      <FinnaOrb size={20} />
                     </div>
                   )}
                   <div
@@ -170,14 +183,8 @@ export function FinnaChatFullPage() {
                 </div>
               ))}
               {isLoading && (
-                <div className="flex gap-3 justify-start">
-                  <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                    <Loader2 className="h-5 w-5 text-primary animate-spin" />
-                  </div>
-                  <div className="rounded-2xl rounded-bl-md px-4 py-2.5 text-sm bg-muted border border-border/40 flex items-center gap-2">
-                    <span className="inline-block h-2 w-2 rounded-full bg-primary animate-pulse" />
-                    <span className="text-muted-foreground">Thinking…</span>
-                  </div>
+                <div className="flex justify-start">
+                  <FinnaThinkingPill />
                 </div>
               )}
               <div ref={messagesEndRef} />
@@ -212,7 +219,7 @@ export function FinnaChatFullPage() {
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              <Send className="h-4 w-4" />
+              <AudioLines className="h-4 w-4" strokeWidth={2.25} />
             )}
           </Button>
         </div>

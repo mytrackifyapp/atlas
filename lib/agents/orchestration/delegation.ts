@@ -1,10 +1,16 @@
-import { generateText, stepCountIs } from "ai"
+import { stepCountIs, type ToolSet } from "ai"
 
-import { generateTextWithGroqFallback } from "@/lib/agents/groq-model"
+import {
+  buildOperatingContextPack,
+  formatContextPackForPrompt,
+} from "@/lib/agents/context-pack"
+import { formatFoundationForPrompt } from "@/lib/agents/foundation-prompt"
+import { extractGeneratedText, generateTextWithGroqFallback } from "@/lib/agents/groq-model"
 import { getAgentConfig } from "@/lib/agents/registry"
 import { writeAuditLog } from "@/lib/agents/services/audit"
 import { publishAgentEvent } from "@/lib/agents/services/events"
-import { isAgentInstalled } from "@/lib/agents/services/installed"
+import { getAgentFoundation } from "@/lib/agents/services/foundation"
+import { ensureAgentInstalled } from "@/lib/agents/services/installed"
 import { agentHasTools, getToolsForAgent } from "@/lib/agents/tools/registry"
 import { isDelegatableAgent } from "@/lib/agents/orchestration/routing"
 
@@ -16,6 +22,7 @@ export type DelegationInput = {
   workspaceId?: string
   correlationId?: string
   conversationId?: string
+  userRole?: string | null
 }
 
 export type DelegationResult = {
@@ -33,18 +40,24 @@ export async function delegateToAgent(
     throw new Error("Missing GROQ_API_KEY")
   }
 
-  const { ownerId, fromAgentId, targetAgentId, task, workspaceId, correlationId, conversationId } =
-    input
+  const {
+    ownerId,
+    fromAgentId,
+    targetAgentId,
+    task,
+    workspaceId,
+    correlationId,
+    conversationId,
+    userRole,
+  } = input
 
   if (!isDelegatableAgent(targetAgentId)) {
     throw new Error(`Agent "${targetAgentId}" cannot receive delegated tasks`)
   }
 
-  const installed = await isAgentInstalled(ownerId, targetAgentId)
-  if (!installed) {
-    throw new Error(
-      `Agent "${targetAgentId}" is not installed. Install it from AI Employees first.`
-    )
+  const provisioned = await ensureAgentInstalled(ownerId, targetAgentId)
+  if (!provisioned) {
+    throw new Error(`Agent "${targetAgentId}" is not available`)
   }
 
   await publishAgentEvent({
@@ -75,18 +88,31 @@ export async function delegateToAgent(
     userId: ownerId,
     agentId: targetAgentId,
     workspaceId,
+    userRole,
   }
-  const tools = getToolsForAgent(toolCtx, correlationId)
+  const tools = getToolsForAgent(toolCtx, correlationId, { userRole })
   const hasTools = agentHasTools(targetAgentId) && Object.keys(tools).length > 0
+
+  let system = config.systemPrompt
+  try {
+    const [pack, foundation] = await Promise.all([
+      buildOperatingContextPack({ ownerId, userRole, workspaceId }),
+      getAgentFoundation(ownerId, targetAgentId),
+    ])
+    system += formatContextPackForPrompt(pack)
+    system += formatFoundationForPrompt(targetAgentId, foundation)
+  } catch (error) {
+    console.error("Delegation context pack failed:", error)
+  }
 
   try {
     const result = await generateTextWithGroqFallback({
       preferredModel: config.model,
-      system: config.systemPrompt,
+      system,
       messages: [{ role: "user", content: task.trim() }],
       maxOutputTokens: config.maxTokens,
       temperature: config.temperature,
-      tools: hasTools ? tools : undefined,
+      tools: hasTools ? (tools as ToolSet) : undefined,
       stopWhen: hasTools ? stepCountIs(5) : undefined,
     })
 
@@ -102,7 +128,7 @@ export async function delegateToAgent(
       conversationId,
       payload: {
         taskPreview: task.slice(0, 200),
-        responsePreview: result.text.slice(0, 300),
+        responsePreview: extractGeneratedText(result).slice(0, 300),
         toolCallCount,
       },
     })
@@ -133,7 +159,7 @@ export async function delegateToAgent(
     return {
       agentId: targetAgentId,
       agentName,
-      response: result.text.trim(),
+      response: extractGeneratedText(result),
       delegated: true,
       toolCallCount,
     }

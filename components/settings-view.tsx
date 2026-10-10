@@ -20,6 +20,7 @@ import { PageHeader } from "@/components/page-header"
 import { AccountAvatarUpload } from "@/components/account-avatar-upload"
 import { FounderVerificationSettings } from "@/components/founder-verification-settings"
 import { SettingsWalletSection } from "@/components/settings-wallet-section"
+import { ManageBillingButton } from "@/components/checkout/manage-billing-button"
 import { VerifiedBadge } from "@/components/verified-badge"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -42,6 +43,8 @@ type CreditSnapshot = {
 type Subscription = {
   planId: AiCreditPlanId
   status: string
+  stripeCustomerId?: string
+  provider?: string
 }
 
 type UsageRow = {
@@ -293,19 +296,25 @@ export function SettingsView() {
               )}
             </div>
             {canUpgrade ? (
-              <Button
-                asChild
-                className="rounded-full bg-[#c1ff72] font-semibold text-neutral-950 hover:bg-[#b4f25f]"
-              >
-                <Link href="/checkout?plan=pro&interval=annual">
-                  Upgrade plan
-                  <ArrowUpRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
+              <div className="flex flex-wrap gap-2">
+                <ManageBillingButton />
+                <Button
+                  asChild
+                  className="rounded-full bg-[#c1ff72] font-semibold text-neutral-950 hover:bg-[#b4f25f]"
+                >
+                  <Link href="/checkout?plan=pro&interval=annual">
+                    Upgrade plan
+                    <ArrowUpRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
             ) : (
-              <Button asChild variant="outline" className="rounded-full">
-                <Link href="/contact">Contact sales</Link>
-              </Button>
+              <div className="flex flex-wrap gap-2">
+                <ManageBillingButton />
+                <Button asChild variant="outline" className="rounded-full">
+                  <Link href="/contact">Contact sales</Link>
+                </Button>
+              </div>
             )}
           </div>
         </SettingsSection>

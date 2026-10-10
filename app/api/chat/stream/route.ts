@@ -20,6 +20,7 @@ import {
   insufficientCreditsMessage,
 } from "@/lib/ai-credits/service"
 import type { AgentChatMessage } from "@/lib/agents/types"
+import { parseViewerRole, resolveFinnaAudienceRole } from "@/lib/finna-role"
 
 export const dynamic = "force-dynamic"
 
@@ -33,12 +34,14 @@ export async function POST(request: NextRequest) {
     messages?: AgentChatMessage[]
     workspaceId?: string
     conversationId?: string
+    viewerRole?: string
   }
 
   const agentId = body.agentId ?? "finna"
   const messages = body.messages
   const workspaceId = body.workspaceId
   const conversationId = body.conversationId
+  const viewerRole = parseViewerRole(body.viewerRole)
 
   if (!Array.isArray(messages) || messages.length === 0) {
     return new Response("messages is required", { status: 400 })
@@ -102,11 +105,17 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    const audienceRole = session
+      ? resolveFinnaAudienceRole(session.user.role, viewerRole)
+      : null
+
     const result = await streamFinnaReply({
       agentId,
       messages,
       ownerId: session?.user.id,
-      userRole: session?.user.role,
+      userRole: audienceRole ?? session?.user.role,
+      userName: session?.user.name,
+      audienceRole,
       persistAudit: Boolean(session),
       correlationId,
       workspaceId,

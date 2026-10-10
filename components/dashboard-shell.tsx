@@ -24,13 +24,19 @@ import { getRoleConfig, getRoleFromPath, getSettingsHref, type UserRole } from "
 import { cn } from "@/lib/utils"
 import { LogOut, Moon, Settings, Sun } from "lucide-react"
 
-export function DashboardShell({ children }: { children: React.ReactNode }) {
+export function DashboardShell({
+  children,
+  viewerRole,
+}: {
+  children: React.ReactNode
+  viewerRole?: UserRole
+}) {
   const pathname = usePathname()
   const router = useRouter()
   const { data: session } = authClient.useSession()
 
   const pathRole = getRoleFromPath(pathname)
-  const [userRole, setUserRole] = useState<UserRole>(pathRole)
+  const [userRole, setUserRole] = useState<UserRole>(viewerRole ?? pathRole)
   const [theme, setTheme] = useState<"light" | "dark">("light")
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
@@ -52,11 +58,26 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   }, [])
 
   useEffect(() => {
+    if (pathname.startsWith("/finna")) {
+      const stored = window.sessionStorage.getItem("trackify-view-role")
+      const nextRole =
+        stored === "founder" || stored === "investor"
+          ? stored
+          : viewerRole ?? null
+      if (nextRole && nextRole !== userRole) {
+        setUserRole(nextRole)
+      }
+      if (nextRole) {
+        window.sessionStorage.setItem("trackify-view-role", nextRole)
+      }
+      return
+    }
     const detectedRole = getRoleFromPath(pathname)
     if (detectedRole !== userRole) {
       setUserRole(detectedRole)
     }
-  }, [pathname, userRole])
+    window.sessionStorage.setItem("trackify-view-role", detectedRole)
+  }, [pathname, userRole, viewerRole])
 
   useEffect(() => {
     setIsMobileMenuOpen(false)
@@ -96,7 +117,11 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     onSignOut: handleSignOut,
   }
 
-  const isOnAiRoute = pathname.includes("/ai")
+  const isOnAiRoute = pathname.includes("/ai") || pathname.startsWith("/finna")
+  const hideFinnaBubble =
+    isOnAiRoute ||
+    pathname.startsWith("/founder/sales") ||
+    pathname === "/founder/social"
 
   return (
     <div className="flex h-[100dvh] bg-[#f4f4f5] dark:bg-neutral-950">
@@ -173,7 +198,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        <div className="px-3 py-3 pb-[calc(4.75rem+env(safe-area-inset-bottom))] lg:p-6 lg:pb-6">
+        <div className="px-3 py-3 pb-[calc(6.25rem+env(safe-area-inset-bottom))] lg:p-6 lg:pb-6">
           {children}
         </div>
       </main>
@@ -184,7 +209,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         onMenuOpen={() => setIsMobileMenuOpen((open) => !open)}
       />
 
-      {!isOnAiRoute ? <AIAssistant compactMobile /> : null}
+      {hideFinnaBubble ? null : <AIAssistant compactMobile viewerRole={userRole} />}
     </div>
   )
 }

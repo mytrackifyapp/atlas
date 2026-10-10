@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 
 import { generateFinnaReply } from "@/lib/agents/chat"
+import { extractGeneratedText } from "@/lib/agents/groq-model"
 import { requireAgentAccess, getOptionalSession, isPublicFinnaAgent } from "@/lib/agents/auth"
 import { createCorrelationId } from "@/lib/agents/correlation"
 import {
@@ -16,6 +17,7 @@ import {
   insufficientCreditsMessage,
 } from "@/lib/ai-credits/service"
 import type { AgentChatMessage } from "@/lib/agents/types"
+import { parseViewerRole, resolveFinnaAudienceRole } from "@/lib/finna-role"
 
 export type ChatMessage = AgentChatMessage
 
@@ -32,6 +34,7 @@ export async function POST(request: NextRequest) {
     const agentId = (body.agentId as string | undefined) ?? "finna"
     const messages = body.messages as ChatMessage[] | undefined
     const workspaceId = body.workspaceId as string | undefined
+    const viewerRole = parseViewerRole(body.viewerRole)
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json(
@@ -97,17 +100,23 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    const audienceRole = session
+      ? resolveFinnaAudienceRole(session.user.role, viewerRole)
+      : null
+
     const result = await generateFinnaReply({
       agentId,
       messages,
       ownerId: session?.user.id,
-      userRole: session?.user.role,
+      userRole: audienceRole ?? session?.user.role,
+      userName: session?.user.name,
+      audienceRole,
       persistAudit: Boolean(session),
       correlationId,
       workspaceId,
     })
 
-    const content = result.text.trim() || "I couldn't generate a response. Please try again."
+    const content = extractGeneratedText(result) || "I couldn't generate a response. Please try again."
 
     return NextResponse.json(
       { content },

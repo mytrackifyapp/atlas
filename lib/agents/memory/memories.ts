@@ -64,7 +64,14 @@ export async function listAgentMemories(
   const limit = options?.limit ?? 200
 
   const query: Record<string, unknown> = { ownerId }
-  if (options?.agentId) query.agentId = options.agentId
+  if (options?.agentId) {
+    query.$or = [
+      { agentId: options.agentId },
+      { agentId: { $exists: false } },
+      { agentId: null },
+      { agentId: "" },
+    ]
+  }
 
   const rows = await db
     .collection("agent_memory")

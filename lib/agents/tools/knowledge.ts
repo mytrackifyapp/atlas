@@ -29,7 +29,7 @@ const KNOWLEDGE_POLICIES: Record<KnowledgeToolName, ToolPolicy> = {
     id: "save_memory",
     autonomyTier: "T1",
     sideEffect: "write",
-    allowedAgents: KNOWLEDGE_ENABLED_AGENTS.filter((id) => id !== "finna"),
+    allowedAgents: KNOWLEDGE_ENABLED_AGENTS,
   },
 }
 
@@ -70,7 +70,7 @@ export function createKnowledgeTools(
         ownerId: ctx.userId,
         query,
         limit: Number.isFinite(parsedLimit) ? Math.min(10, Math.max(1, parsedLimit)) : 6,
-        agentId: ctx.agentId,
+        agentId: ctx.agentId === "finna" ? undefined : ctx.agentId,
       })
 
       return {
@@ -104,7 +104,7 @@ export function createKnowledgeTools(
       const embedding = await embedQuery(content)
       const memory = await saveAgentMemory({
         ownerId: ctx.userId,
-        agentId: ctx.agentId,
+        agentId: ctx.agentId === "finna" ? undefined : ctx.agentId,
         conversationId,
         memoryType: memoryType ?? "fact",
         content,

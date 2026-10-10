@@ -35,7 +35,7 @@ export function PageHeader({ title, description, breadcrumbs, actions }: PageHea
             <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base">{description}</p>
           )}
         </div>
-        {actions && <div className="flex items-center gap-2">{actions}</div>}
+        {actions && <div className="w-full sm:w-auto sm:shrink-0">{actions}</div>}
       </div>
     </div>
   )

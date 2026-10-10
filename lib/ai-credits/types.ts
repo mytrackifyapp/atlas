@@ -19,6 +19,10 @@ export type AiSubscription = {
   planId: AiCreditPlanId
   status: AiSubscriptionStatus
   updatedAt: string
+  stripeCustomerId?: string
+  stripeSubscriptionId?: string
+  billingInterval?: "monthly" | "annual"
+  provider?: "stripe" | "crypto"
 }
 
 export type AiCreditBalance = {

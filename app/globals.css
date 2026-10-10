@@ -192,7 +192,8 @@
 }
 
 /* Masterclass PDF pages — 16:9 document, not a slide viewer */
-.masterclass-page {
+.masterclass-page,
+.gap-page {
   aspect-ratio: 16 / 9;
   width: 100%;
   box-shadow: 0 24px 60px rgb(0 0 0 / 0.45);
@@ -222,9 +223,11 @@
   html.pitch-print-root,
   html.cv-print-root,
   html.masterclass-print-root,
+  html.gap-print-root,
   html:has(.pitch-deck),
   html:has(.cv-deck),
-  html:has(.masterclass-deck) {
+  html:has(.masterclass-deck),
+  html:has(.gap-deck) {
     background: #000000 !important;
     background-color: #000000 !important;
     color-scheme: dark;
@@ -235,12 +238,15 @@
   html.pitch-print-root body,
   html.cv-print-root body,
   html.masterclass-print-root body,
+  html.gap-print-root body,
   body.pitch-print-root,
   body.cv-print-root,
   body.masterclass-print-root,
+  body.gap-print-root,
   body:has(.pitch-deck),
   body:has(.cv-deck),
-  body:has(.masterclass-deck) {
+  body:has(.masterclass-deck),
+  body:has(.gap-deck) {
     background: #000000 !important;
     background-color: #000000 !important;
     -webkit-print-color-adjust: exact !important;
@@ -250,9 +256,11 @@
   .pitch-deck,
   .cv-deck,
   .masterclass-deck,
+  .gap-deck,
   .pitch-deck > *,
   .cv-deck > *,
-  .masterclass-deck > * {
+  .masterclass-deck > *,
+  .gap-deck > * {
     background-color: #000000 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
@@ -260,7 +268,8 @@
 
   .pitch-deck *,
   .cv-deck *,
-  .masterclass-deck * {
+  .masterclass-deck *,
+  .gap-deck * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
@@ -285,7 +294,8 @@
     print-color-adjust: exact !important;
   }
 
-  .masterclass-page img.deck-image-banner {
+  .masterclass-page img.deck-image-banner,
+  .gap-page img.deck-image-banner {
     position: absolute !important;
     inset: 0 !important;
     width: 100% !important;
@@ -326,14 +336,16 @@
     flex-shrink: 0 !important;
   }
 
-  html.masterclass-print-root .masterclass-page-stack {
+  html.masterclass-print-root .masterclass-page-stack,
+  html.gap-print-root .gap-page-stack {
     max-width: none !important;
     gap: 0 !important;
     padding: 0 !important;
     margin: 0 !important;
   }
 
-  html.masterclass-print-root .masterclass-page {
+  html.masterclass-print-root .masterclass-page,
+  html.gap-print-root .gap-page {
     width: 13.333in !important;
     height: 7.5in !important;
     max-width: none !important;
@@ -347,7 +359,8 @@
     overflow: hidden !important;
   }
 
-  html.masterclass-print-root .masterclass-page:last-child {
+  html.masterclass-print-root .masterclass-page:last-child,
+  html.gap-print-root .gap-page:last-child {
     break-after: auto;
     page-break-after: auto;
   }

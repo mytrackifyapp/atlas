@@ -3,7 +3,9 @@ import {
   Briefcase,
   Building2,
   DatabaseZap,
+  Globe,
   Info,
+  Landmark,
   Lightbulb,
   NewspaperIcon,
   Rocket,
@@ -17,14 +19,17 @@ export type MarketingMenuLink = {
 }
 
 export const MARKETING_NAV_LINKS = [
-  { label: "AI Agents", href: "/ai-agents" },
+  { label: "Capital", href: "/capital" },
+  { label: "Finna AI", href: "/ai-agents" },
   { label: "Pricing", href: "/pricing" },
 ] as const
 
 export const MARKETING_SOLUTIONS_LINKS: MarketingMenuLink[] = [
+  { label: "Trackify Capital", href: "/capital", icon: Landmark },
   { label: "For Investors", href: "/solutions/investors", icon: Briefcase },
   { label: "For Founders", href: "/solutions/founders", icon: Lightbulb },
   { label: "Accelerators", href: "/solutions/accelerators", icon: Rocket },
+  { label: "U.S. company", href: "/incorporate", icon: Globe },
 ]
 
 export const MARKETING_RESOURCES_LINKS: MarketingMenuLink[] = [

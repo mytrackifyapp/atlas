@@ -7,27 +7,22 @@ import {
   Copy,
   Download,
   ImageIcon,
-  Linkedin,
   Loader2,
   Palette,
   RefreshCw,
   Send,
   Sparkles,
   Trash2,
-  Upload,
-  X,
 } from "lucide-react"
 
-import type { OurFileRouter } from "@/app/api/uploadthing/core"
+import { BrandKitEditor } from "@/components/content/brand-kit-editor"
 import { PageHeader } from "@/components/page-header"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
-import { UploadButton } from "@uploadthing/react"
 
 type PostRow = {
   id: string
@@ -39,14 +34,6 @@ type PostRow = {
   renderError?: string
   fields: Record<string, string | undefined>
   updatedAt: string
-}
-
-type BrandKit = {
-  companyName: string
-  logoUrl?: string
-  primaryColor: string
-  secondaryColor: string
-  accentColor: string
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -67,14 +54,10 @@ type LinkedInStatus = {
 export function SocialPostsView() {
   const searchParams = useSearchParams()
   const [posts, setPosts] = useState<PostRow[]>([])
-  const [brand, setBrand] = useState<BrandKit | null>(null)
-  const [pexelsConfigured, setPexelsConfigured] = useState(false)
   const [linkedIn, setLinkedIn] = useState<LinkedInStatus>({ connected: false })
   const [linkedInConfigured, setLinkedInConfigured] = useState(false)
   const [banner, setBanner] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
-  const [savingBrand, setSavingBrand] = useState(false)
-  const [logoUploading, setLogoUploading] = useState(false)
   const [renderingId, setRenderingId] = useState<string | null>(null)
   const [publishingId, setPublishingId] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -91,13 +74,11 @@ export function SocialPostsView() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const [postsRes, brandRes, linkedInRes] = await Promise.all([
+      const [postsRes, linkedInRes] = await Promise.all([
         fetch("/api/social/posts"),
-        fetch("/api/social/brand-kit"),
         fetch("/api/social/linkedin/status"),
       ])
       const postsData = await postsRes.json()
-      const brandData = await brandRes.json()
       const linkedInData = await linkedInRes.json()
 
       if (postsRes.ok) {
@@ -105,10 +86,6 @@ export function SocialPostsView() {
         if (!selectedId && postsData.posts?.[0]?.id) {
           setSelectedId(postsData.posts[0].id)
         }
-      }
-      if (brandRes.ok) {
-        setBrand(brandData.brand)
-        setPexelsConfigured(Boolean(brandData.pexelsConfigured))
       }
       if (linkedInRes.ok) {
         setLinkedIn(linkedInData.linkedin ?? { connected: false })
@@ -153,48 +130,6 @@ export function SocialPostsView() {
     setBanner("LinkedIn disconnected.")
   }
 
-  const persistBrand = async (payload: BrandKit) => {
-    setSavingBrand(true)
-    try {
-      const res = await fetch("/api/social/brand-kit", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      })
-      const data = await res.json()
-      if (res.ok) setBrand(data.brand)
-    } finally {
-      setSavingBrand(false)
-    }
-  }
-
-  const saveBrand = async () => {
-    if (!brand) return
-    await persistBrand(brand)
-  }
-
-  const handleLogoUploadComplete = (res: { url: string }[]) => {
-    if (!res[0]?.url || !brand) return
-    setLogoUploading(false)
-    const next = { ...brand, logoUrl: res[0].url }
-    setBrand(next)
-    void persistBrand(next)
-    setBanner("Logo uploaded and saved to your brand kit.")
-  }
-
-  const handleLogoUploadError = (error: Error) => {
-    console.error("Logo upload error:", error)
-    setLogoUploading(false)
-    alert("Failed to upload logo. Please try again.")
-  }
-
-  const removeLogo = () => {
-    if (!brand) return
-    const next = { ...brand, logoUrl: undefined }
-    setBrand(next)
-    void persistBrand(next)
-  }
-
   const renderPost = async (postId: string) => {
     setRenderingId(postId)
     try {
@@ -236,7 +171,7 @@ export function SocialPostsView() {
               Refresh
             </Button>
             <Button size="sm" asChild>
-              <Link href="/founder/ai/ai-marketer/chat">
+              <Link href="/founder/social">
                 <Sparkles className="mr-2 h-4 w-4" />
                 Open AI Marketer
               </Link>
@@ -254,7 +189,8 @@ export function SocialPostsView() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
-              <Linkedin className="h-4 w-4" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icons/linkedin.svg" alt="" className="h-4 w-4" />
               LinkedIn
             </CardTitle>
           </CardHeader>
@@ -270,8 +206,9 @@ export function SocialPostsView() {
               </>
             ) : linkedInConfigured ? (
               <Button size="sm" className="w-full" asChild>
-                <a href="/api/social/linkedin/connect">
-                  <Linkedin className="mr-2 h-4 w-4" />
+                <a href="/api/social/linkedin/connect?next=/founder/social/drafts">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/icons/linkedin.svg" alt="" className="mr-2 h-4 w-4" />
                   Connect LinkedIn
                 </a>
               </Button>
@@ -292,115 +229,8 @@ export function SocialPostsView() {
               Brand kit
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {brand ? (
-              <>
-                <div className="space-y-2">
-                  <Label>Company name</Label>
-                  <Input
-                    value={brand.companyName}
-                    onChange={(e) =>
-                      setBrand((b) => (b ? { ...b, companyName: e.target.value } : b))
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Company logo</Label>
-                  {brand.logoUrl ? (
-                    <div className="flex items-center gap-3 rounded-lg border p-3">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={brand.logoUrl}
-                        alt="Company logo"
-                        className="h-14 w-14 rounded-lg border object-contain bg-muted/30"
-                      />
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium">Logo uploaded</p>
-                        <p className="text-xs text-muted-foreground">Used on rendered social graphics</p>
-                      </div>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={removeLogo}
-                        disabled={logoUploading || savingBrand}
-                        title="Remove logo"
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ) : null}
-                  <UploadButton<OurFileRouter, "companyLogo">
-                    endpoint="companyLogo"
-                    onClientUploadComplete={handleLogoUploadComplete}
-                    onUploadError={handleLogoUploadError}
-                    onUploadBegin={() => setLogoUploading(true)}
-                    className="ut-button:w-full ut-button:bg-transparent ut-button:text-foreground ut-button:hover:bg-muted/50 ut-button:rounded-lg ut-button:border-2 ut-button:border-dashed ut-button:border-border"
-                    content={{
-                      button: ({ ready }) => (
-                        <div className="flex w-full items-center justify-center gap-2 px-4 py-3">
-                          {logoUploading ? (
-                            <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-                          ) : (
-                            <Upload className="h-4 w-4 text-muted-foreground" />
-                          )}
-                          <span className="text-sm text-muted-foreground">
-                            {!ready
-                              ? "Preparing upload…"
-                              : brand.logoUrl
-                                ? "Replace logo"
-                                : "Upload logo"}
-                          </span>
-                        </div>
-                      ),
-                    }}
-                  />
-                </div>
-                <div className="grid grid-cols-3 gap-2">
-                  {(["primaryColor", "secondaryColor", "accentColor"] as const).map((key) => (
-                    <div key={key} className="space-y-1">
-                      <Label className="text-xs capitalize">{key.replace("Color", "")}</Label>
-                      <div className="flex gap-1">
-                        <input
-                          type="color"
-                          value={brand[key]}
-                          onChange={(e) =>
-                            setBrand((b) => (b ? { ...b, [key]: e.target.value } : b))
-                          }
-                          className="h-9 w-10 cursor-pointer rounded border"
-                        />
-                        <Input
-                          value={brand[key]}
-                          onChange={(e) =>
-                            setBrand((b) => (b ? { ...b, [key]: e.target.value } : b))
-                          }
-                          className="font-mono text-xs"
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <Button
-                  size="sm"
-                  className="w-full"
-                  onClick={() => void saveBrand()}
-                  disabled={savingBrand || logoUploading}
-                >
-                  {savingBrand ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : null}
-                  Save brand kit
-                </Button>
-                {!pexelsConfigured ? (
-                  <p className="text-xs text-muted-foreground">
-                    Add <code className="rounded bg-muted px-1">PEXELS_API_KEY</code> for stock photo
-                    backgrounds on editorial_photo and photo_launch templates.
-                  </p>
-                ) : null}
-              </>
-            ) : (
-              <p className="text-sm text-muted-foreground">Loading brand kit…</p>
-            )}
+          <CardContent>
+            <BrandKitEditor />
           </CardContent>
         </Card>
         </div>
@@ -424,7 +254,7 @@ export function SocialPostsView() {
                   with rendered previews.
                 </p>
                 <Button className="mt-4" asChild>
-                  <Link href="/founder/ai/ai-marketer/chat">Create with AI Marketer</Link>
+                  <Link href="/founder/social">Create with AI Marketer</Link>
                 </Button>
               </div>
             ) : (

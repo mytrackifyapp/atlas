@@ -284,9 +284,9 @@ export function AgentFoundationPanel({ agentId }: Props) {
         <div className="flex items-center justify-between gap-2 text-[11px]">
           <span className="font-medium text-neutral-600 dark:text-neutral-400">
             {completion >= 100
-              ? "Setup complete"
+              ? `${config.progressNoun ?? "Setup"} complete`
               : filledFieldCount > 0
-                ? "Setup in progress"
+                ? `${config.progressNoun ?? "Setup"} in progress`
                 : "Get started"}
           </span>
           <span className="tabular-nums text-neutral-500">
@@ -322,7 +322,7 @@ export function AgentFoundationPanel({ agentId }: Props) {
         {businessFields.length > 0 ? (
           <section className="space-y-2.5">
             <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-neutral-400">
-              Your business
+              {config.sectionLabel ?? "Your business"}
             </p>
             {businessFields.map((field, index) =>
               renderFieldCard(field, index, fields, updateField),
@@ -559,7 +559,7 @@ export function AgentFoundationPanel({ agentId }: Props) {
           </p>
         ) : saved ? (
           <p className="text-center text-[10px] font-medium text-[#5a8f1e] dark:text-[#c1ff72]">
-            Setup saved — included in every chat
+            {config.progressNoun ?? "Setup"} saved — included in every chat
           </p>
         ) : null}
 
@@ -585,7 +585,7 @@ export function AgentFoundationPanel({ agentId }: Props) {
               Saved
             </>
           ) : (
-            "Save setup"
+            `Save ${config.progressNoun?.toLowerCase() ?? "setup"}`
           )}
         </Button>
 

@@ -12,13 +12,13 @@ export const authLabelClass = "text-sm font-medium text-neutral-400"
 export const authButtonClass =
   "h-12 w-full rounded-full bg-[#c1ff72] text-base font-semibold text-black hover:bg-[#b8f065] shadow-[0_0_28px_-6px_rgba(193,255,114,0.45)]"
 
-const AUTH_SLOGAN = "Finance, fundraising, deal flow, and AI — one platform for venture teams."
+const AUTH_SLOGAN = "Finance, fundraising, deal flow, and AI  all in one platform"
 
 function AuthBrandPanel() {
   return (
     <aside className="relative hidden min-h-[560px] flex-1 overflow-hidden rounded-[2rem] border border-white/[0.06] lg:flex lg:max-w-xl lg:flex-col">
       <Image
-        src="The Subtle Unfolding.jpeg"
+        src="/hero/auth.jpeg"
         alt=""
         fill
         className="object-cover"

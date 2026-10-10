@@ -154,6 +154,11 @@ export async function GET() {
 
   return NextResponse.json({
     configured: isCheckoutConfigured(),
+    stripeConfigured: Boolean(
+      process.env.STRIPE_SECRET_KEY?.trim() &&
+        (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim() ||
+          process.env.STRIPE_PUBLISHABLE_KEY?.trim()),
+    ),
     stablecoins: CHECKOUT_STABLECOINS,
     chains,
   })

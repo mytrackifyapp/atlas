@@ -52,34 +52,44 @@ function getUpstashLimiter(limit: number, window: `${number} ${"s" | "m" | "h" |
 const authenticatedChatLimiter = getUpstashLimiter(60, "1 h")
 const publicFinnaLimiter = getUpstashLimiter(30, "1 h")
 
+let upstashUnavailable = false
+
+async function limitWithFallback(
+  limiter: ReturnType<typeof getUpstashLimiter>,
+  key: string,
+  limit: number,
+  windowMs: number,
+): Promise<RateLimitResult> {
+  if (limiter && !upstashUnavailable) {
+    try {
+      const result = await limiter.limit(key)
+      return {
+        success: result.success,
+        limit: result.limit,
+        remaining: result.remaining,
+        reset: result.reset,
+      }
+    } catch (error) {
+      upstashUnavailable = true
+      console.warn(
+        "Upstash rate limit is unreachable; using in-memory limits for this process.",
+        error instanceof Error ? error.message : error,
+      )
+    }
+  }
+  return memoryRateLimit(key, limit, windowMs)
+}
+
 export async function checkAuthenticatedAgentRateLimit(
   userId: string
 ): Promise<RateLimitResult> {
-  if (authenticatedChatLimiter) {
-    const result = await authenticatedChatLimiter.limit(`user:${userId}`)
-    return {
-      success: result.success,
-      limit: result.limit,
-      remaining: result.remaining,
-      reset: result.reset,
-    }
-  }
-  return memoryRateLimit(`user:${userId}`, 60, 60 * 60 * 1000)
+  return limitWithFallback(authenticatedChatLimiter, `user:${userId}`, 60, 60 * 60 * 1000)
 }
 
 export async function checkPublicFinnaRateLimit(
   clientKey: string
 ): Promise<RateLimitResult> {
-  if (publicFinnaLimiter) {
-    const result = await publicFinnaLimiter.limit(`ip:${clientKey}`)
-    return {
-      success: result.success,
-      limit: result.limit,
-      remaining: result.remaining,
-      reset: result.reset,
-    }
-  }
-  return memoryRateLimit(`ip:${clientKey}`, 30, 60 * 60 * 1000)
+  return limitWithFallback(publicFinnaLimiter, `ip:${clientKey}`, 30, 60 * 60 * 1000)
 }
 
 export function getClientIp(request: Request): string {

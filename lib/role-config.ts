@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react"
-import { BarChart3, Briefcase, Home, Lightbulb, Megaphone, MessageSquare, Rocket, Users, Shield, LayoutPanelTop, Building2, Wallet, Sparkles, Brain, Target } from "lucide-react"
+import { BarChart3, Briefcase, BuildingComplex, Home, ImagePlay, Lightbulb, MessagesCircle, Rocket, Users, Shield, LayoutPanelTop, UserRoundGroup, Wallet, Sparkles, Brain, Target } from "lucide-react"
 
 export type UserRole = "investor" | "founder"
 
@@ -60,6 +60,12 @@ export const roleConfigs: Record<UserRole, RoleConfig> = {
         description: "Collaborative docs, memos & data room",
       },
       {
+        name: "Lounge",
+        href: "/dashboard/updates",
+        icon: MessagesCircle,
+        description: "Community for founders and investors",
+      },
+      {
         name: "Reports",
         href: "/reports",
         icon: BarChart3,
@@ -102,7 +108,7 @@ export const roleConfigs: Record<UserRole, RoleConfig> = {
       {
         name: "Social",
         href: "/founder/social",
-        icon: Megaphone,
+        icon: ImagePlay,
         description: "AI-generated branded social posts",
       },
       {
@@ -112,15 +118,15 @@ export const roleConfigs: Record<UserRole, RoleConfig> = {
         description: "Collaborative docs, memos & data room",
       },
       {
-        name: "Investor Updates",
+        name: "Lounge",
         href: "/founder/updates",
-        icon: MessageSquare,
-        description: "Send updates to investors",
+        icon: MessagesCircle,
+        description: "Community for founders and investors",
       },
       {
         name: "Company Structure",
         href: "/founder/structure",
-        icon: Building2,
+        icon: UserRoundGroup,
         description: "Team, equity, stakeholders & co-founders",
       },
       {
@@ -141,10 +147,10 @@ export const sharedNavigation: NavItem[] = [
     description: "Join the startup accelerator",
   },
   {
-    name: "AI Agents",
-    href: "/ai",
+    name: "Finna",
+    href: "/finna",
     icon: Brain,
-    description: "Specialist AI agents (CFO, Lawyer, Marketer)",
+    description: "Your AI operating partner",
   },
 ]
 

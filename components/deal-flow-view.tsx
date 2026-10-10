@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { PageHeader } from "@/components/page-header"
+import { KPIStrip } from "@/components/kpi-card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -14,7 +15,7 @@ import {
   Star,
   Clock,
   CheckCircle2,
-  XCircle,
+  Target,
   Filter,
   Search,
   ArrowUpRight,
@@ -156,57 +157,14 @@ export function DealFlowView() {
         }
       />
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-muted-foreground" />
-                <p className="text-sm font-medium text-muted-foreground">New Deals</p>
-              </div>
-              <p className="text-3xl font-bold">{summary.counts.New}</p>
-              <p className="text-sm text-muted-foreground">In pipeline</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Star className="h-4 w-4 text-muted-foreground" />
-                <p className="text-sm font-medium text-muted-foreground">Under Review</p>
-              </div>
-              <p className="text-3xl font-bold">{summary.counts["Under Review"]}</p>
-              <p className="text-sm text-muted-foreground">Active</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
-                <p className="text-sm font-medium text-muted-foreground">Due Diligence</p>
-              </div>
-              <p className="text-3xl font-bold">{summary.counts["Due Diligence"]}</p>
-              <p className="text-sm text-muted-foreground">In progress</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <XCircle className="h-4 w-4 text-muted-foreground" />
-                <p className="text-sm font-medium text-muted-foreground">Conversion Rate</p>
-              </div>
-              <p className="text-3xl font-bold">{summary.conversion}%</p>
-              <p className="text-sm text-muted-foreground">Pipeline health</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <KPIStrip
+        items={[
+          { title: "New Deals", value: String(summary.counts.New), change: "In pipeline", icon: Clock },
+          { title: "Under Review", value: String(summary.counts["Under Review"]), change: "Active", icon: Star },
+          { title: "Due Diligence", value: String(summary.counts["Due Diligence"]), change: "In progress", icon: CheckCircle2 },
+          { title: "Conversion Rate", value: `${summary.conversion}%`, change: "Pipeline health", icon: Target },
+        ]}
+      />
 
       {/* Deal Pipeline */}
       <Card>

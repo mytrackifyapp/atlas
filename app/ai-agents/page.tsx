@@ -9,13 +9,10 @@ export default async function AiAgentsMarketingPage() {
   const session = await getSessionWithRole()
   const isAuthenticated = !!session
   const hasCompletedOnboarding = session?.user.onboardingCompleted ?? false
-  const userRole = session?.user.role as "investor" | "founder" | null
 
   const aiDashboardHref =
     isAuthenticated && hasCompletedOnboarding
-      ? userRole === "founder"
-        ? "/founder/ai"
-        : "/dashboard/ai"
+      ? "/finna"
       : isAuthenticated
         ? "/onboarding"
         : "/sign-up"

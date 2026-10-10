@@ -27,6 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { FinanceSubnav } from "@/components/finance/finance-subnav"
 import { FINANCE_CATEGORIES, categoryIconFor } from "@/lib/finance-categories"
 
 const PIE_COLORS = [
@@ -431,6 +432,7 @@ export function FinanceManagementView() {
 
   return (
     <div className="mx-auto w-full max-w-6xl space-y-6 px-4 sm:px-6 lg:px-8">
+      <FinanceSubnav />
       {/* Global Add Account dialog (so the dropdown action always works) */}
       <Dialog open={accountDialogOpen} onOpenChange={setAccountDialogOpen}>
         <DialogContent>

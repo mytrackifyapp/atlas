@@ -32,10 +32,14 @@ import {
   Users,
   Wand2,
   Rocket,
+  Share2,
+  SwatchBook,
   type LucideIcon,
 } from "lucide-react"
 
 import { AgentFoundationPanel } from "@/components/agents/agent-foundation-panel"
+import { BrandKitEditor } from "@/components/content/brand-kit-editor"
+import { SocialPlatformsPanel } from "@/components/content/social-platforms-panel"
 import { QuickFeatureCard, QUICK_FEATURE_GLOWS } from "@/components/agents/quick-feature-card"
 import {
   getAgentChatSuggestions,
@@ -43,6 +47,8 @@ import {
   getAgentWorkspaceLinks,
   type AgentToolIcon,
 } from "@/lib/agent-chat-sidebar"
+import { getAgentFoundationConfig } from "@/lib/agents/foundation-config"
+import { resolveAgentId } from "@/lib/ai-agents-catalog"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -144,6 +150,7 @@ export function AgentChatSidebar({
     fetch(`/api/agents/foundation?agentId=${encodeURIComponent(agentId)}`, { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data: { foundation?: { fields?: Record<string, string>; connectedTools?: string[]; attachments?: unknown[] } } | null) => {
+        if (resolveAgentId(agentId) === "ai-marketer") return
         if (cancelled || !data?.foundation) {
           setTab("setup")
           return
@@ -159,10 +166,14 @@ export function AgentChatSidebar({
     }
   }, [agentId])
 
+  const foundation = getAgentFoundationConfig(agentId)
+  const setupLabel = foundation.tabLabel ?? "Setup"
+  const toolsLabel = foundation.toolsTabLabel ?? "Tools"
+  const isMarketer = resolveAgentId(agentId) === "ai-marketer"
   const tabs = [
     { id: "history" as const, label: "History", icon: MessageSquare },
-    { id: "setup" as const, label: "Setup", icon: ClipboardList },
-    { id: "tools" as const, label: "Tools", icon: Rocket },
+    { id: "setup" as const, label: setupLabel, icon: foundation.tabLabel ? SwatchBook : ClipboardList },
+    { id: "tools" as const, label: toolsLabel, icon: isMarketer ? Share2 : Rocket },
   ]
 
   return (
@@ -252,9 +263,17 @@ export function AgentChatSidebar({
           </>
         ) : null}
 
-        {tab === "setup" ? <AgentFoundationPanel agentId={agentId} /> : null}
+        {tab === "setup" ? (
+          isMarketer ? (
+            <BrandKitEditor compact />
+          ) : (
+            <AgentFoundationPanel agentId={agentId} />
+          )
+        ) : null}
 
-        {tab === "tools" ? (
+        {tab === "tools" && isMarketer ? <SocialPlatformsPanel /> : null}
+
+        {tab === "tools" && !isMarketer ? (
           <div className="min-h-0 flex-1 space-y-4 overflow-y-auto">
             <p className="text-xs leading-relaxed text-neutral-500">
               Tap a shortcut to drop a tailored prompt into chat.
