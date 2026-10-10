@@ -10,21 +10,28 @@ export default async function AiAgentsMarketingPage() {
   const isAuthenticated = !!session
   const hasCompletedOnboarding = session?.user.onboardingCompleted ?? false
 
-  const aiDashboardHref =
+  const finnaPath = "/finna"
+  const signUpHref = `/sign-up?redirect=${encodeURIComponent(finnaPath)}`
+  const signInHref = `/sign-in?redirect=${encodeURIComponent(finnaPath)}`
+  const continueHref =
     isAuthenticated && hasCompletedOnboarding
-      ? "/finna"
+      ? finnaPath
       : isAuthenticated
-        ? "/onboarding"
-        : "/sign-up"
+        ? `/onboarding?redirect=${encodeURIComponent(finnaPath)}`
+        : signUpHref
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white">
       <div className="pointer-events-none fixed inset-x-0 top-0 z-50">
         <div className="pointer-events-auto">
-          <TrackifyVcNavbar />
+          <TrackifyVcNavbar
+            signedOutSignUpHref={signUpHref}
+            signedOutSignInHref={signInHref}
+            signedInHref={continueHref}
+          />
         </div>
       </div>
-      <AiAgentsHero variant="marketing" ctaHref={aiDashboardHref} ctaLabel="Get Trackify" />
+      <AiAgentsHero variant="marketing" ctaHref={continueHref} ctaLabel="Get Trackify" />
       <MarketingFooter />
     </div>
   )

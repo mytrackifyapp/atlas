@@ -18,8 +18,8 @@ export async function proxy(request: NextRequest) {
 
   if (isFinnaHost(requestHost(request.headers)) && pathname === "/") {
     const url = request.nextUrl.clone()
-    url.pathname = "/finna"
-    return NextResponse.redirect(url)
+    url.pathname = "/ai-agents"
+    return NextResponse.rewrite(url)
   }
 
   // Check if route is protected

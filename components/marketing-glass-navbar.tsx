@@ -105,19 +105,21 @@ function NavDropdown({
 export function MarketingGlassNavbar({
   primaryHref = "/sign-up",
   primaryLabel = "Sign up",
+  loginHref = "/sign-in",
   className,
   shellClassName,
   variant = "glass",
 }: {
   primaryHref?: string
   primaryLabel?: string
+  loginHref?: string
   className?: string
   shellClassName?: string
   variant?: "glass" | "light"
 }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const light = variant === "light"
-  const loggedOut = primaryHref === "/sign-up"
+  const loggedOut = primaryHref === "/sign-up" || primaryHref.startsWith("/sign-up?")
 
   const navLinkClass = light
     ? "text-sm font-medium text-neutral-900 transition-colors hover:text-neutral-500"
@@ -169,7 +171,7 @@ export function MarketingGlassNavbar({
               <>
                 {loggedOut ? (
                   <Link
-                    href="/sign-in"
+                    href={loginHref}
                     className="hidden text-sm font-medium text-neutral-900 transition-colors hover:text-neutral-500 sm:inline-flex"
                   >
                     Log in
@@ -298,7 +300,7 @@ export function MarketingGlassNavbar({
 
                   {light && loggedOut ? (
                     <Link
-                      href="/sign-in"
+                      href={loginHref}
                       onClick={() => setMenuOpen(false)}
                       className="mt-4 inline-flex h-11 items-center justify-center rounded-full border border-neutral-200 px-5 text-sm font-medium text-neutral-900"
                     >

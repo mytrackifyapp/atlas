@@ -1,11 +1,9 @@
 import { Suspense } from "react"
-import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
 import { DashboardShell } from "@/components/dashboard-shell"
 import { FinnaWorkspace } from "@/components/finna-workspace"
 import { getSessionWithRole } from "@/lib/auth-helpers"
-import { isFinnaHost, requestHost } from "@/lib/finna-host"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -23,11 +21,10 @@ export default async function FinnaPage({
 }) {
   const session = await getSessionWithRole()
   const params = await searchParams
-  const host = requestHost(await headers())
   const q = params.q?.trim()
   const next = q ? `/finna?q=${encodeURIComponent(q)}` : "/finna"
 
-  if (!session && !isFinnaHost(host)) {
+  if (!session) {
     redirect(`/sign-up?redirect=${encodeURIComponent(next)}`)
   }
 
