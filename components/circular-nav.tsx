@@ -21,9 +21,17 @@ export type CircularNavMoreItem = {
   onClick?: () => void
 }
 
+const sounds = new Map<string, HTMLAudioElement>()
+
 function playSound(src: string) {
-  const audio = new Audio(src)
-  audio.volume = 0.35
+  let audio = sounds.get(src)
+  if (!audio) {
+    audio = new Audio(src)
+    audio.preload = "auto"
+    audio.volume = 0.35
+    sounds.set(src, audio)
+  }
+  audio.currentTime = 0
   void audio.play().catch(() => {})
 }
 
@@ -129,13 +137,18 @@ export function CircularNavOverlay({
     onClose()
   }
 
+  const leave = () => {
+    onClose()
+    setShown(false)
+  }
+
   if (!mounted || !shown) return null
 
   return createPortal(
         <div className="fixed inset-0 z-[70]">
           <div
             className="circular-nav-bg absolute inset-0"
-            style={{ background: "rgba(255, 255, 255, 0.82)", backdropFilter: "blur(48px)", WebkitBackdropFilter: "blur(48px)" }}
+            style={{ background: "rgba(255, 255, 255, 0.88)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
           />
           <motion.div
             className="absolute inset-0 overflow-hidden"
@@ -177,7 +190,7 @@ export function CircularNavOverlay({
                     return (
                       <li key={item.label} className="border-b border-black/10">
                         {item.href ? (
-                          <Link href={item.href} onClick={close} className="flex items-center gap-3 py-3.5 text-base text-neutral-950">
+                          <Link href={item.href} onClick={leave} className="flex items-center gap-3 py-3.5 text-base text-neutral-950">
                             {row}
                           </Link>
                         ) : (
@@ -222,7 +235,7 @@ export function CircularNavOverlay({
                   >
                     <Link
                       href={item.href}
-                      onClick={close}
+                      onClick={leave}
                       onPointerEnter={() => {
                         if (hotRef.current === index) return
                         hotRef.current = index

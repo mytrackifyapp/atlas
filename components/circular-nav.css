@@ -1,6 +1,6 @@
 .circular-nav-bg {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(48px);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
 }
 
 .circular-nav-dome {
@@ -34,7 +34,6 @@
   inset: 0;
   color: #fff;
   background: rgba(23, 23, 23, 0.92);
-  backdrop-filter: blur(20px);
   cursor: pointer;
 }
 

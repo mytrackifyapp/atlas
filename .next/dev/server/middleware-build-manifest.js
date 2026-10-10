@@ -1,30 +1,6 @@
 globalThis.__BUILD_MANIFEST = {
   "pages": {
-    "/_app": [
-      "static/chunks/1esq_next_dist_compiled_1lphzzx._.js",
-      "static/chunks/1esq_next_dist_shared_lib_0ac_au7._.js",
-      "static/chunks/1esq_next_dist_client_1ozu0hw._.js",
-      "static/chunks/1esq_next_dist_1w0zntk._.js",
-      "static/chunks/1esq_next_app_1qhiop6.js",
-      "static/chunks/[next]_entry_page-loader_ts_1g5iren._.js",
-      "static/chunks/0zp2_react-dom_0kpybnj._.js",
-      "static/chunks/node_modules__pnpm_09e1206._.js",
-      "static/chunks/[root-of-the-server]__0l4r13l._.js",
-      "static/chunks/pages__app_0du2_q-._.js",
-      "static/chunks/turbopack-pages__app_1pkq6wc._.js"
-    ],
-    "/_error": [
-      "static/chunks/1esq_next_dist_compiled_1lphzzx._.js",
-      "static/chunks/1esq_next_dist_shared_lib_0jgz1dv._.js",
-      "static/chunks/1esq_next_dist_client_1ozu0hw._.js",
-      "static/chunks/1esq_next_dist_1aovojb._.js",
-      "static/chunks/[next]_entry_page-loader_ts_0-si4fx._.js",
-      "static/chunks/0zp2_react-dom_0kpybnj._.js",
-      "static/chunks/node_modules__pnpm_09e1206._.js",
-      "static/chunks/[root-of-the-server]__02sxxph._.js",
-      "static/chunks/pages__error_0du2_q-._.js",
-      "static/chunks/turbopack-pages__error_196ciiz._.js"
-    ]
+    "/_app": []
   },
   "devFiles": [],
   "polyfillFiles": [
@@ -48,45 +24,6 @@ globalThis.__BUILD_MANIFEST = {
     "static/chunks/turbopack-_07tskrf._.js"
   ],
   "rootMainFilesTree": {
-    "/finna/page": [
-      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_09lr2fy._.js",
-      "static/chunks/1esq_next_dist_compiled_next-devtools_index_18sxezn.js",
-      "static/chunks/1esq_next_dist_compiled_react-dom_1reduyu._.js",
-      "static/chunks/1esq_next_dist_compiled_react-server-dom-turbopack_01c7i_x._.js",
-      "static/chunks/1esq_next_dist_compiled_1n0paht._.js",
-      "static/chunks/1esq_next_dist_client_1hyf-pj._.js",
-      "static/chunks/1esq_next_dist_0gp3qc4._.js",
-      "static/chunks/0zix_@swc_helpers_cjs_0hi-e47._.js",
-      "static/chunks/_1anvha4._.js",
-      "static/chunks/turbopack-_07tskrf._.js",
-      "static/chunks/_0po637v._.js"
-    ],
-    "/ai-agents/page": [
-      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_09lr2fy._.js",
-      "static/chunks/1esq_next_dist_compiled_next-devtools_index_18sxezn.js",
-      "static/chunks/1esq_next_dist_compiled_react-dom_1reduyu._.js",
-      "static/chunks/1esq_next_dist_compiled_react-server-dom-turbopack_01c7i_x._.js",
-      "static/chunks/1esq_next_dist_compiled_1n0paht._.js",
-      "static/chunks/1esq_next_dist_client_1hyf-pj._.js",
-      "static/chunks/1esq_next_dist_0gp3qc4._.js",
-      "static/chunks/0zix_@swc_helpers_cjs_0hi-e47._.js",
-      "static/chunks/_1anvha4._.js",
-      "static/chunks/turbopack-_07tskrf._.js",
-      "static/chunks/_12dsv9v._.js"
-    ],
-    "/capital/page": [
-      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_09lr2fy._.js",
-      "static/chunks/1esq_next_dist_compiled_next-devtools_index_18sxezn.js",
-      "static/chunks/1esq_next_dist_compiled_react-dom_1reduyu._.js",
-      "static/chunks/1esq_next_dist_compiled_react-server-dom-turbopack_01c7i_x._.js",
-      "static/chunks/1esq_next_dist_compiled_1n0paht._.js",
-      "static/chunks/1esq_next_dist_client_1hyf-pj._.js",
-      "static/chunks/1esq_next_dist_0gp3qc4._.js",
-      "static/chunks/0zix_@swc_helpers_cjs_0hi-e47._.js",
-      "static/chunks/_1anvha4._.js",
-      "static/chunks/turbopack-_07tskrf._.js",
-      "static/chunks/_0o8eor9._.js"
-    ],
     "/founder/page": [
       "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_09lr2fy._.js",
       "static/chunks/1esq_next_dist_compiled_next-devtools_index_18sxezn.js",
@@ -99,45 +36,6 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/_1anvha4._.js",
       "static/chunks/turbopack-_07tskrf._.js",
       "static/chunks/_1hyk048._.js"
-    ],
-    "/founder/finance/page": [
-      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_09lr2fy._.js",
-      "static/chunks/1esq_next_dist_compiled_next-devtools_index_18sxezn.js",
-      "static/chunks/1esq_next_dist_compiled_react-dom_1reduyu._.js",
-      "static/chunks/1esq_next_dist_compiled_react-server-dom-turbopack_01c7i_x._.js",
-      "static/chunks/1esq_next_dist_compiled_1n0paht._.js",
-      "static/chunks/1esq_next_dist_client_1hyf-pj._.js",
-      "static/chunks/1esq_next_dist_0gp3qc4._.js",
-      "static/chunks/0zix_@swc_helpers_cjs_0hi-e47._.js",
-      "static/chunks/_1anvha4._.js",
-      "static/chunks/turbopack-_07tskrf._.js",
-      "static/chunks/_0t-f0gy._.js"
-    ],
-    "/founder/finance/us-account/page": [
-      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_09lr2fy._.js",
-      "static/chunks/1esq_next_dist_compiled_next-devtools_index_18sxezn.js",
-      "static/chunks/1esq_next_dist_compiled_react-dom_1reduyu._.js",
-      "static/chunks/1esq_next_dist_compiled_react-server-dom-turbopack_01c7i_x._.js",
-      "static/chunks/1esq_next_dist_compiled_1n0paht._.js",
-      "static/chunks/1esq_next_dist_client_1hyf-pj._.js",
-      "static/chunks/1esq_next_dist_0gp3qc4._.js",
-      "static/chunks/0zix_@swc_helpers_cjs_0hi-e47._.js",
-      "static/chunks/_1anvha4._.js",
-      "static/chunks/turbopack-_07tskrf._.js",
-      "static/chunks/_05t3tqg._.js"
-    ],
-    "/founder/fundraising/page": [
-      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_09lr2fy._.js",
-      "static/chunks/1esq_next_dist_compiled_next-devtools_index_18sxezn.js",
-      "static/chunks/1esq_next_dist_compiled_react-dom_1reduyu._.js",
-      "static/chunks/1esq_next_dist_compiled_react-server-dom-turbopack_01c7i_x._.js",
-      "static/chunks/1esq_next_dist_compiled_1n0paht._.js",
-      "static/chunks/1esq_next_dist_client_1hyf-pj._.js",
-      "static/chunks/1esq_next_dist_0gp3qc4._.js",
-      "static/chunks/0zix_@swc_helpers_cjs_0hi-e47._.js",
-      "static/chunks/_1anvha4._.js",
-      "static/chunks/turbopack-_07tskrf._.js",
-      "static/chunks/_1uymir9._.js"
     ],
     "/page": [
       "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_09lr2fy._.js",
@@ -152,7 +50,7 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/turbopack-_07tskrf._.js",
       "static/chunks/_219uq1s._.js"
     ],
-    "/onboarding/page": [
+    "/about/page": [
       "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_09lr2fy._.js",
       "static/chunks/1esq_next_dist_compiled_next-devtools_index_18sxezn.js",
       "static/chunks/1esq_next_dist_compiled_react-dom_1reduyu._.js",
@@ -163,9 +61,9 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/0zix_@swc_helpers_cjs_0hi-e47._.js",
       "static/chunks/_1anvha4._.js",
       "static/chunks/turbopack-_07tskrf._.js",
-      "static/chunks/_1zb9o78._.js"
+      "static/chunks/_1ihvo1x._.js"
     ],
-    "/dashboard/page": [
+    "/finna/page": [
       "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_09lr2fy._.js",
       "static/chunks/1esq_next_dist_compiled_next-devtools_index_18sxezn.js",
       "static/chunks/1esq_next_dist_compiled_react-dom_1reduyu._.js",
@@ -176,9 +74,9 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/0zix_@swc_helpers_cjs_0hi-e47._.js",
       "static/chunks/_1anvha4._.js",
       "static/chunks/turbopack-_07tskrf._.js",
-      "static/chunks/_1dh94un._.js"
+      "static/chunks/_0po637v._.js"
     ],
-    "/sign-in/page": [
+    "/founder/sales/page": [
       "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_09lr2fy._.js",
       "static/chunks/1esq_next_dist_compiled_next-devtools_index_18sxezn.js",
       "static/chunks/1esq_next_dist_compiled_react-dom_1reduyu._.js",
@@ -189,7 +87,33 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/0zix_@swc_helpers_cjs_0hi-e47._.js",
       "static/chunks/_1anvha4._.js",
       "static/chunks/turbopack-_07tskrf._.js",
-      "static/chunks/_1ee9_5-._.js"
+      "static/chunks/_0_u55u4._.js"
+    ],
+    "/founder/fundraising/page": [
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_09lr2fy._.js",
+      "static/chunks/1esq_next_dist_compiled_next-devtools_index_18sxezn.js",
+      "static/chunks/1esq_next_dist_compiled_react-dom_1reduyu._.js",
+      "static/chunks/1esq_next_dist_compiled_react-server-dom-turbopack_01c7i_x._.js",
+      "static/chunks/1esq_next_dist_compiled_1n0paht._.js",
+      "static/chunks/1esq_next_dist_client_1hyf-pj._.js",
+      "static/chunks/1esq_next_dist_0gp3qc4._.js",
+      "static/chunks/0zix_@swc_helpers_cjs_0hi-e47._.js",
+      "static/chunks/_1anvha4._.js",
+      "static/chunks/turbopack-_07tskrf._.js",
+      "static/chunks/_1uymir9._.js"
+    ],
+    "/founder/finance/page": [
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_09lr2fy._.js",
+      "static/chunks/1esq_next_dist_compiled_next-devtools_index_18sxezn.js",
+      "static/chunks/1esq_next_dist_compiled_react-dom_1reduyu._.js",
+      "static/chunks/1esq_next_dist_compiled_react-server-dom-turbopack_01c7i_x._.js",
+      "static/chunks/1esq_next_dist_compiled_1n0paht._.js",
+      "static/chunks/1esq_next_dist_client_1hyf-pj._.js",
+      "static/chunks/1esq_next_dist_0gp3qc4._.js",
+      "static/chunks/0zix_@swc_helpers_cjs_0hi-e47._.js",
+      "static/chunks/_1anvha4._.js",
+      "static/chunks/turbopack-_07tskrf._.js",
+      "static/chunks/_0t-f0gy._.js"
     ]
   },
   "pagesChunkGroupBootstrapParams": {},
